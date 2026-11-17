@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react'
+import { useId } from 'react'
 
 import { cx } from '../lib/cx'
 
@@ -142,11 +142,11 @@ export function Wordmark({
   )
 }
 
+/** Optional PNG path (favicon / assets). UI brand uses the vector Mark everywhere. */
 export const LOGO_SRC = '/images/hello-techno-logo.png'
 
 /**
- * Site brand. Uses the clear vector lockup by default; upgrades to the PNG
- * only after it successfully loads from /images/hello-techno-logo.png.
+ * Site brand — same vector Mark used in the hero centre, plus wordmark.
  */
 export function Brand({
   size = 'md',
@@ -159,69 +159,30 @@ export function Brand({
   className?: string
   onDarkPlate?: boolean
 }) {
-  const [png, setPng] = useState(false)
-
-  useEffect(() => {
-    let alive = true
-    const img = new Image()
-    img.onload = () => {
-      if (alive) setPng(true)
-    }
-    img.onerror = () => {
-      if (alive) setPng(false)
-    }
-    img.src = LOGO_SRC
-    return () => {
-      alive = false
-    }
-  }, [])
-
-  const lockupSize = size === 'xs' ? 'sm' : size
   const lockup = (
     <BrandLockup
-      size={lockupSize}
+      size={size === 'xs' ? 'sm' : size}
       light={onDarkPlate ? false : light}
       className={!onDarkPlate ? className : undefined}
       compact={size === 'xs'}
     />
   )
 
-  if (!png) {
-    if (onDarkPlate) {
-      return (
-        <span
-          className={cx(
-            'inline-flex items-center rounded-2xl bg-white shadow-[0_10px_24px_-18px_rgb(9_30_74/0.45)]',
-            size === 'xs' ? 'px-2 py-1.5' : 'px-3 py-2',
-            className,
-          )}
-        >
-          {lockup}
-        </span>
-      )
-    }
-    return lockup
-  }
-
-  const img = (
-    <img
-      src={LOGO_SRC}
-      alt="Hello Techno"
-      className={cx(
-        'block w-auto object-contain',
-        size === 'xs' && 'h-8',
-        size === 'sm' && 'h-12',
-        size === 'md' && 'h-14',
-        size === 'lg' && 'h-20',
-        !onDarkPlate && className,
-      )}
-    />
-  )
-
   if (onDarkPlate) {
-    return <span className={cx('inline-flex items-center rounded-2xl bg-white px-3 py-2', className)}>{img}</span>
+    return (
+      <span
+        className={cx(
+          'inline-flex items-center rounded-2xl bg-white shadow-[0_10px_24px_-18px_rgb(9_30_74/0.45)]',
+          size === 'xs' ? 'px-2 py-1.5' : 'px-2.5 py-1.5',
+          className,
+        )}
+      >
+        {lockup}
+      </span>
+    )
   }
-  return img
+
+  return lockup
 }
 
 export function BrandLockup({
@@ -240,7 +201,7 @@ export function BrandLockup({
 
   return (
     <span className={cx('inline-flex items-center', compact ? 'gap-2' : 'gap-2.5', className)}>
-      <Mark className={cx(markClass, 'drop-shadow-[0_8px_16px_rgb(11_58_156/0.22)]')} />
+      <Mark className={cx(markClass, 'drop-shadow-[0_8px_16px_rgb(11_58_156/0.22)]')} glow={size === 'lg'} />
       <Wordmark size={size} light={light} />
     </span>
   )

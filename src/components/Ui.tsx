@@ -1,47 +1,25 @@
 import { Minus, Plus } from 'lucide-react'
-import { AnimatePresence, animate, motion, useInView, useReducedMotion, type HTMLMotionProps } from 'motion/react'
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
+import { useId, useState, type HTMLAttributes, type ReactNode } from 'react'
+import { Link } from 'react-router'
 
 import { cx } from '../lib/cx'
 
-/** Fades and lifts children the first time they scroll into view. */
-export function Reveal({ delay = 0, y = 26, className, children, ...rest }: HTMLMotionProps<'div'> & { delay?: number; y?: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '0px 0px -70px 0px' }}
-      transition={{ duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-      {...rest}
-    >
-      {children}
-    </motion.div>
-  )
+/** Layout wrapper — no scroll animation (kept for call-site compatibility). */
+export function Reveal({
+  delay: _delay,
+  y: _y,
+  className,
+  children,
+}: HTMLAttributes<HTMLDivElement> & { delay?: number; y?: number }) {
+  void _delay
+  void _y
+  return <div className={className}>{children}</div>
 }
 
-/** Counts up to a value the first time it is seen. */
-export function CountUp({ value, duration = 1.5 }: { value: number; duration?: number }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const seen = useInView(ref, { once: true, margin: '0px 0px -40px 0px' })
-  const reduce = useReducedMotion()
-  const [n, setN] = useState(reduce ? value : 0)
-
-  useEffect(() => {
-    if (!seen) return
-    if (reduce) {
-      setN(value)
-      return
-    }
-    const c = animate(0, value, { duration, ease: [0.22, 1, 0.36, 1], onUpdate: (v) => setN(Math.round(v)) })
-    return () => c.stop()
-  }, [seen, value, reduce, duration])
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {n}
-    </span>
-  )
+/** Static number display (no count-up). */
+export function CountUp({ value }: { value: number; duration?: number }) {
+  return <span className="tabular-nums">{value}</span>
 }
 
 /** A live dot that keeps breathing. */
@@ -89,14 +67,29 @@ export function Btn({
   iconRight?: ReactNode
   external?: boolean
 }) {
+  const classNames = cx(buttonBase, buttonVariants[variant], buttonSizes[size], className)
+  const content = (
+    <>
+      <span>{children}</span>
+      {iconRight}
+    </>
+  )
+
+  if (!external && href.startsWith('/') && !href.startsWith('//')) {
+    return (
+      <Link to={href} className={classNames}>
+        {content}
+      </Link>
+    )
+  }
+
   return (
     <a
       href={href}
-      className={cx(buttonBase, buttonVariants[variant], buttonSizes[size], className)}
+      className={classNames}
       {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
     >
-      <span>{children}</span>
-      {iconRight}
+      {content}
     </a>
   )
 }
@@ -151,16 +144,25 @@ export function SectionHead({
   )
 }
 
-/** One question open at a time. */
+/** One question open at a time — numbered floating rows. */
 export function Accordion({ items, defaultOpen = 0 }: { items: { q: string; a: string }[]; defaultOpen?: number | null }) {
   const [open, setOpen] = useState<number | null>(defaultOpen)
   const id = useId()
   return (
-    <ul className="divide-y divide-line overflow-hidden rounded-[26px] border border-line bg-white/80">
+    <ul className="flex flex-col gap-2.5">
       {items.map((item, i) => {
         const isOpen = open === i
+        const n = String(i + 1).padStart(2, '0')
         return (
-          <li key={item.q}>
+          <li
+            key={item.q}
+            className={cx(
+              'overflow-hidden rounded-[20px] border transition-[border-color,box-shadow,background-color] duration-[var(--duration-base)]',
+              isOpen
+                ? 'border-brand/25 bg-white shadow-[0_18px_40px_-28px_rgb(26_99_216/0.45)]'
+                : 'border-line bg-white/75 hover:border-line-strong hover:bg-white hover:shadow-[0_12px_28px_-24px_rgb(9_30_74/0.4)]',
+            )}
+          >
             <h3>
               <button
                 type="button"
@@ -168,16 +170,36 @@ export function Accordion({ items, defaultOpen = 0 }: { items: { q: string; a: s
                 aria-expanded={isOpen}
                 aria-controls={`${id}-p${i}`}
                 onClick={() => setOpen(isOpen ? null : i)}
-                className="group flex w-full items-center justify-between gap-6 px-5 py-5 text-left text-[clamp(1rem,0.95rem+0.35vw,1.18rem)] font-medium tracking-[-0.02em] transition-colors hover:text-brand sm:px-7"
+                className="group flex w-full items-start gap-3.5 px-4 py-4 text-start sm:gap-4 sm:px-5 sm:py-5"
               >
-                {item.q}
                 <span
                   className={cx(
-                    'grid size-9 shrink-0 place-items-center rounded-full border transition-colors duration-[var(--duration-fast)]',
-                    isOpen ? 'border-brand bg-brand text-white' : 'border-line-strong text-muted group-hover:border-brand group-hover:text-brand',
+                    'mt-0.5 grid size-9 shrink-0 place-items-center rounded-[12px] text-[12px] font-semibold tabular-nums transition-colors duration-[var(--duration-fast)]',
+                    isOpen
+                      ? 'bg-[linear-gradient(140deg,#1a63d8,#4b53e8)] text-white shadow-[0_10px_20px_-12px_rgb(26_99_216/0.7)]'
+                      : 'bg-soft text-muted group-hover:bg-brand-soft group-hover:text-brand',
+                  )}
+                  aria-hidden
+                >
+                  {n}
+                </span>
+                <span
+                  className={cx(
+                    'min-w-0 flex-1 pt-1 text-[clamp(0.98rem,0.92rem+0.3vw,1.12rem)] leading-snug font-medium tracking-[-0.02em] transition-colors',
+                    isOpen ? 'text-ink' : 'text-ink-2 group-hover:text-ink',
                   )}
                 >
-                  {isOpen ? <Minus className="size-4" aria-hidden /> : <Plus className="size-4" aria-hidden />}
+                  {item.q}
+                </span>
+                <span
+                  className={cx(
+                    'mt-0.5 grid size-8 shrink-0 place-items-center rounded-full border transition-colors duration-[var(--duration-fast)]',
+                    isOpen
+                      ? 'border-brand bg-brand text-white'
+                      : 'border-line-strong text-muted group-hover:border-brand group-hover:text-brand',
+                  )}
+                >
+                  {isOpen ? <Minus className="size-3.5" aria-hidden /> : <Plus className="size-3.5" aria-hidden />}
                 </span>
               </button>
             </h3>
@@ -193,7 +215,11 @@ export function Accordion({ items, defaultOpen = 0 }: { items: { q: string; a: s
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   className="overflow-hidden"
                 >
-                  <p className="max-w-3xl px-5 pb-6 text-[15px] text-muted sm:px-7">{item.a}</p>
+                  <div className="border-t border-brand/10 px-4 pt-1 pb-5 sm:px-5">
+                    <p className="max-w-3xl ps-[3.25rem] text-[14.5px] leading-relaxed text-muted sm:ps-[3.5rem]">
+                      {item.a}
+                    </p>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

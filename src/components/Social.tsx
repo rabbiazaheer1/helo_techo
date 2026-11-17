@@ -104,7 +104,7 @@ export function SocialRow({
           <span className="sr-only">{BRANDS[kind].label}</span>
           <span
             className={cx(
-              'group/mark grid size-9 place-items-center rounded-full transition-[transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] hover:-translate-y-1 hover:shadow-[0_14px_24px_-12px_rgb(9_30_74/0.45)]',
+              'group/mark grid size-9 place-items-center rounded-full transition-[box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] hover:shadow-[0_14px_24px_-12px_rgb(9_30_74/0.45)]',
               itemClassName,
             )}
             style={{ background: BRANDS[kind].tile ?? BRANDS[kind].color }}

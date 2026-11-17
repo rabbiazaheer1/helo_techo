@@ -16,10 +16,11 @@ import {
   Users,
   Zap,
 } from 'lucide-react'
-import { motion } from 'motion/react'
 import type { ReactNode } from 'react'
+import { Link } from 'react-router'
 
 import { cx } from '../lib/cx'
+import { useLocale } from '../lib/locale'
 import { Mark } from './Logo'
 import { ChannelMark, type ChannelKey } from './Social'
 import { PulseDot, Reveal } from './Ui'
@@ -31,29 +32,27 @@ function Panel({
   title,
   sub,
   tone,
-  arrow = false,
   children,
 }: {
   n: string
   title: string
   sub: string
   tone: 'blue' | 'iris' | 'teal'
-  arrow?: boolean
   children: ReactNode
 }) {
   return (
     <div
       className={cx(
-        'relative flex h-full flex-col overflow-hidden rounded-[26px] border p-4 shadow-[0_20px_50px_-34px_rgb(9_30_74/0.35)] sm:p-5',
+        '@container relative flex h-full min-w-0 flex-col overflow-hidden rounded-[22px] border p-3 shadow-[0_16px_40px_-30px_rgb(9_30_74/0.35)] sm:p-3.5',
         tone === 'blue' && 'border-[#cfe0fb] bg-[linear-gradient(168deg,#f8fbff,#e9f2ff_70%,#e4efff)]',
         tone === 'iris' && 'border-[#ded4ff] bg-[linear-gradient(168deg,#fbfaff,#f0ecff_70%,#eae6ff)]',
         tone === 'teal' && 'border-[#c6ebe9] bg-[linear-gradient(168deg,#f8fffe,#e7f8f7_70%,#dff5f4)]',
       )}
     >
-      <div className="relative flex items-start gap-3">
+      <div className="relative flex items-start gap-2.5">
         <span
           className={cx(
-            'grid size-9 shrink-0 place-items-center rounded-full text-sm font-semibold text-white shadow-[0_10px_20px_-10px_rgb(9_30_74/0.6)]',
+            'grid size-7 shrink-0 place-items-center rounded-full text-[12px] font-semibold text-white shadow-[0_8px_16px_-8px_rgb(9_30_74/0.55)]',
             tone === 'blue' && 'bg-[linear-gradient(140deg,#2b7fe0,#12479f)]',
             tone === 'iris' && 'bg-[linear-gradient(140deg,#7c5cf5,#4c2bc4)]',
             tone === 'teal' && 'bg-[linear-gradient(140deg,#14b5b0,#0a7d86)]',
@@ -62,16 +61,27 @@ function Panel({
           {n}
         </span>
         <div className="min-w-0">
-          <h3 className="text-[1.06rem] leading-tight font-semibold tracking-[-0.03em] text-ink">{title}</h3>
-          <p className="mt-0.5 text-[12.5px] leading-snug text-muted">{sub}</p>
+          <h3 className="text-[0.95rem] leading-tight font-semibold tracking-[-0.03em] text-ink">{title}</h3>
+          <p className="mt-0.5 text-[11.5px] leading-snug text-muted">{sub}</p>
         </div>
       </div>
-      <div className="relative mt-4 flex flex-1 flex-col">{children}</div>
-      {arrow && (
-        <span className="absolute top-1/2 -right-3 z-10 hidden size-7 -translate-y-1/2 place-items-center rounded-full bg-white text-brand shadow-[0_8px_20px_-8px_rgb(9_30_74/0.45)] ring-1 ring-line lg:grid">
-          <ArrowRight className="size-3.5" aria-hidden />
-        </span>
+      <div className="relative mt-3 flex min-w-0 flex-1 flex-col">{children}</div>
+    </div>
+  )
+}
+
+function StepBridge({ horizontal = false }: { horizontal?: boolean }) {
+  return (
+    <div
+      className={cx(
+        'flex items-center justify-center',
+        horizontal ? 'hidden lg:flex' : 'flex py-0.5 lg:hidden',
       )}
+      aria-hidden
+    >
+      <span className="grid size-7 place-items-center rounded-full border border-line bg-white text-brand shadow-[0_8px_18px_-12px_rgb(9_30_74/0.4)]">
+        <ArrowRight className={cx('size-3.5', !horizontal && 'rotate-90')} />
+      </span>
     </div>
   )
 }
@@ -96,113 +106,145 @@ function MiniCard({
   return (
     <div
       className={cx(
-        'rounded-[14px] border border-white/90 bg-white/95 px-2.5 py-2 shadow-[0_10px_24px_-18px_rgb(9_30_74/0.5)] transition-[transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] hover:-translate-y-0.5 hover:shadow-[0_18px_32px_-20px_rgb(9_30_74/0.55)]',
+        'min-w-0 overflow-hidden rounded-[12px] border border-white/90 bg-white/95 px-2 py-1.5 shadow-[0_8px_18px_-14px_rgb(9_30_74/0.45)]',
         className,
       )}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex min-w-0 items-center gap-1.5">
         {icon && (
           <span
-            className="grid size-7 shrink-0 place-items-center rounded-[9px]"
+            className="grid size-6 shrink-0 place-items-center overflow-hidden rounded-[8px]"
             style={{ background: `${accent}16`, color: accent }}
           >
             {icon}
           </span>
         )}
-        <p className="min-w-0 flex-1 text-[12.5px] leading-tight font-medium text-ink">{title}</p>
-        {check && <Check className="size-3.5 shrink-0 text-success" aria-hidden />}
+        <p className="min-w-0 flex-1 truncate text-[11.5px] leading-tight font-medium text-ink">{title}</p>
+        {check && <Check className="size-3 shrink-0 text-success" aria-hidden />}
       </div>
-      {note && <p className="mt-1 text-[11px] leading-snug text-faint">{note}</p>}
+      {note && <p className="mt-0.5 truncate pl-[1.875rem] text-[10px] leading-snug text-faint">{note}</p>}
       {children}
     </div>
   )
 }
 
-function LiveTag({ children = 'Live' }: { children?: string }) {
+function LiveTag({ children }: { children?: string }) {
+  const { copy } = useLocale()
   return (
     <span className="inline-flex items-center gap-1 text-[10px] font-medium tracking-[0.04em] text-success uppercase">
       <PulseDot className="size-1.5" />
-      {children}
+      {children ?? copy.diagram.live}
     </span>
   )
 }
 
 /* --------------------------------------------------------------- panel 1 */
 
+function AiCore() {
+  return (
+    <div className="relative mx-auto grid h-[7.5rem] w-[7.5rem] shrink-0 place-items-center">
+      <span
+        className="pointer-events-none absolute -inset-2 rounded-full bg-[radial-gradient(circle_at_40%_35%,rgb(111_75_242/0.2),transparent_62%)] blur-md"
+        aria-hidden
+      />
+      <span
+        className="absolute size-full rounded-full border border-white/80 bg-[radial-gradient(circle_at_30%_28%,#f4f7ff_0%,#e4ecff_45%,#ddd6ff_100%)] shadow-[0_12px_28px_-16px_rgb(11_58_156/0.4)]"
+        aria-hidden
+      />
+      <span className="absolute size-[88%] animate-spin-slower rounded-full border border-dashed border-brand/25 motion-reduce:animate-none" aria-hidden />
+      <span className="absolute size-[72%] animate-spin-slow rounded-full border border-dashed border-iris/30 motion-reduce:animate-none" aria-hidden />
+
+      <div className="relative z-[1] grid size-[4.25rem] place-items-center overflow-hidden rounded-full bg-white p-1.5 shadow-[0_10px_22px_-12px_rgb(11_58_156/0.4)] ring-2 ring-white">
+        <Mark className="size-[3.1rem]" glow />
+      </div>
+
+      <span className="absolute top-1 right-0 z-[2] rounded-full bg-[linear-gradient(135deg,#6f4bf2,#1a63d8)] px-1.5 py-px text-[9px] font-semibold tracking-[0.12em] text-white shadow-[0_6px_14px_-6px_rgb(111_75_242/0.9)]">
+        AI
+      </span>
+    </div>
+  )
+}
+
 function UnifiedPanel() {
-  const channels: { icon: ReactNode; title: string; meta: string; accent: string }[] = [
+  const { copy } = useLocale()
+  const p1 = copy.diagram.p1
+
+  const channels: { icon: ReactNode; title: string; meta?: string; accent: string; marks?: ChannelKey[] }[] = [
     {
-      icon: (
-        <span className="grid grid-cols-3 gap-px">
-          {(['whatsapp', 'instagram', 'email'] as ChannelKey[]).map((kind) => (
-            <ChannelMark key={kind} kind={kind} className="size-[11px] rounded-[3px] shadow-none" glyphClassName="size-[7px]" />
-          ))}
-        </span>
-      ),
-      title: 'Messaging',
-      meta: 'WhatsApp · Instagram · Gmail',
+      icon: <MessageSquare className="size-3.5" />,
+      title: p1.messaging,
       accent: '#E1306C',
+      marks: ['whatsapp', 'instagram', 'email'],
     },
-    { icon: <Phone className="size-4" />, title: 'Voice / Call', meta: 'Your own numbers', accent: '#1A63D8' },
-    { icon: <MessageSquare className="size-4" />, title: 'Web chat & SMS', meta: 'Every page, every hour', accent: '#7C5CF5' },
+    {
+      icon: <Phone className="size-3.5" />,
+      title: p1.voice,
+      meta: p1.voiceMeta,
+      accent: '#1A63D8',
+    },
+    {
+      icon: <MessageSquare className="size-3.5" />,
+      title: p1.web,
+      meta: p1.webMeta,
+      accent: '#7C5CF5',
+    },
+  ]
+
+  const outcomes = [
+    { accent: '#6F4BF2', icon: <Calendar className="size-3.5" />, title: p1.bookings, note: p1.booked },
+    { accent: '#F59E0B', icon: <Clock className="size-3.5" />, title: p1.appointments, note: p1.scheduled },
+    { accent: '#0E9A9E', icon: <Bell className="size-3.5" />, title: p1.reminders, note: p1.sent },
   ]
 
   return (
     <Panel
       n="1"
-      title="Unified Communication"
-      sub="All your channels. One AI. Seamless conversations."
+      title={p1.title}
+      sub={p1.sub}
       tone="blue"
-      arrow
     >
-      <div className="grid flex-1 grid-cols-1 items-center gap-2 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
-        <div className="flex flex-col gap-1.5">
-          {channels.map((c) => (
-            <MiniCard key={c.title} icon={c.icon} title={c.title} note={c.meta} accent={c.accent} />
-          ))}
+      <div className="relative flex flex-1 flex-col gap-2.5">
+        <span
+          className="pointer-events-none absolute inset-x-2 top-2 bottom-6 rounded-[40%] bg-[radial-gradient(ellipse_at_50%_40%,rgb(167_139_250/0.14),transparent_70%)] blur-lg"
+          aria-hidden
+        />
+
+        <div className="relative z-[1] flex justify-center">
+          <AiCore />
         </div>
 
-        <div className="relative mx-auto grid w-[172px] shrink-0 place-items-center py-1">
-          <div className="absolute size-[168px] rounded-full bg-[radial-gradient(circle_at_32%_26%,#e6f0ff,#efe9ff_58%,#dff7f5)]" aria-hidden />
-          <div className="absolute size-[168px] rounded-full border border-white/80" aria-hidden />
-          <div className="absolute size-[150px] animate-spin-slower rounded-full border border-dashed border-brand/25" aria-hidden />
-          <div className="absolute size-[124px] animate-spin-slow rounded-full border border-dashed border-teal/30" aria-hidden />
-          <motion.div
-            className="relative grid place-items-center"
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <Mark className="size-[104px] drop-shadow-[0_16px_24px_rgb(11_58_156/0.28)]" />
-          </motion.div>
-          <span className="absolute top-4 -right-1 rounded-full bg-[linear-gradient(135deg,#1a63d8,#6f4bf2)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.1em] text-white shadow">
-            AI
-          </span>
-          <div className="mt-2 flex items-end gap-[3px]" aria-hidden>
-            {[0.35, 0.7, 0.5, 0.9, 0.6, 0.4, 0.75].map((h, i) => (
-              <span
-                key={i}
-                className="w-[3px] origin-bottom animate-wave rounded-full bg-brand/60"
-                style={{ height: `${h * 18}px`, animationDelay: `${i * 0.12}s` }}
-              />
+        <div className="relative z-[1] grid grid-cols-2 gap-1.5">
+          <div className="flex min-w-0 flex-col gap-1.5">
+            {channels.map((c) => (
+              <MiniCard key={c.title} icon={c.icon} title={c.title} note={c.meta} accent={c.accent}>
+                {c.marks && (
+                  <div className="mt-1 flex min-w-0 items-center gap-1 pl-[1.875rem]">
+                    {c.marks.map((kind) => (
+                      <ChannelMark
+                        key={kind}
+                        kind={kind}
+                        className="size-3.5 shrink-0 rounded-[3px] shadow-none"
+                        glyphClassName="size-2"
+                      />
+                    ))}
+                    <span className="min-w-0 truncate text-[9.5px] leading-none text-faint">{p1.messagingMeta}</span>
+                  </div>
+                )}
+              </MiniCard>
+            ))}
+          </div>
+
+          <div className="flex min-w-0 flex-col gap-1.5">
+            {outcomes.map((o) => (
+              <MiniCard key={o.title} accent={o.accent} icon={o.icon} title={o.title} note={o.note} check />
             ))}
           </div>
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <MiniCard accent="#6F4BF2" icon={<Calendar className="size-4" />} title="Bookings" note="Confirmed" check />
-          <MiniCard accent="#F59E0B" icon={<Clock className="size-4" />} title="Appointments" note="Scheduled" check />
-          <MiniCard accent="#0E9A9E" icon={<Bell className="size-4" />} title="Reminders" note="Sent" check />
-        </div>
+        <p className="relative z-[1] mt-auto border-t border-white/70 pt-2 text-center text-[10.5px] font-medium text-ink-2">
+          {p1.footer}
+        </p>
       </div>
-      <p className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[12px] font-medium text-ink-2">
-        <span className="font-semibold">AI Employee</span>
-        <span className="text-faint" aria-hidden>•</span>
-        <span className="text-muted">Understands</span>
-        <span className="text-faint" aria-hidden>•</span>
-        <span className="text-muted">Replies</span>
-        <span className="text-faint" aria-hidden>•</span>
-        <span className="text-muted">Takes action</span>
-      </p>
     </Panel>
   )
 }
@@ -211,121 +253,74 @@ function UnifiedPanel() {
 
 function Hub() {
   return (
-    <div className="relative grid size-[124px] place-items-center">
+    <div className="relative mx-auto grid size-[72px] place-items-center">
       <span className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_40%_35%,#f0eaff,#e7f6ff)]" aria-hidden />
       <span className="absolute inset-0 animate-pulse-ring rounded-full border border-iris/40" aria-hidden />
-      <span className="absolute inset-2 animate-spin-slow rounded-full border border-dashed border-iris/35" aria-hidden />
-      <span className="relative grid size-16 place-items-center rounded-full bg-[linear-gradient(140deg,#6f4bf2,#1a63d8)] text-white shadow-[0_16px_30px_-14px_rgb(111_75_242/0.8)]">
-        <Brain className="size-7" aria-hidden />
+      <span className="absolute inset-1.5 animate-spin-slow rounded-full border border-dashed border-iris/35" aria-hidden />
+      <span className="relative grid size-10 place-items-center rounded-full bg-[linear-gradient(140deg,#6f4bf2,#1a63d8)] text-white shadow-[0_12px_24px_-12px_rgb(111_75_242/0.8)]">
+        <Brain className="size-5" aria-hidden />
       </span>
-      <span className="mt-2 text-[10px] font-semibold tracking-[0.12em] text-iris uppercase">AI</span>
     </div>
   )
 }
 
-function UnifiedPanelDots() {
-  return (
-    <svg className="pointer-events-none absolute inset-0 size-full" viewBox="0 0 400 260" preserveAspectRatio="none" aria-hidden>
-      {[
-        'M20 40 Q 120 60 200 130',
-        'M20 130 Q 110 130 200 130',
-        'M20 220 Q 120 200 200 130',
-        'M200 130 Q 300 60 380 40',
-        'M200 130 Q 300 130 380 130',
-        'M200 130 Q 300 200 380 220',
-      ].map((d, i) => (
-        <path
-          key={d}
-          d={d}
-          fill="none"
-          stroke="rgb(26 99 216 / 0.28)"
-          strokeWidth="1.6"
-          strokeDasharray="5 7"
-          className="animate-dash"
-          style={{ animationDelay: `${i * 0.35}s` }}
-        />
-      ))}
-    </svg>
-  )
-}
-
 function ConnectedPanel() {
+  const { copy } = useLocale()
+  const p2 = copy.diagram.p2
+
   return (
     <Panel
       n="2"
-      title="Fast, Connected Intelligence"
-      sub="Real-time context. Smarter decisions. In seconds."
+      title={p2.title}
+      sub={p2.sub}
       tone="iris"
-      arrow
     >
-      <div className="relative flex-1">
-        <UnifiedPanelDots />
-        <div className="relative grid gap-1.5 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
-          <div className="flex flex-col gap-1.5">
-            <MiniCard icon={<Calendar className="size-4" />} title="Bookings & appointments" note="Held and confirmed">
-              <div className="mt-1.5 space-y-1" aria-hidden>
-                <span className="block h-1 w-full rounded-full bg-iris/15" />
-                <span className="block h-1 w-3/4 rounded-full bg-iris/25" />
-              </div>
-              <div className="mt-1.5"><LiveTag /></div>
+      <div className="relative flex min-w-0 flex-1 flex-col gap-2">
+        <div className="relative z-[1] flex justify-center py-0.5">
+          <Hub />
+        </div>
+
+        <div className="relative z-[1] grid grid-cols-2 gap-1.5">
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <MiniCard icon={<Calendar className="size-3.5" />} title={p2.bookings} note={p2.bookingsNote}>
+              <div className="mt-1"><LiveTag /></div>
             </MiniCard>
-            <MiniCard icon={<Sparkles className="size-4" />} title="Sentiment analysis" note="Happy · neutral · at risk">
-              <svg viewBox="0 0 80 38" className="mt-1 w-full" aria-hidden>
-                <path d="M6 32a34 34 0 0 1 68 0" fill="none" stroke="#e3ddfb" strokeWidth="6" strokeLinecap="round" />
-                <path d="M6 32a34 34 0 0 1 56-24" fill="none" stroke="#14b5b0" strokeWidth="6" strokeLinecap="round" strokeDasharray="0 200">
-                  <animate attributeName="stroke-dasharray" from="0 200" to="70 200" dur="1.4s" fill="freeze" />
-                </path>
-                <circle cx="40" cy="32" r="2.6" fill="#0b3a9c" />
-              </svg>
+            <MiniCard icon={<Sparkles className="size-3.5" />} title={p2.sentiment} note={p2.sentimentNote}>
               <div className="mt-1"><LiveTag /></div>
             </MiniCard>
           </div>
-
-          <div className="grid place-items-center px-1 py-2 sm:py-0">
-            <Hub />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <MiniCard icon={<MessageSquare className="size-4" />} title="Customer chats" note="One thread per guest">
-              <div className="mt-1.5 space-y-1" aria-hidden>
-                <span className="ml-auto block h-3 w-4/5 rounded-full rounded-br-sm bg-brand/15" />
-                <span className="block h-3 w-3/5 rounded-full rounded-bl-sm bg-iris/15" />
-              </div>
-              <div className="mt-1.5"><LiveTag /></div>
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <MiniCard icon={<MessageSquare className="size-3.5" />} title={p2.chats} note={p2.chatsNote}>
+              <div className="mt-1"><LiveTag /></div>
             </MiniCard>
-            <MiniCard icon={<Users className="size-4" />} title="Customer history" note="Every past visit, in context">
-              <div className="mt-1.5 flex gap-1" aria-hidden>
-                {['#dbe7fb', '#e6e0ff', '#d7f2f1'].map((c) => (
-                  <span key={c} className="h-1 flex-1 rounded-full" style={{ background: c }} />
-                ))}
-              </div>
-              <div className="mt-1.5"><LiveTag /></div>
+            <MiniCard icon={<Users className="size-3.5" />} title={p2.history} note={p2.historyNote}>
+              <div className="mt-1"><LiveTag /></div>
             </MiniCard>
-            <MiniCard icon={<Bell className="size-4" />} title="Escalations" note="Straight to your team">
+            <MiniCard icon={<Bell className="size-3.5" />} title={p2.escalations} note={p2.escalationsNote}>
               <div className="mt-1"><LiveTag /></div>
             </MiniCard>
           </div>
         </div>
 
-        <div className="relative mt-2 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full bg-[linear-gradient(100deg,#6f4bf2,#3f5ce4)] px-3 py-1.5 text-center text-white shadow-[0_12px_26px_-14px_rgb(111_75_242/0.9)]">
-          <Clock className="size-3.5 shrink-0" aria-hidden />
-          <span className="text-[15px] leading-none font-semibold tabular-nums">1 to 4</span>
-          <span className="text-[11px] leading-tight">seconds average reply time</span>
+        <div className="relative z-[1] flex flex-wrap items-center justify-center gap-x-1.5 gap-y-0.5 rounded-full bg-[linear-gradient(100deg,#6f4bf2,#3f5ce4)] px-2.5 py-1 text-center text-white shadow-[0_10px_22px_-12px_rgb(111_75_242/0.85)]">
+          <Clock className="size-3 shrink-0" aria-hidden />
+          <span className="text-[13px] leading-none font-semibold tabular-nums">1–4</span>
+          <span className="text-[10px] leading-tight">{p2.reply}</span>
         </div>
 
-        <div className="relative mt-2 rounded-[16px] border border-white/90 bg-white/80 p-2.5">
-          <p className="caps text-[10px] tracking-[0.1em] text-brand">Connected to your business systems</p>
-          <div className="mt-1.5 grid grid-cols-3 gap-1.5">
+        <div className="relative z-[1] mt-auto rounded-[12px] border border-white/90 bg-white/80 p-2">
+          <p className="caps text-[9px] tracking-[0.08em] text-brand">{p2.systems}</p>
+          <div className="mt-1 grid grid-cols-3 gap-1">
             {[
-              { name: 'OPERA', sub: 'Oracle PMS', icon: <Database className="size-3.5" /> },
-              { name: 'F&B', sub: 'Symphony', icon: <ChartColumn className="size-3.5" /> },
-              { name: 'ERP', sub: 'Business ops', icon: <Zap className="size-3.5" /> },
+              { name: 'OPERA', sub: 'PMS', icon: <Database className="size-3" /> },
+              { name: 'F&B', sub: 'Symphony', icon: <ChartColumn className="size-3" /> },
+              { name: 'ERP', sub: 'Ops', icon: <Zap className="size-3" /> },
             ].map((s) => (
-              <div key={s.name} className="flex items-center gap-1.5 rounded-[10px] border border-line bg-white px-1.5 py-1.5">
-                <span className="grid size-6 shrink-0 place-items-center rounded-md bg-iris-soft text-iris">{s.icon}</span>
+              <div key={s.name} className="flex min-w-0 items-center gap-1 rounded-[8px] border border-line bg-white px-1 py-1">
+                <span className="grid size-5 shrink-0 place-items-center rounded-md bg-iris-soft text-iris">{s.icon}</span>
                 <span className="min-w-0">
-                  <span className="block truncate text-[10.5px] leading-tight font-semibold text-ink">{s.name}</span>
-                  <span className="block truncate text-[9.5px] leading-tight text-faint">{s.sub}</span>
+                  <span className="block truncate text-[9.5px] leading-tight font-semibold text-ink">{s.name}</span>
+                  <span className="block truncate text-[8.5px] leading-tight text-faint">{s.sub}</span>
                 </span>
               </div>
             ))}
@@ -340,10 +335,10 @@ function ConnectedPanel() {
 
 function FlowCard({ icon, title, note }: { icon: ReactNode; title: string; note: string }) {
   return (
-    <div className="flex flex-col items-center rounded-[14px] border border-white bg-white/95 px-2 py-2.5 text-center shadow-[0_10px_24px_-20px_rgb(9_30_74/0.5)]">
-      <span className="grid size-8 place-items-center rounded-full bg-teal-soft text-teal">{icon}</span>
-      <p className="mt-1.5 text-[11.5px] leading-tight font-semibold text-ink">{title}</p>
-      <p className="mt-0.5 text-[9.5px] leading-snug text-faint">{note}</p>
+    <div className="flex min-w-0 flex-col items-center rounded-[10px] border border-white bg-white/95 px-1.5 py-1.5 text-center shadow-[0_8px_18px_-16px_rgb(9_30_74/0.45)]">
+      <span className="grid size-6 place-items-center rounded-full bg-teal-soft text-teal">{icon}</span>
+      <p className="mt-1 line-clamp-2 text-[10px] leading-tight font-semibold text-ink">{title}</p>
+      <p className="mt-0.5 line-clamp-2 text-[8.5px] leading-snug text-faint">{note}</p>
     </div>
   )
 }
@@ -362,58 +357,59 @@ function RoleCard({
   children: ReactNode
 }) {
   return (
-    <div className="rounded-[12px] border border-white bg-white/95 p-2 shadow-[0_10px_24px_-20px_rgb(9_30_74/0.5)]">
-      <p className="text-[9.5px] leading-tight font-semibold" style={{ color: accent }}>{title}</p>
-      <p className="mt-1 text-[15px] leading-none font-semibold text-ink tabular-nums">{metric}</p>
-      <p className="mt-0.5 text-[9px] leading-tight text-success">▲ {delta}</p>
-      <div className="mt-1.5">{children}</div>
+    <div className="min-w-0 overflow-hidden rounded-[10px] border border-white bg-white/95 p-1.5 shadow-[0_8px_18px_-16px_rgb(9_30_74/0.45)]">
+      <p className="truncate text-[8.5px] leading-tight font-semibold" style={{ color: accent }}>{title}</p>
+      <p className="mt-0.5 text-[13px] leading-none font-semibold text-ink tabular-nums">{metric}</p>
+      <p className="mt-0.5 text-[8px] leading-tight text-success">▲ {delta}</p>
+      <div className="mt-1">{children}</div>
     </div>
   )
 }
 
 function SavedPanel() {
+  const { copy } = useLocale()
+  const p3 = copy.diagram.p3
+
   return (
     <Panel
       n="3"
-      title="Saved, Analyzed, Delivered"
-      sub="Turn conversations into insights and action."
+      title={p3.title}
+      sub={p3.sub}
       tone="teal"
     >
-      <div className="grid items-center gap-1 sm:grid-cols-[1fr_auto_1fr_auto_1fr]">
-        <FlowCard icon={<Database className="size-4" />} title="Secure data storage" note="All interactions & customer data" />
-        <ArrowRight className="mx-auto hidden size-3.5 text-teal sm:block" aria-hidden />
-        <FlowCard icon={<Brain className="size-4" />} title="AI analytics" note="Finds patterns and opportunities" />
-        <ArrowRight className="mx-auto hidden size-3.5 text-teal sm:block" aria-hidden />
-        <FlowCard icon={<TrendingUp className="size-4" />} title="Intelligent reports" note="Sent to the team that acts" />
+      <div className="grid grid-cols-3 gap-1">
+        <FlowCard icon={<Database className="size-3.5" />} title={p3.storage} note={p3.storageNote} />
+        <FlowCard icon={<Brain className="size-3.5" />} title={p3.analytics} note={p3.analyticsNote} />
+        <FlowCard icon={<TrendingUp className="size-3.5" />} title={p3.reports} note={p3.reportsNote} />
       </div>
 
-      <div className="mt-2 grid grid-cols-2 gap-1.5">
-        <RoleCard title="Owner · Business performance" metric="$24,850" delta="12%" accent="#0b3a9c">
-          <div className="flex h-6 items-end gap-[2px]" aria-hidden>
+      <div className="mt-1.5 grid grid-cols-2 gap-1">
+        <RoleCard title={p3.owner} metric="$24,850" delta="12%" accent="#0b3a9c">
+          <div className="flex h-4 items-end gap-[2px]" aria-hidden>
             {[0.3, 0.45, 0.35, 0.6, 0.5, 0.8, 1].map((h, i) => (
               <span key={i} className="flex-1 rounded-sm bg-brand/70" style={{ height: `${h * 100}%` }} />
             ))}
           </div>
         </RoleCard>
-        <RoleCard title="Manager · Team & service" metric="96%" delta="4%" accent="#6f4bf2">
-          <div className="flex items-center gap-1.5">
+        <RoleCard title={p3.manager} metric="96%" delta="4%" accent="#6f4bf2">
+          <div className="flex items-center gap-1">
             <span
-              className="grid size-7 place-items-center rounded-full text-[8px] font-semibold text-iris"
+              className="grid size-6 place-items-center rounded-full text-[7px] font-semibold text-iris"
               style={{ background: 'conic-gradient(#6f4bf2 0 88%, #ece6ff 88% 100%)' }}
               aria-hidden
             >
-              <span className="grid size-5 place-items-center rounded-full bg-white">88</span>
+              <span className="grid size-4 place-items-center rounded-full bg-white">88</span>
             </span>
-            <span className="text-[9px] leading-tight text-faint">Guest satisfaction</span>
+            <span className="text-[8px] leading-tight text-faint">Satisfaction</span>
           </div>
         </RoleCard>
-        <RoleCard title="Operations · Daily" metric="248" delta="6%" accent="#0e9a9e">
-          <svg viewBox="0 0 60 22" className="w-full" aria-hidden>
-            <path d="M1 18 L10 12 L19 15 L28 7 L37 11 L46 4 L59 6" fill="none" stroke="#14b5b0" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <RoleCard title={p3.ops} metric="248" delta="6%" accent="#0e9a9e">
+          <svg viewBox="0 0 60 16" className="w-full" aria-hidden>
+            <path d="M1 13 L10 9 L19 11 L28 5 L37 8 L46 3 L59 4" fill="none" stroke="#14b5b0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </RoleCard>
-        <RoleCard title="Marketing · Growth" metric="8.4%" delta="2.1%" accent="#c2410c">
-          <div className="flex h-6 items-end gap-[2px]" aria-hidden>
+        <RoleCard title={p3.marketing} metric="8.4%" delta="2.1%" accent="#c2410c">
+          <div className="flex h-4 items-end gap-[2px]" aria-hidden>
             {[0.25, 0.4, 0.35, 0.55, 0.7, 1].map((h, i) => (
               <span key={i} className="flex-1 rounded-sm bg-[#f59e0b]/60" style={{ height: `${h * 100}%` }} />
             ))}
@@ -421,9 +417,9 @@ function SavedPanel() {
         </RoleCard>
       </div>
 
-      <div className="mt-2 flex items-center justify-center gap-2 rounded-full bg-teal-soft/80 px-3 py-1.5">
-        <Lightbulb className="size-3.5 text-teal" aria-hidden />
-        <p className="text-[11px] font-medium text-teal-deep">Better insights. Happier guests. More growth.</p>
+      <div className="mt-auto flex items-center justify-center gap-1.5 rounded-full bg-teal-soft/80 px-2.5 py-1">
+        <Lightbulb className="size-3 text-teal" aria-hidden />
+        <p className="text-[10px] font-medium text-teal-deep">{p3.footer}</p>
       </div>
     </Panel>
   )
@@ -431,63 +427,74 @@ function SavedPanel() {
 
 /* ------------------------------------------------------------------ export */
 
-const FOOTER_FEATURES = [
-  { icon: <MessageSquare className="size-4" />, label: 'More conversations' },
-  { icon: <Zap className="size-4" />, label: 'Faster responses' },
-  { icon: <ChartColumn className="size-4" />, label: 'Smarter decisions' },
-  { icon: <Sparkles className="size-4" />, label: 'Happier customers' },
+const FEATURE_ICONS = [
+  <MessageSquare className="size-4" key="msg" />,
+  <Zap className="size-4" key="zap" />,
+  <ChartColumn className="size-4" key="chart" />,
+  <Sparkles className="size-4" key="spark" />,
 ]
 
 export function Diagram() {
+  const { copy } = useLocale()
+  const d = copy.diagram
+  const features = d.features.map((label, i) => ({
+    icon: FEATURE_ICONS[i],
+    label,
+  }))
+
   return (
-    <section id="how-it-works" className="relative mx-auto w-full max-w-[1320px] px-4 py-12 sm:px-6 lg:py-16">
+    <section id="how-it-works" className="relative mx-auto w-full max-w-[1200px] px-4 py-10 sm:px-6 lg:py-12">
       <Reveal className="flex flex-col items-center text-center">
-        <span className="caps inline-flex items-center gap-2 rounded-full border border-line bg-white/80 px-3.5 py-1.5 text-brand">
-          <Sparkles className="size-3.5" aria-hidden />
-          The platform in three moves
+        <span className="caps inline-flex items-center gap-2 rounded-full border border-line bg-white/80 px-3 py-1 text-brand">
+          <Sparkles className="size-3" aria-hidden />
+          {d.eyebrow}
         </span>
-        <h2 className="display mt-6 text-[clamp(1.9rem,1.1rem+3.4vw,3.9rem)] text-ink">
-          AI-Powered <span className="rainbow-text">Customer Communication</span>
+        <h2 className="display mt-4 text-[clamp(1.6rem,1rem+2.6vw,2.8rem)] text-ink">
+          {d.titleBefore} <span className="rainbow-text">{d.titleAccent}</span>
         </h2>
-        <p className="mt-4 max-w-xl text-[clamp(1rem,0.95rem+0.25vw,1.15rem)] text-muted">
-          Be there. Be responsive. Be unforgettable.
+        <p className="mt-2 max-w-xl text-[0.95rem] text-muted">
+          {d.body}
         </p>
       </Reveal>
 
-      <div className="mt-12 grid gap-3 lg:grid-cols-3">
-        <Reveal delay={0.05} className="h-full">
+      <div className="mt-8 flex flex-col gap-3 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-stretch lg:gap-2">
+        <Reveal delay={0.05} className="min-w-0">
           <UnifiedPanel />
         </Reveal>
-        <Reveal delay={0.15} className="h-full">
+        <StepBridge />
+        <StepBridge horizontal />
+        <Reveal delay={0.15} className="min-w-0">
           <ConnectedPanel />
         </Reveal>
-        <Reveal delay={0.25} className="h-full">
+        <StepBridge />
+        <StepBridge horizontal />
+        <Reveal delay={0.25} className="min-w-0">
           <SavedPanel />
         </Reveal>
       </div>
 
       <Reveal delay={0.1}>
-        <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-line pt-6">
-          {FOOTER_FEATURES.map((f, i) => (
-            <li key={f.label} className="flex items-center gap-8">
-              <span className="flex items-center gap-2 text-[13.5px] font-medium text-ink-2">
+        <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-line pt-4">
+          {features.map((f, i) => (
+            <li key={f.label} className="flex items-center gap-6">
+              <span className="flex items-center gap-1.5 text-[12.5px] font-medium text-ink-2">
                 <span className="text-brand">{f.icon}</span>
                 {f.label}
               </span>
-              {i < FOOTER_FEATURES.length - 1 && <span className="hidden h-4 w-px bg-line-strong sm:block" aria-hidden />}
+              {i < features.length - 1 && <span className="hidden h-3.5 w-px bg-line-strong sm:block" aria-hidden />}
             </li>
           ))}
         </ul>
       </Reveal>
 
-      <Reveal delay={0.15} className="mt-8 flex justify-center">
-        <a
-          href="#contact"
-          className="group inline-flex items-center gap-2 text-[13.5px] font-medium text-brand transition-colors hover:text-brand-deep"
+      <Reveal delay={0.15} className="mt-5 flex justify-center">
+        <Link
+          to="/demo"
+          className="group inline-flex items-center gap-1.5 text-[13px] font-medium text-brand transition-colors hover:text-brand-deep"
         >
-          See this running on your own channels
-          <ArrowUpRight className="size-4 transition-transform duration-[var(--duration-base)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
-        </a>
+          {d.cta}
+          <ArrowUpRight className="size-3.5" aria-hidden />
+        </Link>
       </Reveal>
     </section>
   )

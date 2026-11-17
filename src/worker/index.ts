@@ -50,6 +50,8 @@ app.post('/api/chat', async (c) => {
     return Response.json({ error: 'messages must be a non-empty array.' }, { status: 400 })
   }
 
+  const locale = body.locale === 'ar' ? 'ar' : 'en'
+
   const messages: ChatTurn[] = raw
     .filter(
       (m): m is ChatTurn =>
@@ -64,7 +66,7 @@ app.post('/api/chat', async (c) => {
     const reply = await generateChatReply(messages, {
       GEMINI_API_KEY: c.env.GEMINI_API_KEY,
       OPENAI_API_KEY: c.env.OPENAI_API_KEY,
-    })
+    }, locale)
     return c.json({ ok: true, reply })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Chat failed'

@@ -1,4 +1,4 @@
-import { CHAT_SYSTEM_PROMPT, type ChatTurn } from './chatKnowledge'
+import { chatSystemPrompt, type ChatTurn } from './chatKnowledge'
 
 export type ChatAiEnv = {
   GEMINI_API_KEY?: string
@@ -15,14 +15,14 @@ function normalizeTurns(messages: ChatTurn[]): ChatTurn[] {
 
 const GEMINI_MODELS = ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-flash-latest'] as const
 
-async function replyWithGemini(key: string, messages: ChatTurn[]): Promise<string> {
+async function replyWithGemini(key: string, messages: ChatTurn[], locale: 'en' | 'ar'): Promise<string> {
   const contents = messages.map((m) => ({
     role: m.role === 'assistant' ? 'model' : 'user',
     parts: [{ text: m.content }],
   }))
 
   const payload = {
-    systemInstruction: { parts: [{ text: CHAT_SYSTEM_PROMPT }] },
+    systemInstruction: { parts: [{ text: chatSystemPrompt(locale) }] },
     contents,
     generationConfig: { temperature: 0.55, maxOutputTokens: 500 },
   }
@@ -56,7 +56,7 @@ async function replyWithGemini(key: string, messages: ChatTurn[]): Promise<strin
   throw new Error(lastError)
 }
 
-async function replyWithOpenAI(key: string, messages: ChatTurn[]): Promise<string> {
+async function replyWithOpenAI(key: string, messages: ChatTurn[], locale: 'en' | 'ar'): Promise<string> {
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -67,7 +67,7 @@ async function replyWithOpenAI(key: string, messages: ChatTurn[]): Promise<strin
       model: 'gpt-4o-mini',
       temperature: 0.55,
       max_tokens: 500,
-      messages: [{ role: 'system', content: CHAT_SYSTEM_PROMPT }, ...messages],
+      messages: [{ role: 'system', content: chatSystemPrompt(locale) }, ...messages],
     }),
   })
 
@@ -83,12 +83,16 @@ async function replyWithOpenAI(key: string, messages: ChatTurn[]): Promise<strin
 }
 
 /** Generates an assistant reply using Gemini (preferred) or OpenAI. */
-export async function generateChatReply(rawMessages: ChatTurn[], env: ChatAiEnv): Promise<string> {
+export async function generateChatReply(
+  rawMessages: ChatTurn[],
+  env: ChatAiEnv,
+  locale: 'en' | 'ar' = 'en',
+): Promise<string> {
   const messages = normalizeTurns(rawMessages)
   if (!messages.length) throw new Error('No messages')
   if (messages[messages.length - 1]?.role !== 'user') throw new Error('Last message must be from the user')
 
-  if (env.GEMINI_API_KEY) return replyWithGemini(env.GEMINI_API_KEY, messages)
-  if (env.OPENAI_API_KEY) return replyWithOpenAI(env.OPENAI_API_KEY, messages)
+  if (env.GEMINI_API_KEY) return replyWithGemini(env.GEMINI_API_KEY, messages, locale)
+  if (env.OPENAI_API_KEY) return replyWithOpenAI(env.OPENAI_API_KEY, messages, locale)
   throw new Error('MISSING_API_KEY')
 }

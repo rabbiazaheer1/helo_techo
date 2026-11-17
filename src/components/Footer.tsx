@@ -1,10 +1,15 @@
 import { ArrowUp, Mail, MapPin, Phone } from 'lucide-react'
+import { Link } from 'react-router'
 
-import { NAV, SITE } from '../data'
+import { SITE } from '../data'
+import { useLocale } from '../lib/locale'
 import { Brand } from './Logo'
 import { ChannelMark, SocialRow } from './Social'
+import { Reveal } from './Ui'
 
 export function Footer() {
+  const { copy } = useLocale()
+
   return (
     <footer className="on-dark relative overflow-hidden bg-night px-4 pt-16 pb-8 text-white sm:px-6">
       <div
@@ -13,15 +18,12 @@ export function Footer() {
         aria-hidden
       />
       <div className="relative mx-auto w-full max-w-[1320px]">
-        <div className="grid gap-10 border-b border-white/10 pb-12 md:grid-cols-[1.4fr_1fr_1.2fr]">
+        <Reveal className="grid gap-10 border-b border-white/10 pb-12 md:grid-cols-[1.4fr_1fr_1.2fr]">
           <div>
             <Brand size="lg" light onDarkPlate />
-            <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-night-muted">
-              Your Business Communication Partner. Unified, answered, connected and delivered — deployed for
-              hospitality, clinics, restaurants, automobile dealerships and growing businesses across the GCC.
-            </p>
+            <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-night-muted">{copy.footer.blurb}</p>
             <div className="mt-6 flex flex-wrap gap-2">
-              {['English + Arabic', '6 channels', '24/7'].map((tag) => (
+              {copy.footer.tags.map((tag) => (
                 <span
                   key={tag}
                   className="rounded-full border px-3 py-1 text-[12px] text-white/80"
@@ -32,26 +34,32 @@ export function Footer() {
               ))}
             </div>
             <div className="mt-6">
-              <p className="caps text-[10px] text-white/40">We answer where they are</p>
-              <SocialRow className="mt-3 gap-2" itemClassName="size-9" label="Social channels we cover" />
+              <p className="caps text-[10px] text-white/40">{copy.footer.answersWhere}</p>
+              <SocialRow className="mt-3 gap-2" itemClassName="size-9" label={copy.footer.answersWhere} />
             </div>
           </div>
 
           <nav aria-label="Footer">
-            <p className="caps text-white/45">Sections</p>
+            <p className="caps text-white/45">{copy.footer.sections}</p>
             <ul className="mt-4 space-y-2.5">
-              {NAV.map((item) => (
+              {copy.nav.map((item) => (
                 <li key={item.href}>
-                  <a href={item.href} className="text-[14.5px] text-white/80 transition-colors hover:text-white">
-                    {item.label}
-                  </a>
+                  {item.href.startsWith('/') && !item.href.includes('#') ? (
+                    <Link to={item.href} className="text-[14.5px] text-white/80 transition-colors hover:text-white">
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <a href={item.href} className="text-[14.5px] text-white/80 transition-colors hover:text-white">
+                      {item.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
           </nav>
 
           <div>
-            <p className="caps text-white/45">Talk to sales</p>
+            <p className="caps text-white/45">{copy.footer.talkSales}</p>
             <ul className="mt-4 space-y-3 text-[14.5px]">
               <li>
                 <a href={`mailto:${SITE.email}`} className="group flex items-center gap-2.5 text-white/85 transition-colors hover:text-white">
@@ -74,7 +82,7 @@ export function Footer() {
                   href={SITE.whatsapp}
                   target="_blank"
                   rel="noreferrer noopener"
-                  aria-label={`Chat with us on WhatsApp at ${SITE.phone}`}
+                  aria-label={`${copy.navUi.chatWhatsApp} ${SITE.phone}`}
                   className="group flex items-center gap-2.5 text-white/85 transition-colors hover:text-white"
                 >
                   <ChannelMark kind="whatsapp" className="size-8" glyphClassName="size-4" rounded="rounded-full" />
@@ -89,20 +97,20 @@ export function Footer() {
               </li>
             </ul>
           </div>
-        </div>
+        </Reveal>
 
-        <div className="flex flex-col-reverse items-start justify-between gap-4 pt-6 sm:flex-row sm:items-center">
+        <Reveal delay={0.08} className="flex flex-col-reverse items-start justify-between gap-4 pt-6 sm:flex-row sm:items-center">
           <p className="text-[12.5px] text-white/45">
-            © {new Date().getFullYear()} {SITE.brand}. All rights reserved.
+            © {new Date().getFullYear()} {SITE.brand}. {copy.footer.rights}
           </p>
           <a
             href="#top"
             className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3.5 py-2 text-[12.5px] text-white/70 transition-colors hover:border-white/40 hover:text-white"
           >
-            Back to top
+            {copy.footer.backTop}
             <ArrowUp className="size-3.5" aria-hidden />
           </a>
-        </div>
+        </Reveal>
       </div>
     </footer>
   )

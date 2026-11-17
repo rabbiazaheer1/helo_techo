@@ -56,6 +56,7 @@
   --animate-spin-slow: spin-slow 38s linear infinite;
   --animate-spin-slower: spin-slow 64s linear infinite reverse;
   --animate-marquee: marquee 42s linear infinite;
+  --animate-marquee-slow: marquee 72s linear infinite;
   --animate-dash: dash 3.4s linear infinite;
   --animate-drift: drift 16s ease-in-out infinite alternate;
   --animate-pulse-ring: pulse-ring 3.6s ease-out infinite;
@@ -293,12 +294,19 @@
 .orbit {
   animation: spin-slow 52s linear infinite;
 }
+.orbit-reverse {
+  animation: spin-slow 52s linear infinite reverse;
+}
 .orbit-counter {
   animation: spin-slow 52s linear infinite reverse;
+}
+.orbit-reverse .orbit-counter {
+  animation: spin-slow 52s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .orbit,
+  .orbit-reverse,
   .orbit-counter {
     animation: none !important;
   }

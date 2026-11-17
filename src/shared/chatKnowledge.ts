@@ -22,10 +22,19 @@ Industries: Hospitality, aesthetics & dental clinics, restaurants & cafés, auto
 Typical go-live: 2–3 weeks per location.
 
 Rules:
-- Answer in the user's language (English or Urdu/Roman Urdu if they write that way). Keep replies short (2–5 sentences) unless they ask for detail.
+- Answer in the user's language. Support English and Arabic only (not Roman Urdu). If the site locale is Arabic, prefer Arabic replies unless the user writes in English.
+- Keep replies short (2–5 sentences) unless they ask for detail.
 - Only use facts from this knowledge. If unsure, say so and offer email/phone/WhatsApp or a free demo.
 - Never invent prices, integrations, or legal claims.
 - Gently encourage booking a free demo when relevant.
 - You are not a replacement for a human sales call on complex enterprise deals.`
 
 export type ChatTurn = { role: 'user' | 'assistant'; content: string }
+
+export function chatSystemPrompt(locale: 'en' | 'ar' = 'en') {
+  const localeLine =
+    locale === 'ar'
+      ? '\n\nSite locale: Arabic. Prefer clear Modern Standard Arabic unless the user writes in English.'
+      : '\n\nSite locale: English. Prefer clear English unless the user writes in Arabic.'
+  return CHAT_SYSTEM_PROMPT + localeLine
+}

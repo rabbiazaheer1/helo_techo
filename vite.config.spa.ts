@@ -60,13 +60,15 @@ function localApi(): Plugin {
           return
         }
 
-        const messages = (body as { messages?: unknown }).messages
+        const payload = body as { messages?: unknown; locale?: unknown }
+        const messages = payload.messages
+        const locale = payload.locale === 'ar' ? 'ar' : 'en'
         const env = loadEnv(server.config.mode, server.config.root, '')
         try {
           const reply = await generateChatReply((messages as never) ?? [], {
             GEMINI_API_KEY: env.GEMINI_API_KEY || process.env.GEMINI_API_KEY,
             OPENAI_API_KEY: env.OPENAI_API_KEY || process.env.OPENAI_API_KEY,
-          })
+          }, locale)
           json(res, 200, { ok: true, reply })
         } catch (err) {
           const message = err instanceof Error ? err.message : 'Chat failed'

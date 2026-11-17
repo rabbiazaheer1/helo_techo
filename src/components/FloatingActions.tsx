@@ -5,15 +5,11 @@ import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } fr
 import { SITE } from '../data'
 import { postJson } from '../lib/api'
 import { cx } from '../lib/cx'
+import { useLocale } from '../lib/locale'
 import { Brand } from './Logo'
 import { PulseDot } from './Ui'
 
 type ChatMsg = { id: string; role: 'bot' | 'user'; text: string }
-
-const WELCOME =
-  `Hi — I'm the Hello Techno AI assistant. Ask me about plans, channels, go-live time, or book a free demo. English or Roman Urdu, both fine.`
-
-const SUGGESTIONS = ['What plans do you offer?', 'Which channels do you cover?', 'How do I book a demo?']
 
 /** Bold white glyphs — match the classic WhatsApp / chat / call FABs. */
 function IconWhatsApp({ className }: { className?: string }) {
@@ -55,7 +51,7 @@ function Fab({
   children: ReactNode
 }) {
   const base =
-    'grid size-14 place-items-center rounded-full text-white shadow-[0_10px_24px_-6px_rgba(15,23,42,0.32),0_2px_6px_rgba(15,23,42,0.12)] transition-[transform,box-shadow] duration-[var(--duration-fast)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand'
+    'grid size-14 place-items-center rounded-full text-white shadow-[0_10px_24px_-6px_rgba(15,23,42,0.32),0_2px_6px_rgba(15,23,42,0.12)] transition-[box-shadow,transform] duration-[var(--duration-fast)] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand'
 
   if (href) {
     return (
@@ -73,12 +69,18 @@ function Fab({
 }
 
 function ChatPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { locale, copy } = useLocale()
   const titleId = useId()
   const listRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const [messages, setMessages] = useState<ChatMsg[]>([{ id: 'welcome', role: 'bot', text: WELCOME }])
+  const [messages, setMessages] = useState<ChatMsg[]>([{ id: 'welcome', role: 'bot', text: copy.chat.welcome }])
   const [draft, setDraft] = useState('')
   const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    setMessages([{ id: 'welcome', role: 'bot', text: copy.chat.welcome }])
+    setDraft('')
+  }, [locale, copy.chat.welcome])
 
   useEffect(() => {
     if (!open) return
@@ -113,7 +115,7 @@ function ChatPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
       .filter((m) => m.id !== 'welcome')
       .map((m) => ({ role: m.role === 'bot' ? ('assistant' as const) : ('user' as const), content: m.text }))
 
-    const result = await postJson<{ reply: string }>('/api/chat', { messages: history })
+    const result = await postJson<{ reply: string }>('/api/chat', { messages: history, locale })
     setBusy(false)
 
     if (result.ok && typeof result.data.reply === 'string' && result.data.reply.trim()) {
@@ -129,7 +131,7 @@ function ChatPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
         role: 'bot',
         text:
           fallback ||
-          `I could not reach the AI just now. Email ${SITE.email} or WhatsApp ${SITE.phone} and a person will help.`,
+          copy.chat.fallback.replace('{email}', SITE.email).replace('{phone}', SITE.phone),
       },
     ])
   }
@@ -150,23 +152,23 @@ function ChatPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 14, scale: 0.98 }}
           transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed right-3 bottom-[5.75rem] z-[55] flex h-[min(34rem,calc(100svh-7.5rem))] w-[min(22.5rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-[24px] border border-line bg-white shadow-[var(--shadow-float)] sm:right-6 sm:bottom-[6.25rem]"
+          className="fixed end-3 bottom-[5.75rem] z-[55] flex h-[min(34rem,calc(100svh-7.5rem))] w-[min(22.5rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-[24px] border border-line bg-white shadow-[var(--shadow-float)] sm:end-6 sm:bottom-[6.25rem]"
         >
           <header className="flex items-center gap-3 border-b border-line bg-[linear-gradient(115deg,#1a63d8,#4b53e8_58%,#0e9a9e)] px-4 py-3 text-white">
             <Brand size="xs" onDarkPlate className="!rounded-xl !px-2 !py-1.5 shrink-0" />
             <div className="min-w-0 flex-1">
               <p id={titleId} className="truncate text-[14px] font-semibold tracking-[-0.02em]">
-                Hello Techno AI
+                {copy.chat.title}
               </p>
               <p className="flex items-center gap-1.5 text-[11px] text-white/80">
                 <PulseDot className="size-1.5" />
-                Answers from your site knowledge
+                {copy.chat.subtitle}
               </p>
             </div>
             <button
               type="button"
               onClick={onClose}
-              aria-label="Close chat"
+              aria-label={copy.chat.close}
               className="grid size-9 place-items-center rounded-full bg-white/15 text-white transition-colors hover:bg-white/25"
             >
               <X className="size-4" aria-hidden />
@@ -193,14 +195,14 @@ function ChatPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
               <div className="flex justify-start">
                 <div className="inline-flex items-center gap-2 rounded-[16px] rounded-bl-md border border-line bg-white px-3.5 py-2.5 text-[12.5px] text-muted">
                   <LoaderCircle className="size-3.5 animate-spin" aria-hidden />
-                  Thinking…
+                  {copy.chat.thinking}
                 </div>
               </div>
             )}
 
             {messages.length === 1 && !busy && (
               <div className="flex flex-wrap gap-2 pt-1">
-                {SUGGESTIONS.map((s) => (
+                {copy.chat.suggestions.map((s) => (
                   <button
                     key={s}
                     type="button"
@@ -220,7 +222,7 @@ function ChatPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
                 ref={inputRef}
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
-                placeholder="Ask anything about Hello Techno…"
+                placeholder={copy.chat.placeholder}
                 disabled={busy}
                 className="h-11 min-w-0 flex-1 rounded-full border border-line-strong bg-soft/60 px-4 text-[14px] text-ink placeholder:text-faint focus:border-brand focus:outline-none disabled:opacity-60"
               />
@@ -228,13 +230,13 @@ function ChatPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
                 type="submit"
                 disabled={busy || !draft.trim()}
                 className="grid size-11 shrink-0 place-items-center rounded-full bg-brand text-white transition-[filter,transform] hover:brightness-110 active:scale-95 disabled:opacity-40"
-                aria-label="Send message"
+                aria-label={copy.chat.send}
               >
                 {busy ? <LoaderCircle className="size-4 animate-spin" aria-hidden /> : <Send className="size-4" aria-hidden />}
               </button>
             </form>
             <p className="mt-2 text-center text-[10.5px] text-faint">
-              Or WhatsApp{' '}
+              {copy.navUi.chatWhatsApp}{' '}
               <a href={SITE.whatsapp} target="_blank" rel="noreferrer noopener" className="font-medium text-brand">
                 {SITE.phone}
               </a>
@@ -246,29 +248,30 @@ function ChatPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
   )
 }
 
-/** Right-side WhatsApp + AI chat + call stack. */
+/** End-side WhatsApp + AI chat + call stack. */
 export function FloatingActions() {
+  const { copy } = useLocale()
   const [chatOpen, setChatOpen] = useState(false)
 
   return (
     <>
       <ChatPanel open={chatOpen} onClose={() => setChatOpen(false)} />
 
-      <div className="pointer-events-none fixed right-3 bottom-5 z-[54] flex flex-col items-end gap-3 sm:right-6 sm:bottom-6">
+      <div className="pointer-events-none fixed end-3 bottom-5 z-[54] flex flex-col items-end gap-3 sm:end-6 sm:bottom-6">
         <div className="pointer-events-auto flex flex-col items-center gap-3">
-          <Fab href={SITE.whatsapp} label={`Chat on WhatsApp at ${SITE.phone}`} className="bg-[#25D366]">
+          <Fab href={SITE.whatsapp} label={`${copy.navUi.chatWhatsApp} ${SITE.phone}`} className="bg-[#25D366]">
             <IconWhatsApp className="size-[1.65rem]" />
           </Fab>
 
           <Fab
             onClick={() => setChatOpen((v) => !v)}
-            label={chatOpen ? 'Close AI chat' : 'Open AI chat'}
+            label={chatOpen ? copy.chat.closeChat : copy.chat.openChat}
             className={chatOpen ? 'bg-ink' : 'bg-[#4F6BED]'}
           >
             {chatOpen ? <X className="size-6" strokeWidth={2.5} aria-hidden /> : <IconChat className="size-[1.55rem]" />}
           </Fab>
 
-          <Fab onClick={() => setChatOpen(true)} label="Open AI chat" className="bg-[#4F6BED]">
+          <Fab onClick={() => setChatOpen(true)} label={copy.chat.openChat} className="bg-[#4F6BED]">
             <IconCall className="size-[1.45rem]" />
           </Fab>
         </div>

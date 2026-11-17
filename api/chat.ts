@@ -15,11 +15,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return
   }
 
-  const messages = (body as { messages?: unknown }).messages
+  const payload = body as { messages?: unknown; locale?: unknown }
+  const messages = payload.messages
   if (!Array.isArray(messages) || messages.length === 0) {
     res.status(400).json({ error: 'messages must be a non-empty array.' })
     return
   }
+
+  const locale = payload.locale === 'ar' ? 'ar' : 'en'
 
   const turns: ChatTurn[] = messages
     .filter((m): m is ChatTurn => !!m && typeof m === 'object' && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
@@ -31,7 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const reply = await generateChatReply(turns, env)
+    const reply = await generateChatReply(turns, env, locale)
     res.status(200).json({ ok: true, reply })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Chat failed'
