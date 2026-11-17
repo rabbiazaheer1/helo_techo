@@ -1,31 +1,47 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
-
 import { generateChatReply, type ChatAiEnv } from '../src/shared/chatAi'
 import type { ChatTurn } from '../src/shared/chatKnowledge'
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export const config = { runtime: 'edge' }
+
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'content-type': 'application/json; charset=utf-8' },
+  })
+}
+
+export default async function handler(req: Request) {
   if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' })
-    return
+    return json({ error: 'Method not allowed' }, 405)
   }
 
-  const body = req.body
+  let body: unknown
+  try {
+    body = await req.json()
+  } catch {
+    return json({ error: 'Send a JSON object with messages.' }, 400)
+  }
+
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
-    res.status(400).json({ error: 'Send a JSON object with messages.' })
-    return
+    return json({ error: 'Send a JSON object with messages.' }, 400)
   }
 
   const payload = body as { messages?: unknown; locale?: unknown }
   const messages = payload.messages
   if (!Array.isArray(messages) || messages.length === 0) {
-    res.status(400).json({ error: 'messages must be a non-empty array.' })
-    return
+    return json({ error: 'messages must be a non-empty array.' }, 400)
   }
 
   const locale = payload.locale === 'ar' ? 'ar' : 'en'
 
   const turns: ChatTurn[] = messages
-    .filter((m): m is ChatTurn => !!m && typeof m === 'object' && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+    .filter(
+      (m): m is ChatTurn =>
+        !!m &&
+        typeof m === 'object' &&
+        ((m as ChatTurn).role === 'user' || (m as ChatTurn).role === 'assistant') &&
+        typeof (m as ChatTurn).content === 'string',
+    )
     .map((m) => ({ role: m.role, content: m.content }))
 
   const env: ChatAiEnv = {
@@ -35,15 +51,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const reply = await generateChatReply(turns, env, locale)
-    res.status(200).json({ ok: true, reply })
+    return json({ ok: true, reply })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Chat failed'
     if (message === 'MISSING_API_KEY') {
-      res.status(503).json({
-        error: 'AI chatbot is not configured yet. Add GEMINI_API_KEY or OPENAI_API_KEY in Vercel env.',
-      })
-      return
+      return json(
+        {
+          error:
+            'AI chatbot is not configured yet. Add GEMINI_API_KEY or OPENAI_API_KEY in Vercel Project Settings → Environment Variables.',
+        },
+        503,
+      )
     }
-    res.status(502).json({ error: 'The assistant could not reply right now. Please try again.' })
+    console.error('[api/chat]', message)
+    return json({ error: 'The assistant could not reply right now. Please try again.' }, 502)
   }
 }

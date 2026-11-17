@@ -38,3 +38,39 @@ export function chatSystemPrompt(locale: 'en' | 'ar' = 'en') {
       : '\n\nSite locale: English. Prefer clear English unless the user writes in Arabic.'
   return CHAT_SYSTEM_PROMPT + localeLine
 }
+
+/** Offline FAQ-style reply when the live AI API is down. */
+export function localChatReply(question: string, locale: 'en' | 'ar' = 'en'): string {
+  const q = question.toLowerCase()
+  const ar = locale === 'ar'
+
+  if (/price|pricing|plan|cost|اشتراك|سعر|خطة|باقة/.test(q)) {
+    return ar
+      ? 'الباقات تبدأ من ٩٠ ر.ق/شهر (Starter)، والنمو ٢٥٠ ر.ق (موصى بها)، والمتصلة ٥٩٩ ر.ق. لا رسوم إعداد، و٥٠ رصيداً مجانياً للبداية. احجز عرضاً مجانياً للتفاصيل.'
+      : 'Plans start at QAR 90/month (Starter), Growth is QAR 250 (recommended), and Connected is QAR 599. Zero setup fee, 50 free credits to start. Book a free demo for a fit check.'
+  }
+  if (/whatsapp|channel|instagram|voice|call|قناة|واتساب|هاتف/.test(q)) {
+    return ar
+      ? 'Hello Techno يوحّد واتساب والمكالمات والدردشة والموقع وإنستغرام والرسائل والبريد في صندوق واحد، بالعربية والإنجليزية، مع تسليم فوري لفريقك.'
+      : 'Hello Techno unifies WhatsApp, voice, web chat, Instagram, SMS and email in one governed inbox — Arabic and English — with one-click human takeover.'
+  }
+  if (/demo|book|trial|عرض|تجربة|احجز/.test(q)) {
+    return ar
+      ? 'احجز عرضاً مجانياً من صفحة Demo، أو راسلنا sales@hellotechnosolutions.com أو واتساب +974 31637274.'
+      : 'Book a free demo on the Demo page, or reach us at sales@hellotechnosolutions.com / WhatsApp +974 31637274.'
+  }
+  if (/contact|email|phone|رقم|تواصل|بريد/.test(q)) {
+    return ar
+      ? 'تواصل: sales@hellotechnosolutions.com · هاتف/واتساب +974 31637274 · الدوحة، قطر.'
+      : 'Contact: sales@hellotechnosolutions.com · Phone/WhatsApp +974 31637274 · Doha, Qatar.'
+  }
+  if (/what|hello techno|who|ما هو|من هي|عن/.test(q)) {
+    return ar
+      ? 'Hello Techno منصة تواصل ذكية للشركات في الخليج — ترد على العملاء عبر القنوات، تحجز في أنظمتكم، وتُبقي كل محادثة مسجّلة.'
+      : 'Hello Techno is an AI customer-communication platform for GCC businesses — it answers across your channels, books into your systems, and keeps every conversation on the record.'
+  }
+
+  return ar
+    ? 'يمكنني المساعدة حول الباقات والقنوات والعرض التجريبي. للأسئلة الدقيقة راسل sales@hellotechnosolutions.com أو واتساب +974 31637274.'
+    : 'I can help with plans, channels, and booking a demo. For anything precise, email sales@hellotechnosolutions.com or WhatsApp +974 31637274.'
+}

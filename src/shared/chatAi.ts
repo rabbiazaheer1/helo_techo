@@ -13,7 +13,16 @@ function normalizeTurns(messages: ChatTurn[]): ChatTurn[] {
     .slice(-16)
 }
 
-const GEMINI_MODELS = ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-flash-latest'] as const
+/** Try current Gemini IDs first, then stable fallbacks. */
+const GEMINI_MODELS = [
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-2.0-flash-lite',
+  'gemini-1.5-flash',
+  'gemini-flash-latest',
+  'gemini-3.5-flash-lite',
+  'gemini-3.8-flash',
+] as const
 
 async function replyWithGemini(key: string, messages: ChatTurn[], locale: 'en' | 'ar'): Promise<string> {
   const contents = messages.map((m) => ({

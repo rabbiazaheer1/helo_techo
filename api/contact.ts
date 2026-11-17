@@ -1,26 +1,36 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
-
 import { validateContact } from '../src/shared/validation'
+
+export const config = { runtime: 'edge' }
+
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'content-type': 'application/json; charset=utf-8' },
+  })
+}
 
 const reference = () => `HT-${Math.random().toString(36).slice(2, 8).toUpperCase()}`
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: Request) {
   if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' })
-    return
+    return json({ error: 'Method not allowed' }, 405)
   }
 
-  const body = req.body
+  let body: unknown
+  try {
+    body = await req.json()
+  } catch {
+    return json({ error: 'Send a JSON object.' }, 400)
+  }
+
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
-    res.status(400).json({ error: 'Send a JSON object.' })
-    return
+    return json({ error: 'Send a JSON object.' }, 400)
   }
 
   const fieldErrors = validateContact(body as Record<string, unknown>)
   if (Object.keys(fieldErrors).length) {
-    res.status(422).json({ error: 'Please check the highlighted fields.', fieldErrors })
-    return
+    return json({ error: 'Please check the highlighted fields.', fieldErrors }, 422)
   }
 
-  res.status(201).json({ ok: true, reference: reference() })
+  return json({ ok: true, reference: reference() }, 201)
 }

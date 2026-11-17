@@ -6,6 +6,7 @@ import { FloatingActions } from './components/FloatingActions'
 import { Footer } from './components/Footer'
 import { HeyServoWidget } from './components/HeyServoWidget'
 import { Nav } from './components/Nav'
+import { SmoothScroll } from './components/SmoothScroll'
 import { LocaleProvider } from './lib/locale'
 import { AiEmployee } from './pages/AiEmployee'
 import { Auth } from './pages/Auth'
@@ -36,28 +37,30 @@ export function App() {
     <LocaleProvider>
       <MotionConfig reducedMotion="user">
         <BrowserRouter>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <MarketingLayout>
-                  <Home />
-                </MarketingLayout>
-              }
-            />
-            <Route
-              path="/ai-employee"
-              element={
-                <MarketingLayout>
-                  <AiEmployee />
-                </MarketingLayout>
-              }
-            />
-            <Route path="/demo" element={<Auth />} />
-            <Route path="/login" element={<Navigate to="/demo?mode=login" replace />} />
-            <Route path="/signup" element={<Navigate to="/demo" replace />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          <SmoothScroll>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <MarketingLayout>
+                    <Home />
+                  </MarketingLayout>
+                }
+              />
+              <Route
+                path="/ai-employee"
+                element={
+                  <MarketingLayout>
+                    <AiEmployee />
+                  </MarketingLayout>
+                }
+              />
+              <Route path="/demo" element={<Auth />} />
+              <Route path="/login" element={<Navigate to="/demo?mode=login" replace />} />
+              <Route path="/signup" element={<Navigate to="/demo" replace />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </SmoothScroll>
         </BrowserRouter>
       </MotionConfig>
     </LocaleProvider>

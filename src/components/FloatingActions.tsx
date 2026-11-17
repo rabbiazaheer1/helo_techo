@@ -6,6 +6,7 @@ import { SITE } from '../data'
 import { postJson } from '../lib/api'
 import { cx } from '../lib/cx'
 import { useLocale } from '../lib/locale'
+import { localChatReply } from '../shared/chatKnowledge'
 import { Brand } from './Logo'
 import { IconMessenger, IconPhone, IconWhatsApp } from './Social'
 import { PulseDot } from './Ui'
@@ -98,17 +99,9 @@ function ChatPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
       return
     }
 
-    const fallback = !result.ok ? result.error : ''
-    setMessages((m) => [
-      ...m,
-      {
-        id: `b-${Date.now()}`,
-        role: 'bot',
-        text:
-          fallback ||
-          copy.chat.fallback.replace('{email}', SITE.email).replace('{phone}', SITE.phone),
-      },
-    ])
+    // Always answer — use grounded local FAQ if the live API is down / misconfigured.
+    const offline = localChatReply(cleaned, locale)
+    setMessages((m) => [...m, { id: `b-${Date.now()}`, role: 'bot', text: offline }])
   }
 
   const onSubmit = (event: FormEvent) => {
