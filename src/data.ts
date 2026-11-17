@@ -23,6 +23,8 @@ export const SITE = {
   whatsapp: 'https://wa.me/97431637274',
   location: 'Doha, Qatar',
   serving: 'Built for hospitality, clinics, restaurants and growing businesses across the GCC',
+  /** HeyServo widget public key (`pk_live_...`) from the admin Widget page. */
+  heyservoPublicKey: '',
 } as const
 
 export const NAV = [
@@ -53,14 +55,11 @@ export type Channel = { name: string; kind: ChannelKey; note: string }
 
 export const CHANNELS: Channel[] = [
   { name: 'WhatsApp', kind: 'whatsapp', note: 'In and out, on your number' },
-  { name: 'Instagram', kind: 'instagram', note: 'DMs and comments captured' },
-  { name: 'Facebook', kind: 'facebook', note: 'Page inbox and Messenger' },
-  { name: 'X', kind: 'x', note: 'DMs and mentions answered' },
-  { name: 'TikTok', kind: 'tiktok', note: 'Comments turned into bookings' },
-  { name: 'Voice calls', kind: 'voice', note: 'Answers before the third ring' },
+  { name: 'Voice / Call', kind: 'voice', note: 'Answers before the third ring' },
   { name: 'Web chat', kind: 'web', note: 'On every page of your site' },
   { name: 'SMS', kind: 'sms', note: 'Reminders and follow-ups' },
-  { name: 'Email', kind: 'email', note: 'Requests routed, not buried' },
+  { name: 'Instagram', kind: 'instagram', note: 'DMs and comments captured' },
+  { name: 'Gmail', kind: 'email', note: 'Requests routed, not buried' },
 ]
 
 export const INTEGRATIONS = [

@@ -1,8 +1,10 @@
-import { ArrowUpRight, Menu, Phone, X } from 'lucide-react'
+import { ArrowUpRight, LogOut, Menu, Phone, X } from 'lucide-react'
 import { AnimatePresence, motion, useScroll } from 'motion/react'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 
 import { NAV, SITE } from '../data'
+import { clearSession, getSession, type AuthUser } from '../lib/auth'
 import { cx } from '../lib/cx'
 import { Brand } from './Logo'
 import { ChannelMark } from './Social'
@@ -11,7 +13,12 @@ import { PulseDot } from './Ui'
 export function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const [user, setUser] = useState<AuthUser | null>(null)
   const { scrollYProgress } = useScroll()
+
+  useEffect(() => {
+    setUser(getSession())
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 18)
@@ -27,6 +34,12 @@ export function Nav() {
     }
   }, [open])
 
+  const logout = () => {
+    clearSession()
+    setUser(null)
+    setOpen(false)
+  }
+
   return (
     <>
       <motion.div
@@ -41,9 +54,9 @@ export function Nav() {
         )}
       >
         <div className="mx-auto flex h-18 w-full max-w-[1320px] items-center justify-between gap-4 px-4 sm:px-6">
-          <a href="#top" className="shrink-0" aria-label={`${SITE.name} — home`}>
-            <Brand size="sm" className="transition-transform duration-[var(--duration-base)] hover:-translate-y-px" />
-          </a>
+          <Link to="/" className="shrink-0" aria-label={`${SITE.name} — home`}>
+            <Brand size="md" className="max-sm:origin-left transition-transform duration-[var(--duration-base)] hover:-translate-y-px max-sm:scale-[0.92]" />
+          </Link>
 
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Sections">
             {NAV.map((item) => (
@@ -75,6 +88,38 @@ export function Nav() {
               <Phone className="size-3.5" aria-hidden />
               {SITE.phone}
             </a>
+
+            {user ? (
+              <div className="hidden items-center gap-2 lg:flex">
+                <span className="max-w-[9rem] truncate rounded-full bg-soft px-3 py-2 text-[13px] font-medium text-ink">
+                  {user.name.split(' ')[0]}
+                </span>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-line-strong px-3 py-2 text-[13px] font-medium text-muted hover:border-brand hover:text-brand"
+                >
+                  <LogOut className="size-3.5" aria-hidden />
+                  Log out
+                </button>
+              </div>
+            ) : (
+              <div className="hidden items-center gap-1.5 lg:flex">
+                <Link
+                  to="/login"
+                  className="rounded-full px-3.5 py-2 text-[13.5px] font-medium text-muted transition-colors hover:bg-soft hover:text-ink"
+                >
+                  Log in
+                </Link>
+                <Link
+                  to="/signup"
+                  className="rounded-full border border-line-strong bg-white/80 px-3.5 py-2 text-[13.5px] font-medium text-ink transition-colors hover:border-brand hover:text-brand"
+                >
+                  Sign up
+                </Link>
+              </div>
+            )}
+
             <a
               href="#contact"
               className="hidden items-center gap-2 rounded-full bg-[linear-gradient(115deg,#1a63d8,#4b53e8_58%,#0e9a9e)] px-4 py-2.5 text-[13.5px] font-medium text-white shadow-[0_12px_26px_-16px_rgb(26_99_216/0.9)] transition-[filter,transform] duration-[var(--duration-fast)] hover:brightness-[1.07] active:scale-[0.98] sm:inline-flex"
@@ -138,6 +183,38 @@ export function Nav() {
                 ))}
               </nav>
               <div className="mt-5 flex flex-col gap-2">
+                {user ? (
+                  <>
+                    <p className="rounded-[14px] bg-soft px-3 py-2 text-center text-[13.5px] font-medium text-ink">
+                      Signed in as {user.name}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={logout}
+                      className="flex h-12 items-center justify-center gap-2 rounded-full border border-line-strong text-[15px] font-medium text-ink"
+                    >
+                      <LogOut className="size-4" aria-hidden />
+                      Log out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      onClick={() => setOpen(false)}
+                      className="flex h-12 items-center justify-center rounded-full border border-line-strong text-[15px] font-medium text-ink"
+                    >
+                      Log in
+                    </Link>
+                    <Link
+                      to="/signup"
+                      onClick={() => setOpen(false)}
+                      className="flex h-12 items-center justify-center rounded-full border border-brand/30 bg-brand-soft text-[15px] font-medium text-brand"
+                    >
+                      Sign up
+                    </Link>
+                  </>
+                )}
                 <a
                   href="#contact"
                   onClick={() => setOpen(false)}
@@ -152,7 +229,16 @@ export function Nav() {
                   <Phone className="size-4" aria-hidden />
                   {SITE.phone}
                 </a>
-                <p className="mt-1 text-center text-[12.5px] text-muted">{SITE.email}</p>
+                <a
+                  href={SITE.whatsapp}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  onClick={() => setOpen(false)}
+                  className="flex h-12 items-center justify-center gap-2 rounded-full border border-line-strong text-[15px] font-medium text-ink"
+                >
+                  <ChannelMark kind="whatsapp" className="size-6" glyphClassName="size-3.5" rounded="rounded-full" />
+                  WhatsApp
+                </a>
               </div>
             </motion.div>
           </motion.div>

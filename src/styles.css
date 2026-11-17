@@ -176,6 +176,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: clip;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   button,
   input,
@@ -294,6 +295,17 @@
 }
 .orbit-counter {
   animation: spin-slow 52s linear infinite reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit,
+  .orbit-counter {
+    animation: none !important;
+  }
+  .rainbow-text {
+    animation: none !important;
+    background-position: 50% 50%;
+  }
 }
 
 .marquee-mask {

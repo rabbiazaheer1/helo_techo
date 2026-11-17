@@ -58,7 +58,7 @@ export function Footer() {
                   <span className="grid size-8 shrink-0 place-items-center rounded-full border border-white/15 text-white/70 transition-colors group-hover:border-white/40">
                     <Mail className="size-3.5" aria-hidden />
                   </span>
-                  {SITE.email}
+                  <span className="break-all">{SITE.email}</span>
                 </a>
               </li>
               <li>

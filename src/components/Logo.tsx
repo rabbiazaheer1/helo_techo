@@ -1,10 +1,9 @@
-import { useId, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 
 import { cx } from '../lib/cx'
 
 /**
- * The Hello Techno mark: a network brain drawn as a mesh, a signal running
- * through it, and the handset swoosh in brand blue, iris and teal.
+ * Hello Techno mark — brain mesh + signal + handset, high-contrast for small sizes.
  */
 export function Mark({ className, glow = false }: { className?: string; glow?: boolean }) {
   const raw = useId().replace(/[^a-zA-Z0-9]/g, '')
@@ -30,62 +29,61 @@ export function Mark({ className, glow = false }: { className?: string; glow?: b
     <svg viewBox="0 0 120 120" className={cx('shrink-0', className)} aria-hidden>
       <defs>
         <linearGradient id={blue} x1="12" y1="8" x2="96" y2="104" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#1f6fd0" />
-          <stop offset="0.55" stopColor="#1450b0" />
-          <stop offset="1" stopColor="#0b2d7a" />
+          <stop offset="0" stopColor="#3b82f6" />
+          <stop offset="0.45" stopColor="#1a63d8" />
+          <stop offset="1" stopColor="#0b3a9c" />
         </linearGradient>
         <linearGradient id={iris} x1="80" y1="8" x2="108" y2="46" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#a78bfa" />
+          <stop offset="0" stopColor="#c4b5fd" />
           <stop offset="1" stopColor="#7c3aed" />
         </linearGradient>
         <linearGradient id={teal} x1="74" y1="72" x2="118" y2="116" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#3fc9c0" />
-          <stop offset="1" stopColor="#0d8fa3" />
+          <stop offset="0" stopColor="#5eead4" />
+          <stop offset="1" stopColor="#0e9a9e" />
         </linearGradient>
         <radialGradient id={sheen} cx="34%" cy="24%" r="66%">
-          <stop offset="0" stopColor="#ffffff" stopOpacity="0.34" />
+          <stop offset="0" stopColor="#ffffff" stopOpacity="0.42" />
           <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
         </radialGradient>
       </defs>
 
-      {glow && <circle cx="60" cy="60" r="56" fill={`url(#${teal})`} opacity="0.12" />}
+      {glow && <circle cx="60" cy="60" r="56" fill={`url(#${teal})`} opacity="0.16" />}
 
-      {/* Brain silhouette, built from overlapping lobes. */}
+      <circle cx="60" cy="60" r="52" fill="#eef4ff" />
+      <circle cx="60" cy="60" r="50" fill={`url(#${blue})`} />
+
       <g fill={`url(#${blue})`}>
-        <circle cx="44" cy="46" r="24" />
-        <circle cx="66" cy="34" r="21" />
-        <circle cx="86" cy="48" r="19" />
-        <circle cx="60" cy="62" r="24" />
-        <circle cx="40" cy="66" r="17" />
-        <circle cx="78" cy="68" r="15" />
+        <circle cx="44" cy="46" r="22" />
+        <circle cx="66" cy="34" r="19" />
+        <circle cx="86" cy="48" r="17" />
+        <circle cx="60" cy="62" r="22" />
+        <circle cx="40" cy="66" r="15" />
+        <circle cx="78" cy="68" r="14" />
       </g>
-      <circle cx="90" cy="32" r="14" fill={`url(#${iris})`} />
-      <circle cx="40" cy="84" r="9" fill={`url(#${teal})`} opacity="0.85" />
+      <circle cx="90" cy="32" r="13" fill={`url(#${iris})`} />
+      <circle cx="40" cy="84" r="9" fill={`url(#${teal})`} />
       <circle cx="60" cy="60" r="34" fill={`url(#${sheen})`} />
 
-      {/* The mesh: white ribs and nodes across the brain. */}
-      <g stroke="#ffffff" strokeOpacity="0.5" strokeWidth="1.6" strokeLinecap="round">
+      <g stroke="#ffffff" strokeOpacity="0.7" strokeWidth="1.8" strokeLinecap="round">
         {edges.map(([a, b]) => (
           <line key={`${a}-${b}`} x1={nodes[a][0]} y1={nodes[a][1]} x2={nodes[b][0]} y2={nodes[b][1]} />
         ))}
       </g>
-      <g fill="#ffffff" fillOpacity="0.85">
+      <g fill="#ffffff">
         {nodes.map(([x, y]) => (
-          <circle key={`${x}-${y}`} cx={x} cy={y} r="2.1" />
+          <circle key={`${x}-${y}`} cx={x} cy={y} r="2.3" />
         ))}
       </g>
 
-      {/* The signal running through. */}
       <path
         d="M30 58h9l6-16 8 32 8-24 7 16 6-8h10"
         fill="none"
         stroke="#ffffff"
-        strokeWidth="4.6"
+        strokeWidth="4.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
 
-      {/* Handset swoosh. */}
       <path
         d="M84 84c9 1 16 8 17 17"
         fill="none"
@@ -93,59 +91,13 @@ export function Mark({ className, glow = false }: { className?: string; glow?: b
         strokeWidth="9"
         strokeLinecap="round"
       />
-      <circle cx="84" cy="84" r="6.6" fill={`url(#${teal})`} />
-      <circle cx="101" cy="101" r="6.6" fill={`url(#${teal})`} />
+      <circle cx="84" cy="84" r="6.8" fill={`url(#${teal})`} />
+      <circle cx="101" cy="101" r="6.8" fill={`url(#${teal})`} />
     </svg>
   )
 }
 
-/** One of the two "o"s in the wordmark: a ring holding a signal. */
-function SignalO({ size = 'md', light = false }: { size?: 'md' | 'sm'; light?: boolean }) {
-  return (
-    <span
-      className={cx(
-        'relative inline-grid shrink-0 place-items-center rounded-full',
-        light
-          ? 'bg-[linear-gradient(135deg,#4d8ce8,#63b9f0_55%,#3fc9c9)]'
-          : 'bg-[linear-gradient(135deg,#1450b0,#2b8fd6_55%,#1a9fbd)]',
-        size === 'md' ? 'size-[0.88em]' : 'size-[0.8em]',
-      )}
-    >
-      <span className="flex items-end gap-[0.06em]" aria-hidden>
-        {[0.34, 0.62, 0.46, 0.7, 0.38].map((h, i) => (
-          <span
-            key={i}
-            className="w-[0.055em] rounded-full bg-white/95"
-            style={{ height: `${h * 0.42}em` }}
-          />
-        ))}
-      </span>
-    </span>
-  )
-}
-
-function MicO({ light = false }: { light?: boolean }) {
-  return (
-    <span
-      className={cx(
-        'relative inline-grid size-[0.86em] shrink-0 place-items-center rounded-full border-[0.09em]',
-        light ? 'border-[#5fd8d0]' : 'border-teal',
-      )}
-    >
-      <span className="flex flex-col items-center gap-[0.05em]" aria-hidden>
-        <span className={cx('h-[0.2em] w-[0.13em] rounded-full', light ? 'bg-[#5fd8d0]' : 'bg-teal')} />
-        <span
-          className={cx(
-            'h-[0.12em] w-[0.27em] rounded-b-full border-x-[0.05em] border-b-[0.05em]',
-            light ? 'border-[#5fd8d0]' : 'border-teal',
-          )}
-        />
-      </span>
-    </span>
-  )
-}
-
-/** "Hello" in brand blue over "Techno" in teal, with the signal circles. */
+/** Clear, readable wordmark — Hello / Techno stacked. */
 export function Wordmark({
   className,
   size = 'md',
@@ -158,36 +110,32 @@ export function Wordmark({
   return (
     <span
       className={cx(
-        'flex flex-col leading-none',
-        size === 'sm' && 'text-[1.02rem]',
-        size === 'md' && 'text-[1.28rem]',
-        size === 'lg' && 'text-[1.9rem]',
+        'flex flex-col leading-[0.95]',
+        size === 'sm' && 'text-[1.05rem]',
+        size === 'md' && 'text-[1.35rem]',
+        size === 'lg' && 'text-[1.95rem]',
         className,
       )}
     >
-      <span className="flex items-center gap-[0.05em] font-semibold tracking-[-0.055em]" aria-hidden>
-        <span
-          className={cx(
-            'bg-clip-text text-transparent',
-            light
-              ? 'bg-[linear-gradient(100deg,#a9cdff,#6fb0f5_60%,#8cc4ff)]'
-              : 'bg-[linear-gradient(100deg,#12328f,#1f7fd4_70%,#2b8fd6)]',
-          )}
-        >
-          Hell
-        </span>
-        <SignalO light={light} />
-        <SignalO light={light} />
+      <span
+        className={cx(
+          'font-[family-name:var(--font-display)] font-semibold tracking-[-0.04em]',
+          light
+            ? 'text-white drop-shadow-[0_1px_8px_rgb(0_0_0/0.25)]'
+            : 'bg-[linear-gradient(100deg,#0b3a9c,#1a63d8_55%,#2563eb)] bg-clip-text text-transparent',
+        )}
+        aria-hidden
+      >
+        Hello
       </span>
       <span
-        aria-hidden
         className={cx(
-          'mt-[0.12em] flex items-center gap-[0.03em] text-[0.78em] font-medium tracking-[0.01em]',
-          light ? 'text-[#5fd8d0]' : 'text-teal',
+          'mt-[0.08em] font-[family-name:var(--font-display)] text-[0.82em] font-semibold tracking-[-0.02em]',
+          light ? 'text-[#7DE8E2]' : 'text-teal',
         )}
+        aria-hidden
       >
-        Techn
-        <MicO light={light} />
+        Techno
       </span>
       <span className="sr-only">Hello Techno</span>
     </span>
@@ -197,9 +145,8 @@ export function Wordmark({
 export const LOGO_SRC = '/images/hello-techno-logo.png'
 
 /**
- * The supplied Hello Techno logo file. Until the PNG is saved to
- * `public/images/hello-techno-logo.png` the <img> fails and the vector mark
- * from this file is drawn instead, so the header and footer never break.
+ * Site brand. Uses the clear vector lockup by default; upgrades to the PNG
+ * only after it successfully loads from /images/hello-techno-logo.png.
  */
 export function Brand({
   size = 'md',
@@ -212,19 +159,58 @@ export function Brand({
   className?: string
   onDarkPlate?: boolean
 }) {
-  const [broken, setBroken] = useState(false)
+  const [png, setPng] = useState(false)
 
-  if (broken) return <BrandLockup size={size === 'xs' ? 'sm' : size} light={light} className={className} />
+  useEffect(() => {
+    let alive = true
+    const img = new Image()
+    img.onload = () => {
+      if (alive) setPng(true)
+    }
+    img.onerror = () => {
+      if (alive) setPng(false)
+    }
+    img.src = LOGO_SRC
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  const lockupSize = size === 'xs' ? 'sm' : size
+  const lockup = (
+    <BrandLockup
+      size={lockupSize}
+      light={onDarkPlate ? false : light}
+      className={!onDarkPlate ? className : undefined}
+      compact={size === 'xs'}
+    />
+  )
+
+  if (!png) {
+    if (onDarkPlate) {
+      return (
+        <span
+          className={cx(
+            'inline-flex items-center rounded-2xl bg-white shadow-[0_10px_24px_-18px_rgb(9_30_74/0.45)]',
+            size === 'xs' ? 'px-2 py-1.5' : 'px-3 py-2',
+            className,
+          )}
+        >
+          {lockup}
+        </span>
+      )
+    }
+    return lockup
+  }
 
   const img = (
     <img
       src={LOGO_SRC}
-      alt=""
-      onError={() => setBroken(true)}
+      alt="Hello Techno"
       className={cx(
         'block w-auto object-contain',
-        size === 'xs' && 'h-7',
-        size === 'sm' && 'h-11',
+        size === 'xs' && 'h-8',
+        size === 'sm' && 'h-12',
         size === 'md' && 'h-14',
         size === 'lg' && 'h-20',
         !onDarkPlate && className,
@@ -232,7 +218,6 @@ export function Brand({
     />
   )
 
-  // On the dark footer the supplied artwork needs a light plate to stay legible.
   if (onDarkPlate) {
     return <span className={cx('inline-flex items-center rounded-2xl bg-white px-3 py-2', className)}>{img}</span>
   }
@@ -243,14 +228,19 @@ export function BrandLockup({
   className,
   size = 'md',
   light = false,
+  compact = false,
 }: {
   className?: string
   size?: 'sm' | 'md' | 'lg'
   light?: boolean
+  compact?: boolean
 }) {
+  const markClass =
+    size === 'lg' ? 'size-[3.25rem]' : size === 'md' ? 'size-11' : compact ? 'size-8' : 'size-10'
+
   return (
-    <span className={cx('inline-flex items-center gap-2.5', className)}>
-      <Mark className={size === 'lg' ? 'size-14' : size === 'md' ? 'size-11' : 'size-9'} />
+    <span className={cx('inline-flex items-center', compact ? 'gap-2' : 'gap-2.5', className)}>
+      <Mark className={cx(markClass, 'drop-shadow-[0_8px_16px_rgb(11_58_156/0.22)]')} />
       <Wordmark size={size} light={light} />
     </span>
   )

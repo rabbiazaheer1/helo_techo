@@ -4,7 +4,12 @@ dist
 .dev.vars
 .dev.vars.*
 !.dev.vars.example
+.env
+.env.*
+!.env.example
 .DS_Store
 *.log
 .freebuff
 c5b3fe7b-bc3d-4da2-9849-97354ae0c248/
+
+.vercel

@@ -1,73 +1,44 @@
-import { Mail, MessageCircle, MessageSquare, Phone } from 'lucide-react'
+import { MessageCircle, MessageSquare, Phone } from 'lucide-react'
 import type { IconType } from 'react-icons'
-import { FaLinkedin } from 'react-icons/fa6'
-import {
-  SiFacebook,
-  SiInstagram,
-  SiSnapchat,
-  SiTelegram,
-  SiThreads,
-  SiTiktok,
-  SiWhatsapp,
-  SiX,
-  SiYoutube,
-} from 'react-icons/si'
+import { SiGmail, SiInstagram, SiWhatsapp } from 'react-icons/si'
 
 import { cx } from '../lib/cx'
 
-export type ChannelKey =
-  | 'whatsapp'
-  | 'instagram'
-  | 'facebook'
-  | 'x'
-  | 'voice'
-  | 'web'
-  | 'sms'
-  | 'email'
-  | 'linkedin'
-  | 'tiktok'
-  | 'youtube'
-  | 'snapchat'
-  | 'telegram'
-  | 'threads'
+export type ChannelKey = 'whatsapp' | 'voice' | 'web' | 'sms' | 'instagram' | 'email'
 
 type Brand = {
   label: string
   color: string
-  /** Full tile background, when the brand is a gradient (Instagram). */
+  /** Full tile background, when the brand is a gradient (Instagram / Gmail). */
   tile?: string
   glyph: IconType
-  /** Snapchat's yellow tile needs a dark glyph. */
   darkGlyph?: boolean
 }
 
 export const BRANDS: Record<ChannelKey, Brand> = {
   whatsapp: { label: 'WhatsApp', color: '#25D366', glyph: SiWhatsapp },
+  voice: { label: 'Voice / Call', color: '#1A63D8', glyph: Phone },
+  web: { label: 'Web chat', color: '#7C5CF5', glyph: MessageSquare },
+  sms: { label: 'SMS', color: '#4DA3E8', glyph: MessageCircle },
   instagram: {
     label: 'Instagram',
     color: '#E1306C',
     tile: 'linear-gradient(45deg,#f9ce34 0%,#ee2a7b 48%,#6228d7 100%)',
     glyph: SiInstagram,
   },
-  facebook: { label: 'Facebook', color: '#1877F2', glyph: SiFacebook },
-  x: { label: 'X', color: '#0F1419', glyph: SiX },
-  voice: { label: 'Voice calls', color: '#1A63D8', glyph: Phone },
-  web: { label: 'Web chat', color: '#0E9A9E', glyph: MessageSquare },
-  sms: { label: 'SMS', color: '#F59E0B', glyph: MessageCircle },
-  email: { label: 'Email', color: '#EA4335', glyph: Mail },
-  linkedin: { label: 'LinkedIn', color: '#0A66C2', glyph: FaLinkedin },
-  tiktok: { label: 'TikTok', color: '#010101', glyph: SiTiktok },
-  youtube: { label: 'YouTube', color: '#FF0033', glyph: SiYoutube },
-  snapchat: { label: 'Snapchat', color: '#FFFC00', glyph: SiSnapchat, darkGlyph: true },
-  telegram: { label: 'Telegram', color: '#26A5E4', glyph: SiTelegram },
-  threads: { label: 'Threads', color: '#0F1419', glyph: SiThreads },
+  email: {
+    label: 'Gmail',
+    color: '#EA4335',
+    tile: 'linear-gradient(135deg,#EA4335 0%,#FBBC05 40%,#34A853 70%,#4285F4 100%)',
+    glyph: SiGmail,
+  },
 }
 
 export function brandColor(kind: ChannelKey) {
   return BRANDS[kind].color
 }
 
-/** A brand-coloured tile holding the real platform mark. */
+/** A brand-coloured tile holding the platform mark. */
 export function ChannelMark({
   kind,
   className,
@@ -109,36 +80,27 @@ export function ChannelMark({
   )
 }
 
-/** The social platforms the platform answers on. Badges, not profile links. */
-export const SOCIALS: ChannelKey[] = [
-  'whatsapp',
-  'instagram',
-  'facebook',
-  'x',
-  'tiktok',
-  'linkedin',
-  'youtube',
-  'snapchat',
-  'threads',
-  'telegram',
-]
+/** The six channels Hello Techno answers on — used everywhere social icons appear. */
+export const SOCIALS: ChannelKey[] = ['whatsapp', 'voice', 'web', 'sms', 'instagram', 'email']
 
 /** A row of platform marks with their names available to assistive tech. */
 export function SocialRow({
   kinds = SOCIALS,
   className,
   itemClassName,
-  label = 'Social channels',
+  label = 'Channels we answer on',
+  showLabels = false,
 }: {
   kinds?: ChannelKey[]
   className?: string
   itemClassName?: string
   label?: string
+  showLabels?: boolean
 }) {
   return (
     <ul className={cx('flex flex-wrap items-center gap-2', className)} aria-label={label}>
       {kinds.map((kind) => (
-        <li key={kind} title={BRANDS[kind].label}>
+        <li key={kind} title={BRANDS[kind].label} className={cx(showLabels && 'flex items-center gap-2')}>
           <span className="sr-only">{BRANDS[kind].label}</span>
           <span
             className={cx(
@@ -151,12 +113,13 @@ export function SocialRow({
             {(() => {
               const Glyph = BRANDS[kind].glyph
               return (
-                <Glyph
-                  className={cx('size-4', BRANDS[kind].darkGlyph ? 'text-[#101418]' : 'text-white')}
-                />
+                <Glyph className={cx('size-4', BRANDS[kind].darkGlyph ? 'text-[#101418]' : 'text-white')} />
               )
             })()}
           </span>
+          {showLabels && (
+            <span className="text-[13px] font-medium text-ink-2">{BRANDS[kind].label}</span>
+          )}
         </li>
       ))}
     </ul>

@@ -35,11 +35,16 @@ export function ContactForm() {
     if (Object.keys(local).length) return
 
     setStatus('sending')
-    const result = await postJson<{ reference: string }>('/api/contact', values)
-    if (result.ok) {
-      setReference(result.data.reference ?? '')
+    const result = await postJson<{ reference?: string; ok?: boolean }>('/api/contact', values)
+    if (result.ok && typeof result.data.reference === 'string' && result.data.reference) {
+      setReference(result.data.reference)
       setStatus('sent')
       setValues(initial)
+      return
+    }
+    if (result.ok) {
+      setStatus('idle')
+      setFailure('Something went wrong. Please try again or email us directly.')
       return
     }
     setStatus('idle')
@@ -48,23 +53,35 @@ export function ContactForm() {
   }
 
   if (status === 'sent') {
+    const waText = encodeURIComponent(
+      `Hi Hello Techno — I'd like to book a free demo. Reference ${reference}.`,
+    )
     return (
       <div className="flex h-full flex-col justify-center rounded-[26px] border border-white/15 bg-white/[0.06] p-8 text-center">
         <span className="mx-auto grid size-14 place-items-center rounded-full bg-teal/20 text-teal">
           <Check className="size-6" aria-hidden />
         </span>
-        <h3 className="display mt-5 text-[1.6rem] text-white">Brief received.</h3>
+        <h3 className="display mt-5 text-[1.6rem] text-white">Demo request booked.</h3>
         <p className="mx-auto mt-3 max-w-sm text-[14.5px] text-night-muted">
-          A person from Hello Techno will reply within one working day. Reference{' '}
+          Thanks — your request is in. A person from Hello Techno will reply within one working day. Reference{' '}
           <span className="font-medium text-white">{reference}</span>.
         </p>
-        <p className="mt-4 text-[13px] text-night-muted">
-          Need it sooner? Call{' '}
-          <a href={SITE.phoneHref} className="text-white underline decoration-white/30 underline-offset-4">
-            {SITE.phone}
+        <div className="mx-auto mt-6 flex w-full max-w-sm flex-col gap-2 sm:flex-row">
+          <a
+            href={`${SITE.whatsapp}?text=${waText}`}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex h-11 flex-1 items-center justify-center rounded-full bg-[#25D366] px-4 text-[13.5px] font-medium text-white"
+          >
+            Confirm on WhatsApp
           </a>
-          .
-        </p>
+          <a
+            href={SITE.phoneHref}
+            className="inline-flex h-11 flex-1 items-center justify-center rounded-full border border-white/20 px-4 text-[13.5px] font-medium text-white"
+          >
+            Call {SITE.phone}
+          </a>
+        </div>
       </div>
     )
   }

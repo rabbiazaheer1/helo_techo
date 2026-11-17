@@ -133,18 +133,18 @@ function UnifiedPanel() {
   const channels: { icon: ReactNode; title: string; meta: string; accent: string }[] = [
     {
       icon: (
-        <span className="grid grid-cols-2 gap-px">
-          {(['instagram', 'facebook', 'x', 'tiktok'] as ChannelKey[]).map((kind) => (
+        <span className="grid grid-cols-3 gap-px">
+          {(['whatsapp', 'instagram', 'email'] as ChannelKey[]).map((kind) => (
             <ChannelMark key={kind} kind={kind} className="size-[11px] rounded-[3px] shadow-none" glyphClassName="size-[7px]" />
           ))}
         </span>
       ),
-      title: 'Social Media',
-      meta: 'Instagram · Facebook · X · TikTok',
+      title: 'Messaging',
+      meta: 'WhatsApp · Instagram · Gmail',
       accent: '#E1306C',
     },
-    { icon: <Phone className="size-4" />, title: 'Phone Calls', meta: 'Your own numbers', accent: '#1A63D8' },
-    { icon: <MessageSquare className="size-4" />, title: 'Web Chat', meta: 'Every page, every hour', accent: '#0E9A9E' },
+    { icon: <Phone className="size-4" />, title: 'Voice / Call', meta: 'Your own numbers', accent: '#1A63D8' },
+    { icon: <MessageSquare className="size-4" />, title: 'Web chat & SMS', meta: 'Every page, every hour', accent: '#7C5CF5' },
   ]
 
   return (
@@ -194,7 +194,7 @@ function UnifiedPanel() {
           <MiniCard accent="#0E9A9E" icon={<Bell className="size-4" />} title="Reminders" note="Sent" check />
         </div>
       </div>
-      <p className="mt-3 flex items-center justify-center gap-2 text-[12px] font-medium text-ink-2">
+      <p className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[12px] font-medium text-ink-2">
         <span className="font-semibold">AI Employee</span>
         <span className="text-faint" aria-hidden>•</span>
         <span className="text-muted">Understands</span>
@@ -281,7 +281,7 @@ function ConnectedPanel() {
             </MiniCard>
           </div>
 
-          <div className="hidden place-items-center px-1 sm:grid">
+          <div className="grid place-items-center px-1 py-2 sm:py-0">
             <Hub />
           </div>
 
@@ -307,10 +307,10 @@ function ConnectedPanel() {
           </div>
         </div>
 
-        <div className="relative mt-2 flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(100deg,#6f4bf2,#3f5ce4)] px-3 py-1.5 text-white shadow-[0_12px_26px_-14px_rgb(111_75_242/0.9)]">
-          <Clock className="size-3.5" aria-hidden />
+        <div className="relative mt-2 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full bg-[linear-gradient(100deg,#6f4bf2,#3f5ce4)] px-3 py-1.5 text-center text-white shadow-[0_12px_26px_-14px_rgb(111_75_242/0.9)]">
+          <Clock className="size-3.5 shrink-0" aria-hidden />
           <span className="text-[15px] leading-none font-semibold tabular-nums">1 to 4</span>
-          <span className="text-[11px] leading-tight">1 to 4 seconds average reply time</span>
+          <span className="text-[11px] leading-tight">seconds average reply time</span>
         </div>
 
         <div className="relative mt-2 rounded-[16px] border border-white/90 bg-white/80 p-2.5">

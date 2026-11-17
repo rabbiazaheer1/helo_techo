@@ -1,5 +1,7 @@
 import { Hono } from 'hono'
 
+import { generateChatReply } from '../shared/chatAi'
+import type { ChatTurn } from '../shared/chatKnowledge'
 import { validateContact, type FieldErrors } from '../shared/validation'
 
 // The Worker in front of the static site. /api/contact validates the demo
@@ -7,6 +9,8 @@ import { validateContact, type FieldErrors } from '../shared/validation'
 // to keep the requests. Everything else falls through to the built assets.
 type Env = {
   ASSETS: Fetcher
+  GEMINI_API_KEY?: string
+  OPENAI_API_KEY?: string
 }
 
 const app = new Hono<{ Bindings: Env }>()
@@ -35,6 +39,43 @@ app.post('/api/contact', async (c) => {
   if (Object.keys(errors).length) return invalid(errors)
 
   return c.json({ ok: true, reference: reference() }, 201)
+})
+
+app.post('/api/chat', async (c) => {
+  const body = await readBody(c.req.raw)
+  if (!body) return Response.json({ error: 'Send a JSON object with messages.' }, { status: 400 })
+
+  const raw = body.messages
+  if (!Array.isArray(raw) || raw.length === 0) {
+    return Response.json({ error: 'messages must be a non-empty array.' }, { status: 400 })
+  }
+
+  const messages: ChatTurn[] = raw
+    .filter(
+      (m): m is ChatTurn =>
+        !!m &&
+        typeof m === 'object' &&
+        ((m as ChatTurn).role === 'user' || (m as ChatTurn).role === 'assistant') &&
+        typeof (m as ChatTurn).content === 'string',
+    )
+    .map((m) => ({ role: m.role, content: m.content }))
+
+  try {
+    const reply = await generateChatReply(messages, {
+      GEMINI_API_KEY: c.env.GEMINI_API_KEY,
+      OPENAI_API_KEY: c.env.OPENAI_API_KEY,
+    })
+    return c.json({ ok: true, reply })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Chat failed'
+    if (message === 'MISSING_API_KEY') {
+      return Response.json(
+        { error: 'AI chatbot is not configured yet. Add GEMINI_API_KEY or OPENAI_API_KEY.' },
+        { status: 503 },
+      )
+    }
+    return Response.json({ error: 'The assistant could not reply right now. Please try again.' }, { status: 502 })
+  }
 })
 
 app.all('/api/*', (c) => c.json({ error: 'Not found' }, 404))
