@@ -102,18 +102,19 @@ export function HeroOrbit() {
         className="absolute inset-[2%] overflow-hidden rounded-[32px] border border-white/90 bg-[linear-gradient(165deg,#f7faff_0%,#eef3ff_42%,#f3efff_78%,#eafaf8_100%)] shadow-[var(--shadow-float)] sm:rounded-[40px]"
         aria-hidden
       >
-        <span className="absolute -top-16 -left-10 size-48 rounded-full bg-[radial-gradient(circle,rgb(26_99_216/0.22),transparent_70%)] blur-2xl" />
-        <span className="absolute -right-12 top-10 size-44 rounded-full bg-[radial-gradient(circle,rgb(111_75_242/0.18),transparent_70%)] blur-2xl" />
-        <span className="absolute bottom-0 left-1/3 size-52 rounded-full bg-[radial-gradient(circle,rgb(14_154_158/0.16),transparent_70%)] blur-2xl" />
-        <span className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(rgb(26_99_216/0.12)_1px,transparent_1px)] [background-size:18px_18px]" />
+        <span className="absolute -top-16 -left-10 size-48 rounded-full bg-[radial-gradient(circle,rgb(26_99_216/0.42),transparent_70%)] blur-2xl" />
+        <span className="absolute -right-12 top-10 size-44 rounded-full bg-[radial-gradient(circle,rgb(111_75_242/0.36),transparent_70%)] blur-2xl" />
+        <span className="absolute bottom-0 left-1/3 size-52 rounded-full bg-[radial-gradient(circle,rgb(14_154_158/0.32),transparent_70%)] blur-2xl" />
+        <span className="absolute inset-0 opacity-[0.45] [background-image:radial-gradient(rgb(26_99_216/0.18)_1px,transparent_1px)] [background-size:18px_18px]" />
       </div>
 
-      <span className="pointer-events-none absolute inset-[24%] rounded-full border border-dashed border-brand/20" aria-hidden />
-      <span className="pointer-events-none absolute inset-[34%] rounded-full border border-white/80 bg-[radial-gradient(circle_at_40%_35%,rgb(255_255_255/0.55),transparent_72%)]" aria-hidden />
+      <span className="pointer-events-none absolute inset-[24%] animate-pulse-ring rounded-full border-2 border-brand/45 motion-reduce:animate-none" aria-hidden />
+      <span className="pointer-events-none absolute inset-[28%] animate-pulse-ring rounded-full border border-iris/50 motion-reduce:animate-none [animation-delay:1.2s]" aria-hidden />
+      <span className="pointer-events-none absolute inset-[34%] rounded-full border border-brand/30 bg-[radial-gradient(circle_at_40%_35%,rgb(255_255_255/0.55),transparent_72%)]" aria-hidden />
 
       {/* Soft ambient glow behind core */}
       <div
-        className="pointer-events-none absolute inset-[30%] rounded-full bg-[radial-gradient(circle,#cfe2ff,#e3dbff_50%,transparent_70%)] blur-xl opacity-70"
+        className="pointer-events-none absolute inset-[30%] rounded-full bg-[radial-gradient(circle,#9ec2ff,#b8a6ff_50%,transparent_70%)] blur-xl opacity-80"
         aria-hidden
       />
 

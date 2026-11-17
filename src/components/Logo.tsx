@@ -11,7 +11,7 @@ export function Mark({ className, glow = false }: { className?: string; glow?: b
     <span className={cx('relative inline-grid shrink-0 place-items-center', className)}>
       {glow && (
         <span
-          className="pointer-events-none absolute inset-[-12%] rounded-full bg-[radial-gradient(circle,rgb(14_154_158/0.28),transparent_70%)] blur-md"
+          className="pointer-events-none absolute inset-[-12%] rounded-full bg-[radial-gradient(circle,rgb(14_154_158/0.5),transparent_70%)] blur-md"
           aria-hidden
         />
       )}

@@ -5,8 +5,11 @@ export type Copy = {
   serving: string
   hero: {
     title: string
+    subhead: string
     lead: string
     body: string
+    tagline: string
+    closing: string
     primary: string
     orEmail: string
     answersOn: string
@@ -158,10 +161,12 @@ const en: Copy = {
   serving: 'Built for hospitality, clinics, restaurants and growing businesses across the GCC',
   hero: {
     title: 'Be there. Be responsive. Be unforgettable.',
-    lead:
-      'Unify every customer interaction across voice calls, WhatsApp, social media, and web chat into one intelligent AI-powered platform. Deliver instant, personalised responses, capture every opportunity, convert leads into loyal customers, and turn customer conversations into meaningful insights that drive business growth.',
-    body:
-      'Hello Techno deploys a governed AI layer across WhatsApp, phone, web chat, social, SMS and email — answering in English and Arabic from your approved knowledge, booking into the systems you already run, and handing any conversation to your team in one click.',
+    subhead: 'One intelligent platform for every customer conversation.',
+    lead: 'Connect WhatsApp, phone calls, social media, SMS and web chat in one AI-powered platform.',
+    body: 'Respond instantly, capture more opportunities, automate bookings and deliver exceptional customer experiences — 24/7.',
+    tagline: 'Your business. Your rules. Your AI.',
+    closing:
+      'Hello Techno connects your communication channels, business knowledge and existing systems into one intelligent solution.',
     primary: 'Book a free demo',
     orEmail: 'Or email',
     answersOn: 'Answers on',
@@ -252,8 +257,8 @@ const en: Copy = {
   },
   industries: {
     eyebrow: 'Industries',
-    title: 'Built for how your operation actually runs.',
-    body: 'The platform is the same. The knowledge, procedures, connectors and language of your operation are not. Each industry gets its own build.',
+    title: 'Built around the way your business operates.',
+    body: 'The platform stays consistent. Knowledge, workflows, procedures, integrations and language are tailored to each business — so every industry gets a solution aligned with how it actually runs.',
     pain: 'The pain',
     win: 'The win',
     seeOp: 'See it on your operation',
@@ -680,10 +685,11 @@ const ar: Copy = {
   serving: 'مبني للضيافة والعيادات والمطاعم والشركات النامية في دول الخليج',
   hero: {
     title: 'كن حاضراً. كن سريعاً. كن لا يُنسى.',
-    lead:
-      'وحّد كل تفاعل مع العملاء عبر المكالمات وواتساب ووسائل التواصل والدردشة في منصة ذكية واحدة مدعومة بالذكاء الاصطناعي. ردود فورية ومخصصة، التقط كل فرصة، حوّل العملاء المحتملين إلى عملاء أوفياء، وحوّل المحادثات إلى رؤى تنمّي عملك.',
-    body:
-      'تنشر Hello Techno طبقة ذكاء اصطناعي محكومة عبر واتساب والهاتف والدردشة والتواصل والرسائل والبريد — ترد بالعربية والإنجليزية من معرفتك المعتمدة، وتحجز في أنظمتك الحالية، وتسلّم أي محادثة لفريقك بنقرة واحدة.',
+    subhead: 'منصة ذكية واحدة لكل محادثة مع العملاء.',
+    lead: 'اربط واتساب والمكالمات ووسائل التواصل والرسائل ودردشة الموقع في منصة واحدة بالذكاء الاصطناعي.',
+    body: 'رد فوراً، التقط فرصاً أكثر، وأتمِت الحجوزات وقدّم تجربة استثنائية على مدار الساعة.',
+    tagline: 'عملك. قواعدك. ذكاؤك الاصطناعي.',
+    closing: 'Hello Techno تربط قنوات تواصلك ومعرفة عملك وأنظمتك الحالية في حل ذكي واحد.',
     primary: 'احجز عرضاً مجانياً',
     orEmail: 'أو راسلنا',
     answersOn: 'نجيب عبر',
@@ -774,8 +780,8 @@ const ar: Copy = {
   },
   industries: {
     eyebrow: 'القطاعات',
-    title: 'مبنية كما يعمل تشغيلك فعلاً.',
-    body: 'المنصة واحدة. المعرفة والإجراءات والموصلات ولغة عملك ليست كذلك. كل قطاع يحصل على بناء خاص.',
+    title: 'مبنية حول طريقة عمل عملك.',
+    body: 'المنصة ثابتة. أما المعرفة وسير العمل والإجراءات والتكاملات واللغة فتُخصَّص لكل عمل — فيحصل كل قطاع على حل يتوافق مع تشغيله الفعلي.',
     pain: 'التحدي',
     win: 'النتيجة',
     seeOp: 'شاهدها على تشغيلك',

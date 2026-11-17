@@ -30,23 +30,23 @@ function Hero() {
     <section className="relative overflow-hidden pt-24 pb-8 sm:pt-28 lg:pt-32 lg:pb-10">
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
         <div className="absolute inset-0 grid-lines opacity-60 [mask-image:radial-gradient(ellipse_at_50%_0%,#000,transparent_72%)]" />
-        <div className="absolute -top-32 -left-24 size-[min(100vw,520px)] rounded-full bg-[radial-gradient(circle,#cfe2ff,transparent_65%)] blur-2xl" />
-        <div className="absolute -top-20 right-0 size-[min(90vw,460px)] rounded-full bg-[radial-gradient(circle,#e3dbff,transparent_65%)] blur-2xl" />
-        <div className="absolute bottom-0 left-1/3 size-[min(80vw,420px)] rounded-full bg-[radial-gradient(circle,#d3f5f2,transparent_65%)] blur-2xl" />
+        <div className="absolute -top-32 -left-24 size-[min(100vw,520px)] animate-[float_11s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgb(26_99_216/0.38),transparent_65%)] blur-2xl motion-reduce:animate-none" />
+        <div className="absolute -top-20 right-0 size-[min(90vw,460px)] animate-[float_14s_ease-in-out_infinite_reverse] rounded-full bg-[radial-gradient(circle,rgb(111_75_242/0.34),transparent_65%)] blur-2xl motion-reduce:animate-none" />
+        <div className="absolute bottom-0 left-1/3 size-[min(80vw,420px)] animate-[drift_16s_ease-in-out_infinite_alternate] rounded-full bg-[radial-gradient(circle,rgb(14_154_158/0.3),transparent_65%)] blur-2xl motion-reduce:animate-none" />
       </div>
 
       <div className="mx-auto grid w-full max-w-[1320px] items-center gap-8 px-4 sm:gap-10 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
         <div>
-          <Reveal>
+          <Reveal immediate variant="down" y={20}>
             <span className="caps inline-flex max-w-full items-center gap-2 rounded-full border border-line bg-white/80 py-1.5 pr-3.5 pl-2 text-brand">
               <span className="grid size-5 shrink-0 place-items-center rounded-full bg-brand-soft">
-                <Sparkles className="size-3" aria-hidden />
+                <Sparkles className="size-3 animate-[bob_3.5s_ease-in-out_infinite]" aria-hidden />
               </span>
               <span className="truncate">{copy.hero.partnerEyebrow}</span>
             </span>
           </Reveal>
 
-          <Reveal delay={0.06}>
+          <Reveal immediate delay={0.08} variant="up" y={28}>
             <h1 className="display mt-5 text-[clamp(2.05rem,1.05rem+4vw,4.6rem)] text-ink sm:mt-6">
               {titleParts.length === 3 ? (
                 <>
@@ -58,17 +58,30 @@ function Hero() {
             </h1>
           </Reveal>
 
-          <Reveal delay={0.12}>
-            <p className="mt-5 max-w-xl text-[clamp(0.98rem,0.94rem+0.28vw,1.16rem)] leading-relaxed text-muted sm:mt-6">
+          <Reveal immediate delay={0.14} variant="up" y={20}>
+            <p className="mt-4 max-w-xl text-[clamp(1.05rem,0.98rem+0.4vw,1.3rem)] font-semibold tracking-[-0.02em] text-ink-2 sm:mt-5">
+              {copy.hero.subhead}
+            </p>
+          </Reveal>
+
+          <Reveal immediate delay={0.18} variant="up" y={18}>
+            <p className="mt-3 max-w-xl text-[clamp(0.98rem,0.94rem+0.28vw,1.12rem)] leading-relaxed text-muted">
               {copy.hero.lead}
             </p>
           </Reveal>
 
-          <Reveal delay={0.18}>
-            <p className="mt-3 max-w-xl text-[13.5px] leading-relaxed text-faint sm:text-[14.5px]">{copy.hero.body}</p>
+          <Reveal immediate delay={0.22} variant="up" y={16}>
+            <p className="mt-2.5 max-w-xl text-[13.5px] leading-relaxed text-faint sm:text-[14.5px]">{copy.hero.body}</p>
           </Reveal>
 
-          <Reveal delay={0.24}>
+          <Reveal immediate delay={0.26} variant="up" y={14}>
+            <p className="mt-4 max-w-xl text-[15px] font-semibold tracking-[-0.02em] text-brand sm:text-[16px]">
+              {copy.hero.tagline}
+            </p>
+            <p className="mt-2 max-w-xl text-[13px] leading-relaxed text-muted sm:text-[13.5px]">{copy.hero.closing}</p>
+          </Reveal>
+
+          <Reveal immediate delay={0.28} variant="scale" y={20}>
             <div className="mt-7 flex flex-wrap items-center gap-2.5 sm:mt-8 sm:gap-3">
               <Btn href="/demo" size="lg" className="max-sm:w-full" iconRight={<ArrowRight className="size-4 transition-transform duration-[var(--duration-base)] group-hover/btn:translate-x-0.5" aria-hidden />}>
                 {copy.hero.primary}
@@ -84,14 +97,14 @@ function Hero() {
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label={`${copy.navUi.chatWhatsApp} ${SITE.phone}`}
-                className="grid size-12 shrink-0 place-items-center rounded-full border border-line bg-white/80 transition-[box-shadow] duration-[var(--duration-fast)] hover:shadow-[var(--shadow-card)] sm:size-14"
+                className="grid size-12 shrink-0 place-items-center rounded-full border border-line bg-white/80 transition-[box-shadow,transform] duration-[var(--duration-fast)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-card)] sm:size-14"
               >
                 <ChannelMark kind="whatsapp" className="size-8 sm:size-9" glyphClassName="size-4 sm:size-5" rounded="rounded-full" />
               </a>
             </div>
           </Reveal>
 
-          <Reveal delay={0.3}>
+          <Reveal immediate delay={0.34} variant="left" y={22}>
             <p className="mt-4 text-[12.5px] text-faint">
               {copy.hero.orEmail}{' '}
               <a href={`mailto:${SITE.email}`} className="font-medium text-brand underline decoration-brand/25 underline-offset-4 hover:decoration-brand">
@@ -100,10 +113,10 @@ function Hero() {
             </p>
           </Reveal>
 
-          <Reveal delay={0.36}>
+          <Reveal immediate delay={0.4} variant="up" y={26}>
             <dl className="mt-8 grid max-w-lg grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-6 sm:mt-9 sm:grid-cols-4 sm:gap-x-6">
               {copy.hero.proof.map((p) => (
-                <div key={p.label}>
+                <div key={p.label} className="transition-transform duration-[var(--duration-base)] hover:-translate-y-0.5">
                   <dt className="text-[1.05rem] leading-none font-semibold tracking-[-0.03em] text-ink sm:text-[1.15rem]">{p.value}</dt>
                   <dd className="mt-1.5 text-[11px] leading-tight text-muted sm:text-[11.5px]">{p.label}</dd>
                 </div>
@@ -111,7 +124,7 @@ function Hero() {
             </dl>
           </Reveal>
 
-          <Reveal delay={0.42}>
+          <Reveal immediate delay={0.46} variant="right" y={20}>
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <span className="caps text-[10px] text-faint">{copy.hero.answersOn}</span>
               <SocialRow itemClassName="size-8" className="gap-1.5" label={copy.hero.answersOn} />
@@ -119,7 +132,7 @@ function Hero() {
           </Reveal>
         </div>
 
-        <Reveal delay={0.2} className="relative">
+        <Reveal immediate delay={0.18} variant="scale" className="relative">
           <HeroOrbit />
         </Reveal>
       </div>
@@ -141,16 +154,16 @@ function ChannelStrip() {
     <section className="relative border-y border-line bg-white/70 py-8 backdrop-blur-sm">
       <div className="mx-auto w-full max-w-[1320px] px-4 sm:px-6">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-10">
-          <p className="caps max-w-[16rem] shrink-0 text-muted">
-            {copy.channelStrip.eyebrow}
-          </p>
+          <Reveal variant="left" y={24} className="shrink-0">
+            <p className="caps max-w-[16rem] text-muted">{copy.channelStrip.eyebrow}</p>
+          </Reveal>
           <div className="marquee-mask flex-1 overflow-hidden">
             <ul className="flex w-max animate-marquee items-center gap-3 hover:[animation-play-state:paused]">
               {[...channels, ...channels].map((c, i) => (
                 <li
                   key={`${c.name}-${i}`}
                   aria-hidden={i >= channels.length || undefined}
-                  className="flex items-center gap-2.5 rounded-full border border-line bg-white px-3 py-2 whitespace-nowrap shadow-[0_8px_20px_-18px_rgb(9_30_74/0.5)]"
+                  className="flex items-center gap-2.5 rounded-full border border-line bg-white px-3 py-2 whitespace-nowrap shadow-[0_8px_20px_-18px_rgb(9_30_74/0.5)] transition-[transform,box-shadow] duration-[var(--duration-base)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-16px_rgb(9_30_74/0.45)]"
                 >
                   <ChannelMark kind={c.kind} className="size-7" glyphClassName="size-3.5" rounded="rounded-full" />
                   <span className="text-[13.5px] font-medium text-ink">{c.name}</span>
@@ -201,17 +214,17 @@ function Platform() {
       />
       <div className="pointer-events-none absolute inset-0 grid-lines opacity-35" aria-hidden />
       <span
-        className="pointer-events-none absolute top-24 -left-20 size-[22rem] rounded-full bg-[radial-gradient(circle,rgb(26_99_216/0.12),transparent_70%)] blur-2xl"
+        className="pointer-events-none absolute top-24 -left-20 size-[22rem] animate-[drift_14s_ease-in-out_infinite_alternate] rounded-full bg-[radial-gradient(circle,rgb(26_99_216/0.28),transparent_70%)] blur-2xl motion-reduce:animate-none"
         aria-hidden
       />
       <span
-        className="pointer-events-none absolute right-0 bottom-10 size-[18rem] rounded-full bg-[radial-gradient(circle,rgb(111_75_242/0.1),transparent_70%)] blur-2xl"
+        className="pointer-events-none absolute right-0 bottom-10 size-[18rem] animate-[float_12s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgb(111_75_242/0.24),transparent_70%)] blur-2xl motion-reduce:animate-none"
         aria-hidden
       />
 
       <div className="relative mx-auto w-full max-w-[1320px] px-4 sm:px-6">
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-14">
-          <Reveal className="lg:sticky lg:top-28">
+          <Reveal variant="left" y={40} className="lg:sticky lg:top-28">
             <SectionHead
               align="left"
               eyebrow={copy.platform.eyebrow}
@@ -250,11 +263,18 @@ function Platform() {
           <div className="grid gap-3 sm:grid-cols-2">
             {capabilities.map((c, i) => {
               const wide = i === 0 || i === 3
+              const variants = ['left', 'right', 'scale', 'up', 'up', 'right'] as const
               return (
-                <Reveal key={c.title} delay={0.04 * i} className={cx(wide && 'sm:col-span-2 lg:col-span-1')}>
+                <Reveal
+                  key={c.title}
+                  delay={0.05 * i}
+                  variant={variants[i % variants.length]}
+                  y={32}
+                  className={cx(wide && 'sm:col-span-2 lg:col-span-1')}
+                >
                   <article
                     className={cx(
-                      'group relative h-full overflow-hidden rounded-[22px] border border-white/90 bg-white/80 p-5 shadow-[0_14px_34px_-28px_rgb(9_30_74/0.35)] backdrop-blur-sm',
+                      'group relative h-full overflow-hidden rounded-[22px] border border-white/90 bg-white/80 p-5 shadow-[0_14px_34px_-28px_rgb(9_30_74/0.35)] backdrop-blur-sm transition-[transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] hover:-translate-y-1.5 hover:shadow-[0_28px_50px_-28px_rgb(9_30_74/0.45)]',
                       wide && 'sm:flex sm:items-start sm:gap-5 lg:block',
                     )}
                     style={{ borderColor: `${c.accent}22` }}
@@ -328,7 +348,7 @@ function Industries() {
   return (
     <section id="industries" className="relative overflow-hidden bg-white/60 py-12 lg:py-16">
       <div className="mx-auto w-full max-w-[1320px] px-4 sm:px-6">
-        <Reveal>
+        <Reveal variant="up" y={28}>
           <SectionHead
             eyebrow={copy.industries.eyebrow}
             accent="#6F4BF2"
@@ -456,7 +476,7 @@ function Results() {
         />
 
         <div className="relative flex flex-col gap-10">
-          <Reveal>
+          <Reveal variant="scale" y={24}>
             <SectionHead
               align="center"
               tone="light"
@@ -478,18 +498,17 @@ function Results() {
             </div>
           </Reveal>
 
-          <Reveal delay={0.08}>
-            <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-              {copy.results.stats.map((stat, i) => {
-                const accent = accents[i % accents.length]
-                return (
+          <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {copy.results.stats.map((stat, i) => {
+              const accent = accents[i % accents.length]
+              return (
+                <Reveal key={stat.label} delay={0.06 * i} variant={i % 2 === 0 ? 'up' : 'scale'} y={28}>
                   <div
-                    key={stat.label}
-                    className="group relative overflow-hidden rounded-[20px] border border-white/12 p-5 backdrop-blur-sm sm:p-6"
+                    className="group relative h-full overflow-hidden rounded-[20px] border border-white/12 p-5 backdrop-blur-sm transition-[transform,border-color] duration-[var(--duration-base)] hover:-translate-y-1 hover:border-white/25 sm:p-6"
                     style={{ background: `linear-gradient(150deg, ${accent}28, rgb(255 255 255 / 0.05) 62%)` }}
                   >
                     <span
-                      className="absolute inset-x-0 top-0 h-0.5"
+                      className="absolute inset-x-0 top-0 h-0.5 origin-left transition-transform duration-700 group-hover:scale-x-100"
                       style={{ background: `linear-gradient(90deg, ${accent}, transparent)` }}
                       aria-hidden
                     />
@@ -500,10 +519,10 @@ function Results() {
                       {stat.label}
                     </dd>
                   </div>
-                )
-              })}
-            </dl>
-          </Reveal>
+                </Reveal>
+              )
+            })}
+          </dl>
 
           <Reveal delay={0.12}>
             <div className="overflow-hidden rounded-[18px] border border-white/12 bg-white/[0.05]">
@@ -548,7 +567,7 @@ function Pricing() {
   return (
     <section id="pricing" className="relative bg-white/60 py-12 lg:py-16">
       <div className="mx-auto w-full max-w-[1320px] px-4 sm:px-6">
-        <Reveal>
+        <Reveal variant="up" y={28}>
           <SectionHead
             eyebrow={copy.pricing.eyebrow}
             accent="#0E9A9E"
@@ -559,13 +578,19 @@ function Pricing() {
 
         <div className="mt-11 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {plans.map((plan, i) => (
-            <Reveal key={plan.name} delay={0.05 * i} className="h-full">
+            <Reveal
+              key={plan.name}
+              delay={0.07 * i}
+              variant={plan.featured ? 'scale' : i % 2 === 0 ? 'up' : 'down'}
+              y={plan.featured ? 20 : 40}
+              className="h-full"
+            >
               <article
                 className={cx(
-                  'relative flex h-full flex-col overflow-hidden rounded-[26px] p-6',
+                  'relative flex h-full flex-col overflow-hidden rounded-[26px] p-6 transition-[transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] hover:-translate-y-1.5',
                   plan.featured
-                    ? 'bg-[linear-gradient(160deg,#0b2a63,#0b3a9c_45%,#0b6f88)] text-white shadow-[var(--shadow-float)]'
-                    : 'border border-line bg-white text-ink shadow-[0_18px_40px_-34px_rgb(9_30_74/0.45)]',
+                    ? 'bg-[linear-gradient(160deg,#0b2a63,#0b3a9c_45%,#0b6f88)] text-white shadow-[var(--shadow-float)] hover:shadow-[0_32px_60px_-24px_rgb(11_58_156/0.65)]'
+                    : 'border border-line bg-white text-ink shadow-[0_18px_40px_-34px_rgb(9_30_74/0.45)] hover:shadow-[0_28px_48px_-30px_rgb(9_30_74/0.5)]',
                 )}
               >
                 {plan.featured && (

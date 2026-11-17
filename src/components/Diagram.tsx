@@ -143,15 +143,16 @@ function AiCore() {
   return (
     <div className="relative mx-auto grid h-[7.5rem] w-[7.5rem] shrink-0 place-items-center">
       <span
-        className="pointer-events-none absolute -inset-2 rounded-full bg-[radial-gradient(circle_at_40%_35%,rgb(111_75_242/0.2),transparent_62%)] blur-md"
+        className="pointer-events-none absolute -inset-2 rounded-full bg-[radial-gradient(circle_at_40%_35%,rgb(111_75_242/0.38),transparent_62%)] blur-md"
         aria-hidden
       />
       <span
-        className="absolute size-full rounded-full border border-white/80 bg-[radial-gradient(circle_at_30%_28%,#f4f7ff_0%,#e4ecff_45%,#ddd6ff_100%)] shadow-[0_12px_28px_-16px_rgb(11_58_156/0.4)]"
+        className="absolute size-full rounded-full border border-brand/25 bg-[radial-gradient(circle_at_30%_28%,#eaf1ff_0%,#d4e3ff_45%,#cfc4ff_100%)] shadow-[0_12px_28px_-16px_rgb(11_58_156/0.4)]"
         aria-hidden
       />
-      <span className="absolute size-[88%] animate-spin-slower rounded-full border border-dashed border-brand/25 motion-reduce:animate-none" aria-hidden />
-      <span className="absolute size-[72%] animate-spin-slow rounded-full border border-dashed border-iris/30 motion-reduce:animate-none" aria-hidden />
+      <span className="absolute size-[88%] animate-spin-slower rounded-full border border-dashed border-brand/55 motion-reduce:animate-none" aria-hidden />
+      <span className="absolute size-[72%] animate-spin-slow rounded-full border border-dashed border-iris/60 motion-reduce:animate-none" aria-hidden />
+      <span className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-brand/45 motion-reduce:animate-none" aria-hidden />
 
       <div className="relative z-[1] grid size-[4.25rem] place-items-center overflow-hidden rounded-full bg-white p-1.5 shadow-[0_10px_22px_-12px_rgb(11_58_156/0.4)] ring-2 ring-white">
         <Mark className="size-[3.1rem]" glow />
@@ -253,9 +254,10 @@ function UnifiedPanel() {
 function Hub() {
   return (
     <div className="relative mx-auto grid size-[72px] place-items-center">
-      <span className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_40%_35%,#f0eaff,#e7f6ff)]" aria-hidden />
-      <span className="absolute inset-0 animate-pulse-ring rounded-full border border-iris/40" aria-hidden />
-      <span className="absolute inset-1.5 animate-spin-slow rounded-full border border-dashed border-iris/35" aria-hidden />
+      <span className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_40%_35%,#e4d8ff,#d4eaff)]" aria-hidden />
+      <span className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-iris/70" aria-hidden />
+      <span className="absolute -inset-1 animate-pulse-ring rounded-full border border-brand/50 [animation-delay:1.1s]" aria-hidden />
+      <span className="absolute inset-1.5 animate-spin-slow rounded-full border border-dashed border-iris/65" aria-hidden />
       <span className="relative grid size-10 place-items-center rounded-full bg-[linear-gradient(140deg,#6f4bf2,#1a63d8)] text-white shadow-[0_12px_24px_-12px_rgb(111_75_242/0.8)]">
         <Brain className="size-5" aria-hidden />
       </span>

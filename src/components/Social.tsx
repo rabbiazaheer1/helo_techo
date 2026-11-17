@@ -192,7 +192,9 @@ export function SocialRow({
         return (
           <li key={kind} title={brand.label} className={cx(showLabels && 'flex items-center gap-2')}>
             <span className="sr-only">{brand.label}</span>
-            <ChannelMark kind={kind} className={cx('size-9', itemClassName)} glyphClassName="size-[55%]" rounded="rounded-full" />
+            <span className="inline-grid transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-soft)] hover:-translate-y-1 hover:scale-110">
+              <ChannelMark kind={kind} className={cx('size-9', itemClassName)} glyphClassName="size-[55%]" rounded="rounded-full" />
+            </span>
             {showLabels && <span className="text-[13px] font-medium text-ink-2">{brand.label}</span>}
           </li>
         )

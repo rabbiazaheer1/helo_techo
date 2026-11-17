@@ -1,25 +1,108 @@
 import { Minus, Plus } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
-import { useId, useState, type HTMLAttributes, type ReactNode } from 'react'
+import { AnimatePresence, motion, useInView, useMotionValue, useSpring, useReducedMotion } from 'motion/react'
+import { useEffect, useId, useRef, useState, type HTMLAttributes, type ReactNode } from 'react'
 import { Link } from 'react-router'
 
 import { cx } from '../lib/cx'
+import { EASE, revealVariants, staggerContainer, type RevealVariant } from '../lib/motion'
 
-/** Layout wrapper — no scroll animation (kept for call-site compatibility). */
+/** Scroll-triggered entrance — slide / scale / rise (not fade-only). */
 export function Reveal({
-  delay: _delay,
-  y: _y,
+  delay = 0,
+  y = 36,
+  variant = 'up',
   className,
   children,
-}: HTMLAttributes<HTMLDivElement> & { delay?: number; y?: number }) {
-  void _delay
-  void _y
-  return <div className={className}>{children}</div>
+  once = true,
+  immediate = false,
+}: HTMLAttributes<HTMLDivElement> & {
+  delay?: number
+  y?: number
+  variant?: RevealVariant
+  once?: boolean
+  /** Play on mount (hero / above-the-fold) instead of waiting for scroll. */
+  immediate?: boolean
+}) {
+  const reduce = useReducedMotion()
+  const variants = revealVariants(variant, y)
+
+  if (reduce) return <div className={className}>{children}</div>
+
+  return (
+    <motion.div
+      className={className}
+      variants={variants}
+      initial="hidden"
+      {...(immediate
+        ? { animate: 'visible' as const }
+        : {
+            whileInView: 'visible' as const,
+            viewport: { once, amount: 0.05 as const, margin: '0px 0px -12% 0px' },
+          })}
+      transition={{ duration: 0.65, delay, ease: EASE }}
+    >
+      {children}
+    </motion.div>
+  )
 }
 
-/** Static number display (no count-up). */
-export function CountUp({ value }: { value: number; duration?: number }) {
-  return <span className="tabular-nums">{value}</span>
+/** Parent for staggered children Reveals / motion items. */
+export function Stagger({
+  className,
+  children,
+  once = true,
+}: {
+  className?: string
+  children: ReactNode
+  once?: boolean
+}) {
+  const reduce = useReducedMotion()
+  if (reduce) return <div className={className}>{children}</div>
+
+  return (
+    <motion.div
+      className={className}
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once, amount: 0.15 }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+/** Count-up once when scrolled into view. */
+export function CountUp({ value, duration = 1.35 }: { value: number; duration?: number }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true, amount: 0.6 })
+  const reduce = useReducedMotion()
+  const motionValue = useMotionValue(0)
+  const spring = useSpring(motionValue, { stiffness: 70, damping: 22 })
+  const [display, setDisplay] = useState(0)
+
+  useEffect(() => {
+    if (reduce) {
+      setDisplay(value)
+      return
+    }
+    if (!inView) return
+    motionValue.set(0)
+    const id = window.setTimeout(() => motionValue.set(value), 40)
+    return () => window.clearTimeout(id)
+  }, [inView, value, motionValue, reduce])
+
+  useEffect(() => {
+    const unsub = spring.on('change', (v) => setDisplay(Math.round(v)))
+    return unsub
+  }, [spring])
+
+  void duration
+  return (
+    <span ref={ref} className="tabular-nums">
+      {display}
+    </span>
+  )
 }
 
 /** A live dot that keeps breathing. */
@@ -113,7 +196,7 @@ export function SectionHead({
   className?: string
 }) {
   return (
-    <div className={cx('flex flex-col', align === 'center' ? 'items-center text-center' : 'items-start text-left', className)}>
+    <div className={cx('flex flex-col', align === 'center' ? 'items-center text-center' : 'items-start text-start', className)}>
       <span
         className={cx('caps inline-flex items-center gap-2')}
         style={{ color: tone === 'light' ? 'rgb(255 255 255 / 0.7)' : accent }}
@@ -123,9 +206,9 @@ export function SectionHead({
       </span>
       <h2
         className={cx(
-          'display mt-4 max-w-[22ch] text-[clamp(1.9rem,1.2rem+2.4vw,3.4rem)]',
+          'display mt-4 text-[clamp(1.9rem,1.2rem+2.4vw,3.4rem)] tracking-[-0.03em]',
           tone === 'light' ? 'text-white' : 'text-ink',
-          align === 'center' && 'mx-auto',
+          align === 'center' ? 'mx-auto max-w-[22ch] text-center' : 'max-w-[20ch] text-start',
         )}
       >
         {title}
@@ -133,8 +216,9 @@ export function SectionHead({
       {body && (
         <p
           className={cx(
-            'mt-5 max-w-2xl text-[clamp(1rem,0.96rem+0.2vw,1.12rem)]',
+            'mt-5 text-[clamp(1rem,0.96rem+0.2vw,1.12rem)] leading-relaxed text-pretty',
             tone === 'light' ? 'text-night-muted' : 'text-muted',
+            align === 'center' ? 'mx-auto max-w-2xl text-center' : 'w-full max-w-[36ch] text-start',
           )}
         >
           {body}
@@ -154,8 +238,12 @@ export function Accordion({ items, defaultOpen = 0 }: { items: { q: string; a: s
         const isOpen = open === i
         const n = String(i + 1).padStart(2, '0')
         return (
-          <li
+          <motion.li
             key={item.q}
+            initial={{ opacity: 0, x: 28 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.35 }}
+            transition={{ delay: 0.05 * i, duration: 0.5, ease: EASE }}
             className={cx(
               'overflow-hidden rounded-[20px] border transition-[border-color,box-shadow,background-color] duration-[var(--duration-base)]',
               isOpen
@@ -223,7 +311,7 @@ export function Accordion({ items, defaultOpen = 0 }: { items: { q: string; a: s
                 </motion.div>
               )}
             </AnimatePresence>
-          </li>
+          </motion.li>
         )
       })}
     </ul>

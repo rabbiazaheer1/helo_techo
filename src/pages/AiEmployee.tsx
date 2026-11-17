@@ -21,9 +21,9 @@ import { PulseDot } from '../components/Ui'
 import { SITE } from '../data'
 import { cx } from '../lib/cx'
 import { useLocale } from '../lib/locale'
+import { EASE, revealVariants, type RevealVariant } from '../lib/motion'
 
 const FEATURE_ICONS = [ShoppingBag, UserRound, Lock, Box, Truck, Star]
-const EASE = [0.22, 1, 0.36, 1] as const
 
 const WA_QR = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(SITE.whatsapp)}`
 
@@ -31,22 +31,25 @@ function FadeIn({
   children,
   className,
   delay = 0,
-  y = 24,
+  y = 28,
+  variant = 'up',
 }: {
   children: ReactNode
   className?: string
   delay?: number
   y?: number
+  variant?: RevealVariant
 }) {
   const reduce = useReducedMotion()
-  // Lenient viewport so sections animate on short phones / tablets too.
+  const variants = revealVariants(variant, y)
   return (
     <motion.div
       className={className}
-      initial={reduce ? false : { opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '0px 0px -8% 0px', amount: 0.08 }}
-      transition={{ duration: reduce ? 0 : 0.55, delay: reduce ? 0 : delay, ease: EASE }}
+      variants={variants}
+      initial={reduce ? false : 'hidden'}
+      whileInView="visible"
+      viewport={{ once: true, margin: '0px 0px -12% 0px', amount: 0.05 }}
+      transition={{ duration: reduce ? 0 : 0.6, delay: reduce ? 0 : delay, ease: EASE }}
     >
       {children}
     </motion.div>
@@ -279,8 +282,8 @@ function FeatureCard({
   delay: number
 }) {
   return (
-    <FadeIn delay={delay} y={36}>
-      <article className="group relative min-h-[240px] overflow-hidden rounded-[20px] sm:min-h-[300px] sm:rounded-[24px] lg:min-h-[320px]">
+    <FadeIn delay={delay} y={36} variant={delay > 0.1 ? 'scale' : 'up'}>
+      <article className="group relative min-h-[240px] overflow-hidden rounded-[20px] transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-[0_28px_50px_-28px_rgb(5_16_31/0.55)] sm:min-h-[300px] sm:rounded-[24px] lg:min-h-[320px]">
         <img
           src={image}
           alt=""
@@ -401,10 +404,10 @@ export function AiEmployee() {
       {/* ------------------------------------------------------ try it live */}
       <section className="relative px-4 pb-12 sm:px-6 sm:pb-20">
         <div className="mx-auto grid w-full max-w-[1100px] gap-4 sm:gap-5 lg:grid-cols-2">
-          <FadeIn delay={0.05} className="min-w-0">
+          <FadeIn delay={0.05} variant="left" className="min-w-0">
             <CallCard />
           </FadeIn>
-          <FadeIn delay={0.15} className="min-w-0">
+          <FadeIn delay={0.15} variant="right" className="min-w-0">
             <WhatsAppCard />
           </FadeIn>
         </div>
@@ -489,13 +492,13 @@ export function AiEmployee() {
             </div>
           </FadeIn>
 
-          <FadeIn delay={0.12} y={40} className="min-w-0">
+          <FadeIn delay={0.12} y={40} variant="scale" className="min-w-0">
             <div className="relative mx-auto w-full max-w-md lg:max-w-none">
               <span className="pointer-events-none absolute -inset-3 rounded-[36px] bg-[radial-gradient(circle_at_40%_30%,rgb(26_99_216/0.2),transparent_65%)] blur-xl sm:-inset-4" aria-hidden />
               <motion.div
                 className="relative overflow-hidden rounded-[22px] shadow-[var(--shadow-float)] ring-1 ring-white/80 motion-reduce:transform-none sm:rounded-[28px]"
-                animate={reduce ? undefined : { y: [0, -8, 0] }}
-                transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+                animate={reduce ? undefined : { y: [0, -10, 0], rotate: [0, 0.6, 0] }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
               >
                 <img src={p.multiImage} alt="" className="aspect-[5/4] w-full object-cover sm:aspect-[5/6]" loading="lazy" />
                 <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgb(5_16_31/0.55))] p-4 sm:p-5">
