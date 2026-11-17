@@ -610,7 +610,7 @@ const en: Copy = {
     langDemo: 'Book In-Person Demo',
     langWa: 'Chat on WhatsApp',
     langHint: 'Hear the Arabic voice live at the demo',
-    langImage: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=80',
+    langImage: 'https://images.pexels.com/photos/2761206/pexels-photo-2761206.jpeg?auto=compress&cs=tinysrgb&w=1200',
     bookDemo: 'Book a Demo',
   },
 }
@@ -1093,7 +1093,7 @@ const ar: Copy = {
     langDemo: 'احجز عرضاً حضورياً',
     langWa: 'محادثة واتساب',
     langHint: 'اسمع الصوت العربي مباشرة في العرض',
-    langImage: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=80',
+    langImage: 'https://images.pexels.com/photos/2761206/pexels-photo-2761206.jpeg?auto=compress&cs=tinysrgb&w=1200',
     bookDemo: 'احجز عرضاً',
   },
 }

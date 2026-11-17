@@ -11,8 +11,8 @@ import {
   Truck,
   UserRound,
 } from 'lucide-react'
-import { motion, useInView, useReducedMotion } from 'motion/react'
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { Link } from 'react-router'
 
 import { Mark } from '../components/Logo'
@@ -86,46 +86,7 @@ function DemoBtn({ label, className }: { label: string; className?: string }) {
 }
 
 function StatValue({ value }: { value: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, margin: '0px 0px -40px 0px' })
-  const reduce = useReducedMotion()
-  const numeric = value.match(/^(\d+)/)
-  const [n, setN] = useState(0)
-
-  useEffect(() => {
-    if (!inView || !numeric) return
-    const target = Number(numeric[1])
-    if (reduce) {
-      setN(target)
-      return
-    }
-    const start = performance.now()
-    const dur = 1100
-    let raf = 0
-    const tick = (t: number) => {
-      const p = Math.min(1, (t - start) / dur)
-      const eased = 1 - Math.pow(1 - p, 3)
-      setN(Math.round(target * eased))
-      if (p < 1) raf = requestAnimationFrame(tick)
-    }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [inView, numeric, reduce])
-
-  if (!numeric) {
-    return (
-      <span ref={ref} className="display text-[clamp(1.8rem,1.4rem+1.2vw,2.45rem)] text-brand">
-        {value}
-      </span>
-    )
-  }
-
-  return (
-    <span ref={ref} className="display text-[clamp(1.8rem,1.4rem+1.2vw,2.45rem)] text-brand">
-      {n}
-      {value.slice(numeric[1].length)}
-    </span>
-  )
+  return <span className="display text-[clamp(1.8rem,1.4rem+1.2vw,2.45rem)] text-brand">{value}</span>
 }
 
 function CallCard() {
@@ -637,39 +598,24 @@ export function AiEmployee() {
 
             <div className="relative z-[1] p-5 sm:p-7 lg:p-8">
               <div className="relative overflow-hidden rounded-[24px] shadow-[0_30px_60px_-28px_rgb(0_0_0/0.55)]">
-                <img src={p.langImage} alt="" className="aspect-[4/5] w-full object-cover" loading="lazy" />
-                <motion.div
-                  className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/20 bg-night/80 p-3.5 backdrop-blur-md sm:inset-x-5 sm:bottom-5 sm:p-4"
-                  initial={reduce ? false : { opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2, duration: 0.55, ease: EASE }}
-                >
+                <img
+                  src={p.langImage}
+                  alt=""
+                  className="aspect-[4/5] w-full object-cover object-[center_20%]"
+                  loading="lazy"
+                />
+                <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/20 bg-night/80 p-3.5 backdrop-blur-md sm:inset-x-5 sm:bottom-5 sm:p-4">
                   <p className="caps flex items-center gap-1.5 text-[10px] text-aqua">
                     <PulseDot className="size-1.5" />
                     Voice call · Arabic
                   </p>
-                  <motion.p
-                    className="mt-2 rounded-xl bg-white/10 px-3 py-2 text-[12.5px] leading-snug text-white/80"
-                    dir="rtl"
-                    initial={reduce ? false : { opacity: 0, x: 10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.35, duration: 0.4 }}
-                  >
+                  <p className="mt-2 rounded-xl bg-white/10 px-3 py-2 text-[12.5px] leading-snug text-white/80" dir="rtl">
                     مرحباً، أبي أحجز كيكة ليوم الجمعة لو سمحت
-                  </motion.p>
-                  <motion.p
-                    className="mt-2 max-w-[90%] rounded-xl bg-brand px-3 py-2 text-[12.5px] leading-snug text-white"
-                    dir="rtl"
-                    initial={reduce ? false : { opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.55, duration: 0.4 }}
-                  >
+                  </p>
+                  <p className="mt-2 max-w-[90%] rounded-xl bg-brand px-3 py-2 text-[12.5px] leading-snug text-white" dir="rtl">
                     أكيد. لأي مناسبة؟ وأبغى الاسم يُكتب على الكيكة؟
-                  </motion.p>
-                </motion.div>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
