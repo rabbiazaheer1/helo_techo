@@ -1,6 +1,9 @@
-import { ArrowRight, ArrowUpRight, Check, Mail, Phone, Shield, Sparkles } from 'lucide-react'
-import { useState } from 'react'
+import { ArrowRight, ArrowUpRight, Check, Shield, Sparkles } from 'lucide-react'
+import { motion, useReducedMotion } from 'motion/react'
+import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router'
+
+import { Mark } from '../components/Logo'
 
 import { Diagram } from '../components/Diagram'
 import { HeroOrbit } from '../components/HeroOrbit'
@@ -72,7 +75,7 @@ function Hero() {
               </Btn>
               <Btn href={SITE.phoneHref} variant="outline" size="lg" className="max-sm:min-w-0 max-sm:flex-1">
                 <span className="flex items-center gap-2">
-                  <Phone className="size-4" aria-hidden />
+                  <ChannelMark kind="voice" className="size-6" glyphClassName="size-3" rounded="rounded-full" />
                   <span className="truncate">{SITE.phone}</span>
                 </span>
               </Btn>
@@ -683,18 +686,14 @@ function Faq() {
                   href={`mailto:${SITE.email}`}
                   className="flex items-center gap-2.5 rounded-[14px] border border-white/90 bg-white/90 px-3 py-2.5 text-[13.5px] font-medium text-ink transition-colors hover:border-brand hover:text-brand"
                 >
-                  <span className="grid size-8 place-items-center rounded-full bg-brand-soft text-brand">
-                    <Mail className="size-3.5" aria-hidden />
-                  </span>
+                  <ChannelMark kind="email" className="size-8" glyphClassName="size-4" rounded="rounded-full" />
                   <span className="min-w-0 truncate">{SITE.email}</span>
                 </a>
                 <a
                   href={SITE.phoneHref}
                   className="flex items-center gap-2.5 rounded-[14px] border border-white/90 bg-white/90 px-3 py-2.5 text-[13.5px] font-medium text-ink transition-colors hover:border-brand hover:text-brand"
                 >
-                  <span className="grid size-8 place-items-center rounded-full bg-brand-soft text-brand">
-                    <Phone className="size-3.5" aria-hidden />
-                  </span>
+                  <ChannelMark kind="voice" className="size-8" glyphClassName="size-4" rounded="rounded-full" />
                   {SITE.phone}
                 </a>
                 <Link
@@ -712,6 +711,155 @@ function Faq() {
             <Accordion items={copy.faq.items} />
           </Reveal>
         </div>
+      </div>
+    </section>
+  )
+}
+
+/* --------------------------------------------------------------- resources */
+
+const RESOURCE_EASE = [0.22, 1, 0.36, 1] as const
+
+function ResourceLink({
+  href,
+  className,
+  children,
+}: {
+  href: string
+  className?: string
+  children: ReactNode
+}) {
+  if (href.startsWith('/') && !href.includes('#')) {
+    return (
+      <Link to={href} className={className}>
+        {children}
+      </Link>
+    )
+  }
+  return (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  )
+}
+
+function Resources() {
+  const { copy } = useLocale()
+  const r = copy.resources
+  const reduce = useReducedMotion()
+
+  return (
+    <section id="resources" className="relative mx-auto w-full max-w-[1320px] px-4 py-12 sm:px-6 lg:py-16">
+      <div className="on-dark relative overflow-hidden rounded-[24px] bg-[linear-gradient(155deg,#040d1c_0%,#081b3a_48%,#062a32_100%)] px-5 py-10 text-white sm:rounded-[34px] sm:px-10 sm:py-12 lg:px-14 lg:py-14">
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <motion.div
+            className="absolute -top-28 -end-24 size-[min(90vw,520px)] rounded-full bg-[radial-gradient(circle,rgb(14_154_158/0.35),transparent_68%)] blur-3xl motion-reduce:transform-none"
+            animate={reduce ? undefined : { y: [0, 22, 0], x: [0, -14, 0] }}
+            transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute -bottom-36 -start-20 size-[min(80vw,460px)] rounded-full bg-[radial-gradient(circle,rgb(26_99_216/0.32),transparent_70%)] blur-3xl motion-reduce:transform-none"
+            animate={reduce ? undefined : { y: [0, -18, 0], x: [0, 12, 0] }}
+            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <div className="absolute inset-0 opacity-[0.22] [background-image:radial-gradient(rgb(255_255_255/0.11)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_50%_30%,#000,transparent_75%)]" />
+        </div>
+
+        <div className="relative grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-end lg:gap-14">
+          <Reveal>
+            <SectionHead
+              align="left"
+              tone="light"
+              accent="#7DE8E2"
+              eyebrow={r.eyebrow}
+              title={<>{r.title}</>}
+              body={r.body}
+            />
+            <motion.div
+              className="mt-8 hidden h-px origin-left bg-[linear-gradient(90deg,rgb(125_232_226/0.7),transparent)] lg:block"
+              initial={reduce ? false : { scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: RESOURCE_EASE }}
+            />
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <ResourceLink
+              href={r.featuredHref}
+              className="group relative flex flex-col gap-5 overflow-hidden rounded-[22px] border border-white/12 bg-white/[0.05] p-5 backdrop-blur-sm transition-[border-color,background-color] duration-[var(--duration-base)] hover:border-teal/40 hover:bg-white/[0.08] sm:flex-row sm:items-center sm:gap-6 sm:p-6"
+            >
+              <motion.span
+                className="pointer-events-none absolute inset-x-0 top-0 h-px origin-left bg-[linear-gradient(90deg,#7DE8E2,#1a63d8,transparent)]"
+                initial={reduce ? false : { scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.1, ease: RESOURCE_EASE }}
+              />
+              <span className="relative grid size-16 shrink-0 place-items-center rounded-[18px] bg-white shadow-[0_16px_36px_-18px_rgb(0_0_0/0.55)] sm:size-[4.5rem]">
+                <Mark className="size-11 sm:size-12" />
+                <span className="absolute -top-1 -end-1 grid size-5 place-items-center rounded-full bg-teal text-night">
+                  <Sparkles className="size-3" aria-hidden />
+                </span>
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="caps text-[10px] text-teal">{r.featuredTag}</span>
+                <span className="display mt-1.5 block text-[clamp(1.25rem,1.05rem+0.9vw,1.75rem)] tracking-[-0.03em] text-white">
+                  {r.featuredTitle}
+                </span>
+                <span className="mt-2 block max-w-xl text-[13.5px] leading-relaxed text-night-muted sm:text-[14px]">
+                  {r.featuredBody}
+                </span>
+              </span>
+              <span className="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-white/15 bg-white/10 px-4 py-2.5 text-[13px] font-semibold text-white transition-[background-color,border-color] group-hover:border-teal/50 group-hover:bg-teal/15 sm:self-center">
+                {r.featuredCta}
+                <ArrowUpRight className="size-3.5 transition-transform duration-[var(--duration-base)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+              </span>
+            </ResourceLink>
+          </Reveal>
+        </div>
+
+        <ol className="relative mt-8 border-t border-white/10 sm:mt-10">
+          {r.items.map((item, i) => {
+            const n = String(i + 1).padStart(2, '0')
+            return (
+              <motion.li
+                key={item.title}
+                initial={reduce ? false : { opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.35 }}
+                transition={{ delay: 0.05 * i, duration: 0.5, ease: RESOURCE_EASE }}
+                className="border-b border-white/10"
+              >
+                <ResourceLink
+                  href={item.href}
+                  className="group relative flex items-start gap-3.5 py-5 sm:items-center sm:gap-5 sm:py-6"
+                >
+                  <span
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-[linear-gradient(90deg,rgb(125_232_226/0.55),transparent)] transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:scale-x-100"
+                    aria-hidden
+                  />
+                  <span className="display w-10 shrink-0 text-[1.35rem] tabular-nums text-white/25 transition-colors group-hover:text-teal sm:w-14 sm:text-[1.55rem]">
+                    {n}
+                  </span>
+                  <span className="hidden w-24 shrink-0 caps text-[10px] text-teal sm:block">{item.tag}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="caps text-[10px] text-teal sm:hidden">{item.tag}</span>
+                    <span className="mt-1 block text-[15px] font-semibold tracking-[-0.02em] text-white transition-colors group-hover:text-teal sm:mt-0 sm:text-[1.05rem]">
+                      {item.title}
+                    </span>
+                    <span className="mt-1 block max-w-xl text-[13px] leading-snug text-night-muted sm:text-[13.5px]">
+                      {item.body}
+                    </span>
+                  </span>
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full border border-white/15 text-white/50 transition-[background-color,border-color,color] group-hover:border-teal/40 group-hover:bg-teal/15 group-hover:text-teal sm:size-10">
+                    <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0" aria-hidden />
+                  </span>
+                </ResourceLink>
+              </motion.li>
+            )
+          })}
+        </ol>
       </div>
     </section>
   )
@@ -770,9 +918,7 @@ function Contact() {
                 href={`mailto:${SITE.email}`}
                 className="group flex items-center gap-3 rounded-[16px] border border-white/12 bg-white/[0.05] p-3 transition-colors hover:border-white/30"
               >
-                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/10 text-white">
-                  <Mail className="size-4" aria-hidden />
-                </span>
+                <ChannelMark kind="email" className="size-9" glyphClassName="size-4" rounded="rounded-full" />
                 <span className="min-w-0 text-left">
                   <span className="block text-[10.5px] tracking-[0.08em] text-white/45 uppercase">{copy.demo.email}</span>
                   <span className="block truncate text-[12.5px] font-medium text-white">{SITE.email}</span>
@@ -782,9 +928,7 @@ function Contact() {
                 href={SITE.phoneHref}
                 className="group flex items-center gap-3 rounded-[16px] border border-white/12 bg-white/[0.05] p-3 transition-colors hover:border-white/30"
               >
-                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/10 text-white">
-                  <Phone className="size-4" aria-hidden />
-                </span>
+                <ChannelMark kind="voice" className="size-9" glyphClassName="size-4" rounded="rounded-full" />
                 <span className="min-w-0 text-left">
                   <span className="block text-[10.5px] tracking-[0.08em] text-white/45 uppercase">{copy.demo.phone}</span>
                   <span className="block truncate text-[12.5px] font-medium text-white">{SITE.phone}</span>
@@ -823,6 +967,7 @@ export function Home() {
       <Industries />
       <Results />
       <Pricing />
+      <Resources />
       <Faq />
       <Contact />
     </main>

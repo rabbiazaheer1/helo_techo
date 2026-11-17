@@ -10,7 +10,6 @@ import {
   Database,
   Lightbulb,
   MessageSquare,
-  Phone,
   Sparkles,
   TrendingUp,
   Users,
@@ -171,22 +170,22 @@ function UnifiedPanel() {
 
   const channels: { icon: ReactNode; title: string; meta?: string; accent: string; marks?: ChannelKey[] }[] = [
     {
-      icon: <MessageSquare className="size-3.5" />,
+      icon: <ChannelMark kind="whatsapp" className="size-5" glyphClassName="size-2.5" rounded="rounded-md" />,
       title: p1.messaging,
       accent: '#E1306C',
       marks: ['whatsapp', 'instagram', 'email'],
     },
     {
-      icon: <Phone className="size-3.5" />,
+      icon: <ChannelMark kind="voice" className="size-5" glyphClassName="size-2.5" rounded="rounded-md" />,
       title: p1.voice,
       meta: p1.voiceMeta,
-      accent: '#1A63D8',
+      accent: '#34C759',
     },
     {
-      icon: <MessageSquare className="size-3.5" />,
+      icon: <ChannelMark kind="web" className="size-5" glyphClassName="size-2.5" rounded="rounded-md" />,
       title: p1.web,
       meta: p1.webMeta,
-      accent: '#7C5CF5',
+      accent: '#0084FF',
     },
   ]
 

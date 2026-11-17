@@ -32,6 +32,18 @@ export type Copy = {
   capabilities: { title: string; body: string; note: string }[]
   results: { eyebrow: string; title: string; body: string; tags: string[]; stats: { value: string; label: string }[]; proofLines: string[] }
   pricing: { eyebrow: string; title: string; body: string; recommended: string; talkSales: string; startTrial: string; customPrice: string; creditNotes: { value: string; label: string }[]; plans: { name: string; blurb: string; estimate: string; credits: string; features: string[]; currency: string; per: string }[] }
+  resources: {
+    eyebrow: string
+    title: string
+    body: string
+    featuredTag: string
+    featuredTitle: string
+    featuredBody: string
+    featuredCta: string
+    featuredHref: string
+    read: string
+    items: { tag: string; title: string; body: string; href: string }[]
+  }
   faq: { eyebrow: string; title: string; body: string; items: { q: string; a: string }[] }
   demo: { eyebrow: string; title: string; body: string; bullets: string[]; cta: string; hint: string; email: string; phone: string; whatsapp: string }
   aiEmployee: {
@@ -140,6 +152,7 @@ const en: Copy = {
     { label: 'Industries', href: '/#industries' },
     { label: 'Results', href: '/#results' },
     { label: 'Pricing', href: '/#pricing' },
+    { label: 'Resources', href: '/#resources' },
     { label: 'FAQ', href: '/#faq' },
   ],
   serving: 'Built for hospitality, clinics, restaurants and growing businesses across the GCC',
@@ -401,6 +414,44 @@ const en: Copy = {
       },
     ],
   },
+  resources: {
+    eyebrow: 'Resources',
+    title: 'Read before the demo.',
+    body: 'Four short briefs — how the AI Employee works, how you go live, how credits bill, and where to start.',
+    featuredTag: 'Playbook',
+    featuredTitle: 'Meet the AI Order-Taking Employee',
+    featuredBody:
+      'WhatsApp, Instagram, phone and web — Arabic and English — without adding a night seat.',
+    featuredCta: 'Open playbook',
+    featuredHref: '/ai-employee',
+    read: 'Open',
+    items: [
+      {
+        tag: 'Checklist',
+        title: 'Go-live in two to three weeks',
+        body: 'Knowledge → rules → shadow mode → channel cutover.',
+        href: '/#how-it-works',
+      },
+      {
+        tag: 'Guide',
+        title: 'Credits, messages and call minutes',
+        body: 'One credit ≈ twenty messages; a call minute costs two.',
+        href: '/#pricing',
+      },
+      {
+        tag: 'Brief',
+        title: 'Industries we wire first',
+        body: 'Hospitality, clinics, restaurants, dealerships across the GCC.',
+        href: '/#industries',
+      },
+      {
+        tag: 'Demo',
+        title: 'Book a live walkthrough',
+        body: 'Thirty minutes on your channels. Product, not slides.',
+        href: '/demo',
+      },
+    ],
+  },
   faq: {
     eyebrow: 'FAQ',
     title: 'Straight answers.',
@@ -623,6 +674,7 @@ const ar: Copy = {
     { label: 'القطاعات', href: '/#industries' },
     { label: 'النتائج', href: '/#results' },
     { label: 'الأسعار', href: '/#pricing' },
+    { label: 'الموارد', href: '/#resources' },
     { label: 'الأسئلة', href: '/#faq' },
   ],
   serving: 'مبني للضيافة والعيادات والمطاعم والشركات النامية في دول الخليج',
@@ -881,6 +933,43 @@ const ar: Copy = {
           'خيارات استضافة وإقامة بيانات داخل الدولة',
           'تهيئة ودعم مسمّى',
         ],
+      },
+    ],
+  },
+  resources: {
+    eyebrow: 'الموارد',
+    title: 'اقرأ قبل العرض.',
+    body: 'أربعة مختصرات — كيف يعمل الموظف الذكي، كيف تُطلق، كيف تُحتسب الأرصدة، ومن أين تبدأ.',
+    featuredTag: 'دليل عملي',
+    featuredTitle: 'تعرّف على موظف استقبال الطلبات الذكي',
+    featuredBody: 'واتساب وإنستغرام والهاتف والموقع — عربي وإنجليزي — دون مقعد ليلي إضافي.',
+    featuredCta: 'افتح الدليل',
+    featuredHref: '/ai-employee',
+    read: 'افتح',
+    items: [
+      {
+        tag: 'قائمة تحقق',
+        title: 'الإطلاق خلال أسبوعين إلى ثلاثة',
+        body: 'المعرفة ← القواعد ← الوضع التجريبي ← قطع القنوات.',
+        href: '/#how-it-works',
+      },
+      {
+        tag: 'دليل',
+        title: 'الأرصدة والرسائل ودقائق المكالمة',
+        body: 'رصيد واحد ≈ عشرين رسالة؛ دقيقة المكالمة تكلف اثنين.',
+        href: '/#pricing',
+      },
+      {
+        tag: 'موجز',
+        title: 'القطاعات التي نبدأ بها',
+        body: 'الضيافة والعيادات والمطاعم والوكالات عبر الخليج.',
+        href: '/#industries',
+      },
+      {
+        tag: 'عرض',
+        title: 'احجز جولة مباشرة',
+        body: 'ثلاثون دقيقة على قنواتك. منتج حي، لا شرائح.',
+        href: '/demo',
       },
     ],
   },

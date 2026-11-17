@@ -7,35 +7,10 @@ import { postJson } from '../lib/api'
 import { cx } from '../lib/cx'
 import { useLocale } from '../lib/locale'
 import { Brand } from './Logo'
+import { IconMessenger, IconPhone, IconWhatsApp } from './Social'
 import { PulseDot } from './Ui'
 
 type ChatMsg = { id: string; role: 'bot' | 'user'; text: string }
-
-/** Bold white glyphs — match the classic WhatsApp / chat / call FABs. */
-function IconWhatsApp({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden fill="currentColor">
-      <path d="M12.04 2c-5.46 0-9.91 4.43-9.91 9.9 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.9-4.44 9.9-9.9 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 1.8a8.07 8.07 0 0 1 8.1 8.1 8.07 8.07 0 0 1-8.1 8.09c-1.42 0-2.8-.37-4.02-1.07l-.29-.17-3.12.82.83-3.04-.19-.31a8.05 8.05 0 0 1-1.12-4.32 8.07 8.07 0 0 1 8.1-8.1Zm4.63 11.53c-.2.56-1.15 1.07-1.6 1.14-.41.06-.93.09-1.5-.09-.35-.12-.79-.25-1.36-.49-2.39-1.03-3.95-3.44-4.07-3.6-.12-.16-1-1.33-1-2.54 0-1.2.63-1.8.86-2.04.22-.24.49-.3.65-.3h.47c.15 0 .35-.06.55.42.2.49.69 1.69.75 1.81.06.12.1.26.02.42-.08.16-.12.26-.24.4-.12.14-.25.31-.36.42-.12.12-.24.24-.1.47.14.24.62 1.02 1.33 1.65.91.82 1.68 1.07 1.92 1.19.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.58-.14 1.14Z" />
-    </svg>
-  )
-}
-
-function IconChat({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4.5 6.2A3.2 3.2 0 0 1 7.7 3h8.6a3.2 3.2 0 0 1 3.2 3.2v6.1a3.2 3.2 0 0 1-3.2 3.2H11l-3.8 3.1c-.55.45-1.35.06-1.35-.66V15.5A3.2 3.2 0 0 1 4.5 12.3V6.2Z" />
-      <path d="M8.2 8.4h7.6M8.2 11.4h5.2" />
-    </svg>
-  )
-}
-
-function IconCall({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden fill="currentColor">
-      <path d="M6.6 10.8c1.4 2.9 3.8 5.3 6.7 6.7l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.7.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21.3 2.7 13.1 2.7 3.7c0-.6.4-1 1-1H7.3c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.7.1.3 0 .7-.2 1L6.6 10.8Z" />
-    </svg>
-  )
-}
 
 function Fab({
   href,
@@ -268,11 +243,11 @@ export function FloatingActions() {
             label={chatOpen ? copy.chat.closeChat : copy.chat.openChat}
             className={chatOpen ? 'bg-ink' : 'bg-[#4F6BED]'}
           >
-            {chatOpen ? <X className="size-6" strokeWidth={2.5} aria-hidden /> : <IconChat className="size-[1.55rem]" />}
+            {chatOpen ? <X className="size-6" strokeWidth={2.5} aria-hidden /> : <IconMessenger className="size-[1.55rem]" />}
           </Fab>
 
           <Fab onClick={() => setChatOpen(true)} label={copy.chat.openChat} className="bg-[#4F6BED]">
-            <IconCall className="size-[1.45rem]" />
+            <IconPhone className="size-[1.45rem]" />
           </Fab>
         </div>
       </div>

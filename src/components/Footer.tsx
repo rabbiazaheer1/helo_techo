@@ -1,4 +1,4 @@
-import { ArrowUp, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowUp, MapPin } from 'lucide-react'
 import { Link } from 'react-router'
 
 import { SITE } from '../data'
@@ -63,17 +63,13 @@ export function Footer() {
             <ul className="mt-4 space-y-3 text-[14.5px]">
               <li>
                 <a href={`mailto:${SITE.email}`} className="group flex items-center gap-2.5 text-white/85 transition-colors hover:text-white">
-                  <span className="grid size-8 shrink-0 place-items-center rounded-full border border-white/15 text-white/70 transition-colors group-hover:border-white/40">
-                    <Mail className="size-3.5" aria-hidden />
-                  </span>
+                  <ChannelMark kind="email" className="size-8" glyphClassName="size-4" rounded="rounded-full" />
                   <span className="break-all">{SITE.email}</span>
                 </a>
               </li>
               <li>
                 <a href={SITE.phoneHref} className="group flex items-center gap-2.5 text-white/85 transition-colors hover:text-white">
-                  <span className="grid size-8 shrink-0 place-items-center rounded-full border border-white/15 text-white/70 transition-colors group-hover:border-white/40">
-                    <Phone className="size-3.5" aria-hidden />
-                  </span>
+                  <ChannelMark kind="voice" className="size-8" glyphClassName="size-4" rounded="rounded-full" />
                   {SITE.phone}
                 </a>
               </li>

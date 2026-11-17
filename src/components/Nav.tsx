@@ -1,4 +1,4 @@
-import { ArrowUpRight, LogOut, Menu, Phone, X } from 'lucide-react'
+import { ArrowUpRight, LogOut, Menu, X } from 'lucide-react'
 import { AnimatePresence, motion, useScroll } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router'
@@ -122,7 +122,7 @@ export function Nav() {
               href={SITE.phoneHref}
               className="hidden items-center gap-2 rounded-full border border-line-strong bg-white/70 px-3.5 py-2 text-[13.5px] font-medium text-ink transition-colors hover:border-brand hover:text-brand md:inline-flex"
             >
-              <Phone className="size-3.5" aria-hidden />
+              <ChannelMark kind="voice" className="size-6" glyphClassName="size-3" rounded="rounded-full" />
               {SITE.phone}
             </a>
 
@@ -244,7 +244,7 @@ export function Nav() {
                   href={SITE.phoneHref}
                   className="flex h-12 items-center justify-center gap-2 rounded-full border border-line-strong text-[15px] font-medium text-ink"
                 >
-                  <Phone className="size-4" aria-hidden />
+                  <ChannelMark kind="voice" className="size-6" glyphClassName="size-3.5" rounded="rounded-full" />
                   {SITE.phone}
                 </a>
                 <a
