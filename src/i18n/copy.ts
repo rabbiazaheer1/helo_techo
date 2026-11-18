@@ -47,6 +47,23 @@ export type Copy = {
     read: string
     items: { tag: string; title: string; body: string; href: string }[]
   }
+  resourcePages: {
+    back: string
+    related: string
+    tipLabel: string
+    ctaDemo: string
+    ctaWa: string
+    pages: Record<
+      'go-live' | 'credits' | 'industries' | 'walkthrough',
+      {
+        tag: string
+        title: string
+        lead: string
+        sections: { title: string; body: string; points?: string[] }[]
+        tip: string
+      }
+    >
+  }
   faq: { eyebrow: string; title: string; body: string; items: { q: string; a: string }[] }
   demo: { eyebrow: string; title: string; body: string; bullets: string[]; cta: string; hint: string; email: string; phone: string; whatsapp: string }
   aiEmployee: {
@@ -435,27 +452,156 @@ const en: Copy = {
         tag: 'Checklist',
         title: 'Go-live in two to three weeks',
         body: 'Knowledge → rules → shadow mode → channel cutover.',
-        href: '/#how-it-works',
+        href: '/resources/go-live',
       },
       {
         tag: 'Guide',
         title: 'Credits, messages and call minutes',
         body: 'One credit ≈ twenty messages; a call minute costs two.',
-        href: '/#pricing',
+        href: '/resources/credits',
       },
       {
         tag: 'Brief',
         title: 'Industries we wire first',
         body: 'Hospitality, clinics, restaurants, dealerships across the GCC.',
-        href: '/#industries',
+        href: '/resources/industries',
       },
       {
         tag: 'Demo',
         title: 'Book a live walkthrough',
         body: 'Thirty minutes on your channels. Product, not slides.',
-        href: '/demo',
+        href: '/resources/walkthrough',
       },
     ],
+  },
+  resourcePages: {
+    back: 'All resources',
+    related: 'More briefs',
+    tipLabel: 'Tip',
+    ctaDemo: 'Book a free demo',
+    ctaWa: 'Chat on WhatsApp',
+    pages: {
+      'go-live': {
+        tag: 'Checklist',
+        title: 'Go-live in two to three weeks',
+        lead: 'A calm cutover order that keeps staff confident — knowledge first, then rules, shadow mode, and channel by channel.',
+        sections: [
+          {
+            title: 'Week 1 — Knowledge & rules',
+            body: 'We index your menus, prices, hours, FAQs and escalation paths, then write the rules with your team.',
+            points: [
+              'Approved knowledge per location and language',
+              'Hours, handoff rules and tone locked with operators',
+              'Test conversations on WhatsApp and web chat',
+            ],
+          },
+          {
+            title: 'Week 2 — Shadow mode',
+            body: 'The AI drafts; your staff sends. You see quality before customers feel the change.',
+            points: [
+              'Side-by-side review in one queue',
+              'Edits feed back into knowledge the same day',
+              'No live customer risk while you calibrate',
+            ],
+          },
+          {
+            title: 'Week 2–3 — Channel cutover',
+            body: 'WhatsApp and Instagram first, then web chat, then voice once your numbers are wired.',
+            points: [
+              'One channel at a time, with a rollback path',
+              'Night coverage without a new night seat',
+              'Live dashboard for managers from day one',
+            ],
+          },
+        ],
+        tip: 'Most locations finish in 14–21 days when knowledge and a decision-maker are available in week one.',
+      },
+      credits: {
+        tag: 'Guide',
+        title: 'Credits, messages and call minutes',
+        lead: 'Simple maths so you can size the plan before you sign — messages, calls and what a credit really buys.',
+        sections: [
+          {
+            title: 'How credits work',
+            body: 'Credits are the shared unit across chat and voice. Unused monthly credits do not roll forever — size for your peak week, not your quietest day.',
+            points: [
+              '1 credit ≈ 20 chat messages',
+              '1 call minute = 2 credits (from Growth up)',
+              '≈ QAR 0.88 per credit on published plans',
+            ],
+          },
+          {
+            title: 'Plan snapshots',
+            body: 'Starter covers messaging; Growth adds voice minutes; Connected adds live system sync and more headroom.',
+            points: [
+              'Starter — 100 credits / month',
+              'Growth — 300 credits + 75 call minutes',
+              'Connected — 750 credits across up to 3 locations',
+            ],
+          },
+          {
+            title: 'Sizing tip',
+            body: 'Count inbound WhatsApp + IG + web threads in a busy week, then add expected call minutes. We help you map that in the demo.',
+            points: [
+              '50 free credits to start, zero setup fee',
+              'Overage is clear before you hit it',
+              'Enterprise can custom-pool across brands',
+            ],
+          },
+        ],
+        tip: 'If you are unsure, book Growth for the first month — easier to step down than to run out mid-launch.',
+      },
+      industries: {
+        tag: 'Brief',
+        title: 'Industries we wire first',
+        lead: 'Same platform. Different knowledge, procedures, connectors and language for how each operation actually runs.',
+        sections: [
+          {
+            title: 'Hospitality',
+            body: 'Resorts, hotel groups and hotel apartments — direct bookings, in-stay requests and post-stay recovery in Arabic and English.',
+            points: ['Guest intake & booking', 'Housekeeping dispatch', 'Review recovery before it posts'],
+          },
+          {
+            title: 'Aesthetics & dental',
+            body: 'Clinics and medspas that lose overnight DMs and mid-procedure calls — intake, voice reception and no-show recall.',
+            points: ['New-patient intake from IG', 'After-hours voice on your numbers', 'No-show recovery loops'],
+          },
+          {
+            title: 'Restaurants, auto & growing SMBs',
+            body: 'Cafés, dealerships, salons and retail — orders, test drives, quotes and bookings without adding night staff.',
+            points: ['Orders & payment links', 'Test-drive and service booking', 'Quotes while they are still chatting'],
+          },
+        ],
+        tip: 'Every industry build ships with local rules per branch — hours, prices and team — not a one-size script.',
+      },
+      walkthrough: {
+        tag: 'Demo',
+        title: 'Book a live walkthrough',
+        lead: 'Thirty focused minutes on your channels and languages — product running live, not a slide deck.',
+        sections: [
+          {
+            title: 'What we cover',
+            body: 'We wire a sample of your channels in the session so you hear Arabic and English replies, see the inbox, and watch a booking or order land.',
+            points: [
+              'WhatsApp + one more channel of your choice',
+              'Knowledge scoped to your location',
+              'Human takeover and escalation rules',
+            ],
+          },
+          {
+            title: 'Who should join',
+            body: 'An operator who knows hours and prices, plus whoever owns the inbox or front desk — decisions happen faster in the room.',
+            points: ['Ops or GM', 'Front-desk / guest experience lead', 'Optional: IT for number and CRM access'],
+          },
+          {
+            title: 'After the call',
+            body: 'You leave with a go-live sketch, credit sizing and a clear next step — trial, pilot location, or enterprise scoping.',
+            points: ['Written summary same day', 'Optional shadow-mode pilot', 'No hard sell — product first'],
+          },
+        ],
+        tip: 'Prefer WhatsApp? Message +974 31637274 and we will schedule around your peak hours.',
+      },
+    },
   },
   faq: {
     eyebrow: 'FAQ',
@@ -957,27 +1103,156 @@ const ar: Copy = {
         tag: 'قائمة تحقق',
         title: 'الإطلاق خلال أسبوعين إلى ثلاثة',
         body: 'المعرفة ← القواعد ← الوضع التجريبي ← قطع القنوات.',
-        href: '/#how-it-works',
+        href: '/resources/go-live',
       },
       {
         tag: 'دليل',
         title: 'الأرصدة والرسائل ودقائق المكالمة',
         body: 'رصيد واحد ≈ عشرين رسالة؛ دقيقة المكالمة تكلف اثنين.',
-        href: '/#pricing',
+        href: '/resources/credits',
       },
       {
         tag: 'موجز',
         title: 'القطاعات التي نبدأ بها',
         body: 'الضيافة والعيادات والمطاعم والوكالات عبر الخليج.',
-        href: '/#industries',
+        href: '/resources/industries',
       },
       {
         tag: 'عرض',
         title: 'احجز جولة مباشرة',
         body: 'ثلاثون دقيقة على قنواتك. منتج حي، لا شرائح.',
-        href: '/demo',
+        href: '/resources/walkthrough',
       },
     ],
+  },
+  resourcePages: {
+    back: 'كل الموارد',
+    related: 'مختصرات أخرى',
+    tipLabel: 'نصيحة',
+    ctaDemo: 'احجز عرضاً مجانياً',
+    ctaWa: 'محادثة واتساب',
+    pages: {
+      'go-live': {
+        tag: 'قائمة تحقق',
+        title: 'الإطلاق خلال أسبوعين إلى ثلاثة',
+        lead: 'ترتيب هادئ للإطلاق يبقي الفريق واثقاً — المعرفة أولاً، ثم القواعد، والوضع التجريبي، ثم القناة تلو القناة.',
+        sections: [
+          {
+            title: 'الأسبوع 1 — المعرفة والقواعد',
+            body: 'نُفهرس القوائم والأسعار والساعات والأسئلة ومسارات التصعيد، ثم نكتب القواعد مع فريقك.',
+            points: [
+              'معرفة معتمدة لكل موقع ولغة',
+              'الساعات وقواعد التسليم والنبرة مع المشغّلين',
+              'محادثات تجريبية على واتساب ودردشة الموقع',
+            ],
+          },
+          {
+            title: 'الأسبوع 2 — الوضع التجريبي',
+            body: 'الذكاء يصيغ؛ فريقك يرسل. ترى الجودة قبل أن يشعر العملاء بالتغيير.',
+            points: [
+              'مراجعة جنباً إلى جنب في صندوق واحد',
+              'التعديلات تعود للمعرفة في اليوم نفسه',
+              'بلا مخاطرة على العملاء أثناء الضبط',
+            ],
+          },
+          {
+            title: 'الأسبوع 2–3 — قطع القنوات',
+            body: 'واتساب وإنستغرام أولاً، ثم الدردشة، ثم الصوت بعد توصيل أرقامك.',
+            points: [
+              'قناة واحدة في كل مرة مع مسار تراجع',
+              'تغطية ليلية دون مقعد ليلي جديد',
+              'لوحة حية للمديرين من اليوم الأول',
+            ],
+          },
+        ],
+        tip: 'معظم المواقع تنتهي خلال 14–21 يوماً عندما تكون المعرفة وصاحب القرار متاحين في الأسبوع الأول.',
+      },
+      credits: {
+        tag: 'دليل',
+        title: 'الأرصدة والرسائل ودقائق المكالمة',
+        lead: 'حساب بسيط لتحدد الحجم قبل التوقيع — الرسائل والمكالمات وما يشتريه الرصيد فعلاً.',
+        sections: [
+          {
+            title: 'كيف تعمل الأرصدة',
+            body: 'الرصيد وحدة مشتركة للدردشة والصوت. حدّد الحجم لأسبوع الذروة لا لأهدأ يوم.',
+            points: [
+              'رصيد واحد ≈ 20 رسالة دردشة',
+              'دقيقة مكالمة = رصيدان (من باقة النمو فصاعداً)',
+              '≈ 0.88 ر.ق لكل رصيد في الباقات المنشورة',
+            ],
+          },
+          {
+            title: 'لمحة الباقات',
+            body: 'المبتدئة للرسائل؛ النمو يضيف دقائق الصوت؛ المتصلة تضيف مزامنة حية ومساحة أكبر.',
+            points: [
+              'المبتدئة — 100 رصيد / شهر',
+              'النمو — 300 رصيد + 75 دقيقة مكالمة',
+              'المتصلة — 750 رصيداً حتى 3 مواقع',
+            ],
+          },
+          {
+            title: 'نصيحة التحجيم',
+            body: 'احسب خيوط واتساب وإنستغرام والموقع في أسبوع مزدحم، ثم أضف دقائق المكالمات المتوقعة.',
+            points: [
+              '50 رصيداً مجانياً للبداية بلا رسوم إعداد',
+              'التجاوز واضح قبل أن تصل إليه',
+              'المؤسسات يمكنها تجميع الأرصدة عبر العلامات',
+            ],
+          },
+        ],
+        tip: 'إن كنت متردداً، ابدأ بالنمو في الشهر الأول — أسهل أن تخفض لاحقاً من أن ينفد الرصيد وسط الإطلاق.',
+      },
+      industries: {
+        tag: 'موجز',
+        title: 'القطاعات التي نبدأ بها',
+        lead: 'المنصة واحدة. المعرفة والإجراءات والموصلات واللغة تختلف حسب تشغيل كل عمل.',
+        sections: [
+          {
+            title: 'الضيافة',
+            body: 'منتجعات ومجموعات فنادق وشقق فندقية — حجوزات مباشرة وطلبات أثناء الإقامة واسترداد بعد المغادرة بالعربية والإنجليزية.',
+            points: ['استقبال الضيوف والحجز', 'توجيه التنظيف', 'استرداد التقييم قبل النشر'],
+          },
+          {
+            title: 'التجميل وطب الأسنان',
+            body: 'عيادات تفقد رسائل الليل ومكالمات أثناء الإجراءات — استقبال وصوت وتذكير بالمواعيد الفائتة.',
+            points: ['استقبال مرضى جدد من إنستغرام', 'صوت خارج الدوام على أرقامك', 'حلقات استرداد عدم الحضور'],
+          },
+          {
+            title: 'المطاعم والسيارات والأعمال النامية',
+            body: 'مقاهٍ ووكالات وصالونات وتجزئة — طلبات وتجارب قيادة وعروض وحجوزات دون طاقم ليلي إضافي.',
+            points: ['طلبات وروابط دفع', 'حجز تجربة قيادة وخدمة', 'عروض بينما المحادثة مفتوحة'],
+          },
+        ],
+        tip: 'كل بناء قطاعي يصل بقواعد محلية لكل فرع — ساعات وأسعار وفريق — لا سكربت واحد للجميع.',
+      },
+      walkthrough: {
+        tag: 'عرض',
+        title: 'احجز جولة مباشرة',
+        lead: 'ثلاثون دقيقة مركّزة على قنواتك ولغاتك — منتج يعمل حياً، لا شرائح.',
+        sections: [
+          {
+            title: 'ماذا نغطي',
+            body: 'نوصل عينة من قنواتك في الجلسة لتسمع ردوداً عربية وإنجليزية، وترى الصندوق، وتشهد حجزاً أو طلباً يصل.',
+            points: [
+              'واتساب + قناة أخرى من اختيارك',
+              'معرفة لكل موقعك',
+              'تسليم بشري وقواعد التصعيد',
+            ],
+          },
+          {
+            title: 'من يحضر',
+            body: 'مشغّل يعرف الساعات والأسعار، ومن يملك الصندوق أو الاستقبال — القرارات أسرع في الغرفة.',
+            points: ['التشغيل أو المدير العام', 'قائد الاستقبال / تجربة الضيف', 'اختياري: تقنية المعلومات للأرقام والـ CRM'],
+          },
+          {
+            title: 'بعد المكالمة',
+            body: 'تخرج بمخطط إطلاق وتحجيم أرصدة وخطوة تالية واضحة — تجربة أو موقع تجريبي أو نطاق مؤسسي.',
+            points: ['ملخص مكتوب في اليوم نفسه', 'تجربة وضع ظلي اختيارية', 'بلا ضغط بيع — المنتج أولاً'],
+          },
+        ],
+        tip: 'تفضل واتساب؟ راسل +974 31637274 وسنجدول حول ساعات الذروة لديك.',
+      },
+    },
   },
   faq: {
     eyebrow: 'الأسئلة الشائعة',

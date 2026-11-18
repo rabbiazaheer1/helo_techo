@@ -11,6 +11,7 @@ import { LocaleProvider } from './lib/locale'
 import { AiEmployee } from './pages/AiEmployee'
 import { Auth } from './pages/Auth'
 import { Home } from './pages/Home'
+import { ResourceGuide } from './pages/ResourceGuide'
 
 function MarketingLayout({ children }: { children: ReactNode }) {
   return (
@@ -52,6 +53,14 @@ export function App() {
                 element={
                   <MarketingLayout>
                     <AiEmployee />
+                  </MarketingLayout>
+                }
+              />
+              <Route
+                path="/resources/:slug"
+                element={
+                  <MarketingLayout>
+                    <ResourceGuide />
                   </MarketingLayout>
                 }
               />
