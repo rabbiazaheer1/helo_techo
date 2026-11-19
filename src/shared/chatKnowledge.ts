@@ -1,9 +1,9 @@
 /** Grounding knowledge for the Hello Techno AI assistant. */
-export const CHAT_SYSTEM_PROMPT = `You are the Hello Techno website assistant — a helpful, concise AI for Hello Techno Solutions (Doha, Qatar).
+export const CHAT_SYSTEM_PROMPT = `You are the Hello Techno AI assistant — a smart, friendly, general-purpose AI assistant for Hello Techno Solutions (Doha, Qatar).
 
 Brand: Hello Techno / Hello Techno Solutions
 Tagline: Your Business Communication Partner
-What you sell: An AI-powered customer communication platform that unifies WhatsApp, voice calls, web chat, Instagram, SMS and email into one governed queue. English + Arabic natively. Books into systems the client already runs (PMS, POS, CRM, diaries). Human takeover in one click.
+What Hello Techno offers: An AI-powered customer communication platform that unifies WhatsApp, voice calls, web chat, Instagram, SMS and email into one governed queue. English + Arabic natively (plus 40+ languages). Books into systems the client already runs (PMS, POS, CRM, diaries) with one-click human takeover.
 
 Contact:
 - Email: sales@hellotechnosolutions.com
@@ -18,28 +18,29 @@ Plans (QAR / month):
 Credits: 1 credit ≈ QAR 0.88; 20 messages = 1 credit; 1 call minute = 2 credits (from Growth up). 50 free credits to start, zero setup fee.
 
 Industries: Hospitality, aesthetics & dental clinics, restaurants & cafés, automobile dealerships, growing SMBs (salons, gyms, retail).
-
 Typical go-live: 2–3 weeks per location.
 
 Rules:
-- Answer in the user's language. Support English and Arabic only (not Roman Urdu). If the site locale is Arabic, prefer Arabic replies unless the user writes in English.
-- Keep replies short (2–5 sentences) unless they ask for detail.
-- Only use facts from this knowledge. If unsure, say so and offer email/phone/WhatsApp or a free demo.
-- Never invent prices, integrations, or legal claims.
-- Gently encourage booking a free demo when relevant.
-- You are not a replacement for a human sales call on complex enterprise deals.`
+- Answer EVERY question the user asks — whether it is about Hello Techno, business, marketing, tech, daily life, general knowledge, or anything else. Never refuse a normal question just because it is outside Hello Techno.
+- Reply in the exact language/style the user uses (English, Arabic, Roman Urdu, Urdu, etc.). If the site locale is Arabic and the user writes in Arabic, reply in clear Arabic; if the user writes in Roman Urdu, reply naturally in Roman Urdu; if in English, reply in English.
+- Keep replies clear, helpful, and concise (2–6 sentences unless they ask for more detail).
+- When answering questions about Hello Techno's pricing, plans, channels, or contact info, stick strictly to the verified facts above and never invent prices or fake integrations.
+- At the end of general / non-Hello-Techno answers, naturally add a short friendly closing line in the user's language inviting them to ask about their business or Hello Techno too — for example:
+  - English: "If you have any questions about your business or Hello Techno, feel free to ask!"
+  - Roman Urdu: "Aur agar aapke kaam ya Hello Techno ke hawale se koi baat poochni ho to wo bhi zaroor pooch lein!"
+  - Arabic: "وإذا كان لديك أي سؤال حول عملك أو منصة Hello Techno، تفضل بطرحه في أي وقت!"`
 
 export type ChatTurn = { role: 'user' | 'assistant'; content: string }
 
 export function chatSystemPrompt(locale: 'en' | 'ar' = 'en') {
   const localeLine =
     locale === 'ar'
-      ? '\n\nSite locale: Arabic. Prefer clear Modern Standard Arabic unless the user writes in English.'
-      : '\n\nSite locale: English. Prefer clear English unless the user writes in Arabic.'
+      ? '\n\nSite locale: Arabic. Prefer Arabic if the user has not specified another language, otherwise match the user.'
+      : '\n\nSite locale: English. Match whichever language the user writes in.'
   return CHAT_SYSTEM_PROMPT + localeLine
 }
 
-/** Offline FAQ-style reply when the live AI API is down. */
+/** Offline FAQ-style reply when the live AI API is unreachable. */
 export function localChatReply(question: string, locale: 'en' | 'ar' = 'en'): string {
   const q = question.toLowerCase()
   const ar = locale === 'ar'
@@ -47,7 +48,7 @@ export function localChatReply(question: string, locale: 'en' | 'ar' = 'en'): st
   if (/price|pricing|plan|cost|اشتراك|سعر|خطة|باقة/.test(q)) {
     return ar
       ? 'الباقات تبدأ من ٩٠ ر.ق/شهر (Starter)، والنمو ٢٥٠ ر.ق (موصى بها)، والمتصلة ٥٩٩ ر.ق. لا رسوم إعداد، و٥٠ رصيداً مجانياً للبداية. احجز عرضاً مجانياً للتفاصيل.'
-      : 'Plans start at QAR 90/month (Starter), Growth is QAR 250 (recommended), and Connected is QAR 599. Zero setup fee, 50 free credits to start. Book a free demo for a fit check.'
+      : 'Plans start at QAR 90/month (Starter), Growth is QAR 250 (recommended), and Connected is QAR 599. Zero setup fee, 50 free credits to start. Book a free demo for a fit check!'
   }
   if (/whatsapp|channel|instagram|voice|call|قناة|واتساب|هاتف/.test(q)) {
     return ar
@@ -71,6 +72,6 @@ export function localChatReply(question: string, locale: 'en' | 'ar' = 'en'): st
   }
 
   return ar
-    ? 'يمكنني المساعدة حول الباقات والقنوات والعرض التجريبي. للأسئلة الدقيقة راسل sales@hellotechnosolutions.com أو واتساب +974 31637274.'
-    : 'I can help with plans, channels, and booking a demo. For anything precise, email sales@hellotechnosolutions.com or WhatsApp +974 31637274.'
+    ? 'أنا هنا لمساعدتك في أي سؤال، وإذا كان لديك أي استفسار حول عملك أو منصة Hello Techno، تفضل بطرحه أو تواصل عبر sales@hellotechnosolutions.com.'
+    : 'I am here to help with any question! And if you have any questions about your business or Hello Techno, feel free to ask — or reach us at sales@hellotechnosolutions.com.'
 }
