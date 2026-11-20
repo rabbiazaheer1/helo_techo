@@ -2,8 +2,8 @@ import { MotionConfig } from 'motion/react'
 import type { ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 
-import { ChatWidget } from './components/ChatWidget'
 import { FloatingActions } from './components/FloatingActions'
+import { OfficialHeyServoScript } from './components/OfficialHeyServoScript'
 import { Footer } from './components/Footer'
 import { Nav } from './components/Nav'
 import { SmoothScroll } from './components/SmoothScroll'
@@ -37,7 +37,8 @@ export function App() {
       <MotionConfig reducedMotion="user">
         <BrowserRouter>
           <SmoothScroll>
-            <ChatWidget />
+            {/* Temp A/B: official widget.js only (custom HeyServoWidget unmounted). */}
+            <OfficialHeyServoScript />
             <FloatingActions />
             <Routes>
               <Route

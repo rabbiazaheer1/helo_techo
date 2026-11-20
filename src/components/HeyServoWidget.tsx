@@ -9,13 +9,15 @@ const KEY_RE = /^pk_live_[A-Za-z0-9_-]{20,64}$/
 const LAUNCHER_CSS = `
 :host, * { box-sizing: border-box; font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif; }
 .hs-launch {
-  position: fixed; bottom: 24px; right: 24px; height: 56px; min-width: 56px; padding: 0;
+  position: fixed; bottom: max(24px, env(safe-area-inset-bottom, 0px)); height: 56px; min-width: 56px; padding: 0;
   border-radius: 999px; border: 1px solid rgba(255,255,255,0.22); cursor: pointer; color: #fff;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   z-index: 2147483000;
   box-shadow: 0 18px 38px -12px rgba(26,99,216,0.58), 0 4px 12px rgba(15,23,42,0.16);
   transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
 }
+.hs-pos-right { right: max(24px, env(safe-area-inset-right, 0px)); }
+.hs-pos-left { left: max(24px, env(safe-area-inset-left, 0px)); }
 .hs-launch:hover { transform: translateY(-2px) scale(1.04); filter: brightness(1.06); }
 .hs-launch:active { transform: scale(0.97); }
 .hs-launch img { width: 32px; height: 32px; border-radius: 50%; object-fit: contain; background: #fff; padding: 3px; }
@@ -91,7 +93,9 @@ export function HeyServoWidget() {
       console.warn('[heyservo] Missing or invalid public widget key (pk_live_…).')
       return
     }
-    if (window.HeyServoWidget || document.getElementById('heyservo-widget-host')) return
+    // Avoid duplicate loaders; clear orphan hosts left by HMR / interrupted mounts.
+    if (window.HeyServoWidget) return
+    document.getElementById('heyservo-widget-host')?.remove()
 
     let cancelled = false
     let mountedWidget: { open?: () => void; destroy?: () => void } | null = null
@@ -112,7 +116,8 @@ export function HeyServoWidget() {
 
     const btn = document.createElement('button')
     btn.type = 'button'
-    btn.className = 'hs-launch'
+    // Default matches official widget.js when theme.position is bottom_right
+    btn.className = 'hs-launch hs-pos-right'
     btn.style.background = 'linear-gradient(135deg, #1a63d8, #4b53e8 58%, #0e9a9e)'
     btn.setAttribute('aria-label', 'Chat with Hello Techno AI')
     btn.innerHTML = `<img src="/images/hello-techno-mark.png" alt="" />`
@@ -131,28 +136,38 @@ export function HeyServoWidget() {
         const raw = (await res.json()) as HeyServoSession
         if (raw.visitor_token) saveVisitorToken(key, raw.visitor_token)
 
-        // Customize presentation while preserving server-enforced flags like emailGate
+        // Customize presentation only. Server flags such as emailGate stay unchanged.
+        const theme = {
+          ...(raw.theme ?? {}),
+          primaryColor: '#1a63d8',
+          title: 'Hello Techno AI',
+          subtitle: '● Online · Replies in seconds',
+          greeting: "Hi! I'm Noor from Hello Techno. Ask me anything about plans, channels, or booking a demo.",
+          launcherLabel: 'Chat with us',
+          logoUrl: `${window.location.origin}/images/hello-techno-mark.png`,
+        }
+
         return {
           ...raw,
           agent_name: 'Hello Techno AI',
-          theme: {
-            ...(raw.theme ?? {}),
-            primaryColor: '#1a63d8',
-            title: 'Hello Techno AI',
-            subtitle: '● Online · Replies in seconds',
-            greeting: "Hi! I'm Noor from Hello Techno. Ask me anything about plans, channels, or booking a demo.",
-            launcherLabel: 'Chat with us',
-            logoUrl: `${window.location.origin}/images/hello-techno-mark.png`,
-          },
+          theme,
         }
       })()
       return sessionPromise
     }
 
-    // Warm up session + core module in the background right away
-    void getSession().catch(() => {
-      sessionPromise = null
-    })
+    // Warm up session; apply official theme.position to the pre-open launcher
+    void getSession()
+      .then((session) => {
+        if (cancelled || !shadow.contains(btn)) return
+        const position = (session.theme as { position?: string } | undefined)?.position
+        btn.className = `hs-launch ${position === 'bottom_left' ? 'hs-pos-left' : 'hs-pos-right'}`
+        const label = (session.theme as { launcherLabel?: string } | undefined)?.launcherLabel
+        if (label) btn.setAttribute('aria-label', label)
+      })
+      .catch(() => {
+        sessionPromise = null
+      })
 
     const openWidget = async () => {
       btn.innerHTML = '<span class="hs-launch-spin"></span>'
