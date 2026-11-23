@@ -109,18 +109,8 @@ export function Nav() {
           <div className="flex items-center gap-2">
             <LangToggle className="hidden sm:inline-flex" />
             <a
-              href={SITE.whatsapp}
-              target="_blank"
-              rel="noreferrer noopener"
-              aria-label={`${copy.navUi.chatWhatsApp} ${SITE.phone}`}
-              title={copy.navUi.chatWhatsApp}
-              className="hidden size-10 place-items-center rounded-full sm:grid"
-            >
-              <ChannelMark kind="whatsapp" className="size-10" glyphClassName="size-5" rounded="rounded-full" />
-            </a>
-            <a
               href={SITE.phoneHref}
-              className="hidden items-center gap-2 rounded-full border border-line-strong bg-white/70 px-3.5 py-2 text-[13.5px] font-medium text-ink transition-colors hover:border-brand hover:text-brand md:inline-flex"
+              className="hidden shrink-0 items-center gap-2 rounded-full border border-line-strong bg-white/70 px-3.5 py-2 text-[13.5px] font-medium whitespace-nowrap text-ink transition-colors hover:border-brand hover:text-brand md:inline-flex"
             >
               <ChannelMark kind="voice" className="size-6" glyphClassName="size-3" rounded="rounded-full" />
               {SITE.phone}
@@ -143,7 +133,7 @@ export function Nav() {
             ) : (
               <Link
                 to="/demo"
-                className="hidden items-center gap-2 rounded-full bg-[linear-gradient(115deg,#1a63d8,#4b53e8_58%,#0e9a9e)] px-4 py-2.5 text-[13.5px] font-medium text-white shadow-[0_12px_26px_-16px_rgb(26_99_216/0.9)] transition-[filter,transform] duration-[var(--duration-fast)] hover:brightness-[1.07] active:scale-[0.98] sm:inline-flex"
+                className="hidden shrink-0 items-center gap-2 rounded-full bg-[linear-gradient(115deg,#1a63d8,#4b53e8_58%,#0e9a9e)] px-4 py-2.5 text-[13.5px] font-medium whitespace-nowrap text-white shadow-[0_12px_26px_-16px_rgb(26_99_216/0.9)] transition-[filter,transform] duration-[var(--duration-fast)] hover:brightness-[1.07] active:scale-[0.98] sm:inline-flex"
               >
                 <PulseDot className="size-1.5" />
                 {copy.navUi.bookDemo}
