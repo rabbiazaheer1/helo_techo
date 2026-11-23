@@ -630,7 +630,7 @@ const en: Copy = {
       },
       {
         q: 'What does it cost?',
-        a: 'Simple monthly plans starting at QAR 90, with one credit covering twenty messages and a call minute costing two. Start with 50 free credits at zero setup cost, size the plan on a demo, and move up only when the volume is there.',
+        a: 'Simple monthly plans starting at QAR 200, with one credit covering twenty messages and a call minute costing two. Start with 50 free credits at zero setup cost, size the plan on a demo, and move up only when the volume is there.',
       },
     ],
   },
@@ -1281,7 +1281,7 @@ const ar: Copy = {
       },
       {
         q: 'كم التكلفة؟',
-        a: 'خطط شهرية بسيطة تبدأ من 90 ر.ق، ورصيد واحد يغطي عشرين رسالة ودقيقة المكالمة تكلف اثنين. ابدأ بـ 50 رصيداً مجانياً بلا رسوم إعداد، وحدّد الخطة في العرض، وانتقل للأعلى فقط عند زيادة الحجم.',
+        a: 'خطط شهرية بسيطة تبدأ من 200 ر.ق، ورصيد واحد يغطي عشرين رسالة ودقيقة المكالمة تكلف اثنين. ابدأ بـ 50 رصيداً مجانياً بلا رسوم إعداد، وحدّد الخطة في العرض، وانتقل للأعلى فقط عند زيادة الحجم.',
       },
     ],
   },

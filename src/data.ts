@@ -241,7 +241,8 @@ export const PLANS = [
   {
     name: 'Starter',
     accent: '#1A63D8',
-    price: '90',
+    originalPrice: '150',
+    price: '200',
     per: '/month',
     currency: 'QAR',
     blurb: 'One location, every messaging channel answered.',
@@ -258,7 +259,8 @@ export const PLANS = [
   {
     name: 'Growth',
     accent: '#6F4BF2',
-    price: '250',
+    originalPrice: '450',
+    price: '500',
     per: '/month',
     currency: 'QAR',
     blurb: 'Follow-ups, promotions and phone enquiries for up to two locations.',
@@ -275,7 +277,8 @@ export const PLANS = [
   {
     name: 'Connected',
     accent: '#0E9A9E',
-    price: '599',
+    originalPrice: '1100',
+    price: '1200',
     per: '/month',
     currency: 'QAR',
     blurb: 'Growth, plus a live connection to the systems you already run.',
@@ -338,7 +341,7 @@ export const FAQ = [
   },
   {
     q: 'What does it cost?',
-    a: 'Simple monthly plans starting at QAR 90, with one credit covering twenty messages and a call minute costing two. Start with 50 free credits at zero setup cost, size the plan on a demo, and move up only when the volume is there.',
+    a: 'Simple monthly plans starting at QAR 200, with one credit covering twenty messages and a call minute costing two. Start with 50 free credits at zero setup cost, size the plan on a demo, and move up only when the volume is there.',
   },
 ]
 

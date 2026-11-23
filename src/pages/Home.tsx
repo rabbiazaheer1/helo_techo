@@ -552,6 +552,7 @@ function Pricing() {
     const t = copy.pricing.plans[i]
     return {
       accent: plan.accent,
+      originalPrice: 'originalPrice' in plan ? plan.originalPrice : undefined,
       price: plan.price,
       featured: plan.featured,
       name: t?.name ?? plan.name,
@@ -617,7 +618,19 @@ function Pricing() {
                   {plan.blurb}
                 </p>
 
-                <div className="mt-5 flex items-end gap-1.5">
+                <div className="mt-5 flex items-end gap-2">
+                  {plan.originalPrice && (
+                    <span
+                      className={cx(
+                        'pb-1 text-[1.25rem] font-medium line-through decoration-2',
+                        plan.featured
+                          ? 'text-white/50 decoration-red-400/90'
+                          : 'text-faint decoration-red-500/80',
+                      )}
+                    >
+                      {plan.originalPrice}
+                    </span>
+                  )}
                   <span className="display text-[2.3rem]" style={{ color: plan.featured ? '#ffffff' : plan.accent }}>
                     {plan.price === 'Custom' ? copy.pricing.customPrice : plan.price}
                   </span>
