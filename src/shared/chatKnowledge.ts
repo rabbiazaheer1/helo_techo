@@ -11,7 +11,7 @@ Contact:
 - Location: Doha, Qatar (GCC)
 
 Plans (QAR / month):
-- Starter: 90/month — messaging channels, 100 credits (~2,000 messages), one location
+- Starter: 100/month — messaging channels, 100 credits (~2,000 messages), one location
 - Growth: 250/month (recommended) — + voice calls, 300 credits, 75 call minutes, up to 2 locations
 - Connected: 599/month — + live system sync, 750 credits, up to 3 locations
 - Enterprise: Custom — multi-brand / multi-branch
@@ -47,8 +47,8 @@ export function localChatReply(question: string, locale: 'en' | 'ar' = 'en'): st
 
   if (/price|pricing|plan|cost|اشتراك|سعر|خطة|باقة/.test(q)) {
     return ar
-      ? 'الباقات تبدأ من ٩٠ ر.ق/شهر (Starter)، والنمو ٢٥٠ ر.ق (موصى بها)، والمتصلة ٥٩٩ ر.ق. لا رسوم إعداد، و٥٠ رصيداً مجانياً للبداية. احجز عرضاً مجانياً للتفاصيل.'
-      : 'Plans start at QAR 90/month (Starter), Growth is QAR 250 (recommended), and Connected is QAR 599. Zero setup fee, 50 free credits to start. Book a free demo for a fit check!'
+      ? 'الباقات تبدأ من ١٠٠ ر.ق/شهر (Starter)، والنمو ٢٥٠ ر.ق (موصى بها)، والمتصلة ٥٩٩ ر.ق. لا رسوم إعداد، و٥٠ رصيداً مجانياً للبداية. احجز عرضاً مجانياً للتفاصيل.'
+      : 'Plans start at QAR 100/month (Starter), Growth is QAR 250 (recommended), and Connected is QAR 599. Zero setup fee, 50 free credits to start. Book a free demo for a fit check!'
   }
   if (/whatsapp|channel|instagram|voice|call|قناة|واتساب|هاتف/.test(q)) {
     return ar
