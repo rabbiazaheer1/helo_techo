@@ -118,8 +118,8 @@ export function HeyServoWidget() {
     btn.type = 'button'
     // Default matches official widget.js when theme.position is bottom_right
     btn.className = 'hs-launch hs-pos-right'
-    btn.style.background = 'linear-gradient(135deg, #1a63d8, #4b53e8 58%, #0e9a9e)'
-    btn.setAttribute('aria-label', 'Chat with Hello Techno AI')
+    btn.style.background = 'linear-gradient(135deg, #5457e6, #6366f1)'
+    btn.setAttribute('aria-label', 'Chat with Hello Techno')
     btn.innerHTML = `<img src="/images/hello-techno-mark.png" alt="" />`
     shadow.appendChild(btn)
 
@@ -139,17 +139,18 @@ export function HeyServoWidget() {
         // Customize presentation only. Server flags such as emailGate stay unchanged.
         const theme = {
           ...(raw.theme ?? {}),
-          primaryColor: '#1a63d8',
-          title: 'Hello Techno AI',
-          subtitle: '● Online · Replies in seconds',
-          greeting: "Hi! I'm Noor from Hello Techno. Ask me anything about plans, channels, or booking a demo.",
+          primaryColor: '#5457e6',
+          title: 'Hello Techno',
+          subtitle: null,
+          greeting:
+            "Hi! I'm Hello Techno's AI assistant, and someone from our team can join anytime. How can I help you today?\n\nمرحباً! أنا المساعد الذكي من Hello Techno، ويمكن لأحد أعضاء فريقنا الانضمام في أي وقت. كيف يمكنني مساعدتك اليوم؟",
           launcherLabel: 'Chat with us',
-          logoUrl: `${window.location.origin}/images/hello-techno-mark.png`,
+          logoUrl: null,
         }
 
         return {
           ...raw,
-          agent_name: 'Hello Techno AI',
+          agent_name: 'Hello Techno',
           theme,
         }
       })()

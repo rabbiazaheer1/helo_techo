@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 
 import { FloatingActions } from './components/FloatingActions'
-import { OfficialHeyServoScript } from './components/OfficialHeyServoScript'
+import { HeyServoWidget } from './components/HeyServoWidget'
 import { Footer } from './components/Footer'
 import { Nav } from './components/Nav'
 import { SmoothScroll } from './components/SmoothScroll'
@@ -37,8 +37,7 @@ export function App() {
       <MotionConfig reducedMotion="user">
         <BrowserRouter>
           <SmoothScroll>
-            {/* Temp A/B: official widget.js only (custom HeyServoWidget unmounted). */}
-            <OfficialHeyServoScript />
+            <HeyServoWidget />
             <FloatingActions />
             <Routes>
               <Route

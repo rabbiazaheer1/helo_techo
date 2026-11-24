@@ -34,7 +34,7 @@ export type Copy = {
   industries: { eyebrow: string; title: string; body: string; pain: string; win: string; seeOp: string; items: { key: string; name: string; tagline: string; pain: string; win: string; uses: { title: string; body: string; result: string }[] }[] }
   capabilities: { title: string; body: string; note: string }[]
   results: { eyebrow: string; title: string; body: string; tags: string[]; stats: { value: string; label: string }[]; proofLines: string[] }
-  pricing: { eyebrow: string; title: string; body: string; recommended: string; talkSales: string; startTrial: string; customPrice: string; creditNotes: { value: string; label: string }[]; plans: { name: string; blurb: string; estimate: string; credits: string; features: string[]; currency: string; per: string }[] }
+  pricing: { eyebrow: string; offerBadge?: string; title: string; body: string; recommended: string; talkSales: string; startTrial: string; customPrice: string; creditNotes: { value: string; label: string }[]; plans: { name: string; blurb: string; estimate: string; credits: string; features: string[]; currency: string; per: string }[] }
   resources: {
     eyebrow: string
     title: string
@@ -365,6 +365,7 @@ const en: Copy = {
   },
   pricing: {
     eyebrow: 'Pricing',
+    offerBadge: 'Limited-Time Offer · Up to 50% off monthly plans',
     title: 'Simple plans. Clear credits.',
     body: 'Hotels, clinics, restaurants, dealerships and growing businesses all run on the same plans and the same credit rate: one credit covers twenty messages, and a call minute costs two. Start with 50 free credits at zero setup cost.',
     recommended: 'Recommended',
@@ -1017,6 +1018,7 @@ const ar: Copy = {
   },
   pricing: {
     eyebrow: 'الأسعار',
+    offerBadge: 'عرض لفترة محدودة · خصم حتى 50% على الباقات الشهرية',
     title: 'خطط بسيطة. أرصدة واضحة.',
     body: 'الفنادق والعيادات والمطاعم والوكالات والأعمال النامية تعمل على نفس الخطط ونفس معدل الرصيد: رصيد واحد يغطي عشرين رسالة، ودقيقة المكالمة تكلف اثنين. ابدأ بـ 50 رصيداً مجانياً بلا رسوم إعداد.',
     recommended: 'موصى به',

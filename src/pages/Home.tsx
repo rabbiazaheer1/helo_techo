@@ -575,6 +575,14 @@ function Pricing() {
             title={<>{copy.pricing.title}</>}
             body={copy.pricing.body}
           />
+          {copy.pricing.offerBadge && (
+            <div className="mt-5 flex justify-center">
+              <span className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50/90 px-4 py-1.5 text-[12.5px] font-semibold text-rose-600 shadow-[0_8px_20px_-14px_rgb(225_29_72/0.45)]">
+                <Sparkles className="size-3.5 shrink-0" aria-hidden />
+                {copy.pricing.offerBadge}
+              </span>
+            </div>
+          )}
         </Reveal>
 
         <div className="mt-11 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
