@@ -44,7 +44,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5">
               {copy.nav.map((item) => (
                 <li key={item.href}>
-                  {item.href.startsWith('/') && !item.href.includes('#') ? (
+                  {item.href.startsWith('/') ? (
                     <Link to={item.href} className="text-[14.5px] text-white/80 transition-colors hover:text-white">
                       {item.label}
                     </Link>

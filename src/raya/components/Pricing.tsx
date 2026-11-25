@@ -259,7 +259,7 @@ export function Pricing({ hideIntro = false }: { hideIntro?: boolean }) {
                   </a>
                 ) : (
                   <Link
-                    href={routes.trial}
+                    href={`${routes.trial}?plan=${encodeURIComponent(plan.name)}&currency=${usd ? "USD" : "QAR"}`}
                     className={`pp-cta ${dark ? "is-ghost" : "is-solid"}`}
                   >
                     {p.cta}

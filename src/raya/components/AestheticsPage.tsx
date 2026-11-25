@@ -10,6 +10,7 @@ import {
   IconCheck,
   IconPlay,
 } from "./Icons";
+import { IndustryDashboard } from "./IndustryDashboard";
 import { Pricing } from "./Pricing";
 import { TourVideoModal } from "./TourVideoModal";
 import { useLocale } from "../lib/locale";
@@ -407,6 +408,8 @@ export function AestheticsPage() {
             </div>
           </div>
         </section>
+
+        <IndustryDashboard kind="aesthetics" />
 
         <div id="ad-pricing">
           <Pricing />

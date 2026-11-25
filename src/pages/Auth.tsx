@@ -4,6 +4,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router'
 
 import { Brand } from '../components/Logo'
 import { SITE } from '../data'
+import { postJson } from '../lib/api'
 import { login, signup } from '../lib/auth'
 import { cx } from '../lib/cx'
 import { useLocale } from '../lib/locale'
@@ -15,11 +16,16 @@ export function Auth() {
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
   const mode: Mode = params.get('mode') === 'login' ? 'login' : 'signup'
+  const selectedPlan = params.get('plan')
+  const selectedCurrency = params.get('currency')
+  const selectedDate = params.get('date')
+  const selectedTime = params.get('time')
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [confirmedRef, setConfirmedRef] = useState('')
   const [busy, setBusy] = useState(false)
 
   const title = mode === 'login' ? copy.auth.loginTitle : copy.auth.signupTitle
@@ -31,7 +37,7 @@ export function Auth() {
     setParams(next === 'signup' ? {} : { mode: 'login' }, { replace: true })
   }
 
-  const onSubmit = (event: FormEvent) => {
+  const onSubmit = async (event: FormEvent) => {
     event.preventDefault()
     setError('')
     setBusy(true)
@@ -41,11 +47,37 @@ export function Auth() {
         ? login({ email, password })
         : signup({ name, email, password })
 
-    setBusy(false)
     if (!result.ok) {
+      setBusy(false)
       setError(result.error)
       return
     }
+
+    if (mode === 'signup') {
+      try {
+        const noteParts = [
+          selectedPlan ? `Plan: ${selectedPlan}${selectedCurrency ? ` (${selectedCurrency})` : ''}` : '',
+          selectedDate ? `Preferred slot: ${selectedDate}${selectedTime ? ` at ${selectedTime}` : ''}` : '',
+        ].filter(Boolean)
+        const res = await postJson<{ ok: boolean; reference?: string }>('/api/contact', {
+          name: name.trim(),
+          email: email.trim(),
+          company: selectedPlan ? `Plan: ${selectedPlan}` : 'Demo Request',
+          phone: '',
+          channel: 'Web Demo',
+          message: noteParts.length ? noteParts.join(' · ') : 'Demo & free trial signup',
+        })
+        if (res.ok && res.data.reference) {
+          setBusy(false)
+          setConfirmedRef(res.data.reference)
+          return
+        }
+      } catch {
+        /* fallback to home navigation */
+      }
+    }
+
+    setBusy(false)
     navigate('/')
   }
 
@@ -96,6 +128,38 @@ export function Auth() {
         <h1 className="display mt-6 text-[clamp(1.7rem,1.35rem+1.4vw,2.25rem)] text-ink">{title}</h1>
         <p className="mt-2 text-[14.5px] text-muted">{body}</p>
 
+        {(selectedPlan || selectedDate) && mode === 'signup' && (
+          <div className="mt-4 flex flex-wrap gap-2 rounded-[14px] border border-brand/20 bg-brand-soft/60 px-3.5 py-2.5 text-[12.5px] font-medium text-brand-deep">
+            {selectedPlan && (
+              <span>
+                Plan: <strong>{selectedPlan}</strong>
+                {selectedCurrency ? ` (${selectedCurrency})` : ''}
+              </span>
+            )}
+            {selectedDate && (
+              <span>
+                Slot: <strong>{selectedDate}</strong>
+                {selectedTime ? ` · ${selectedTime}` : ''}
+              </span>
+            )}
+          </div>
+        )}
+
+        {confirmedRef ? (
+          <div className="mt-6 rounded-[18px] border border-emerald-200 bg-emerald-50 p-5 text-center">
+            <p className="text-[15px] font-semibold text-emerald-900">Your demo & trial request is confirmed!</p>
+            <p className="mt-1 text-[13px] text-emerald-700">
+              Reference: <strong>{confirmedRef}</strong> — our team will reach out shortly.
+            </p>
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="mt-4 inline-flex h-10 items-center justify-center rounded-full bg-emerald-600 px-5 text-[13.5px] font-medium text-white hover:bg-emerald-700"
+            >
+              Back to home
+            </button>
+          </div>
+        ) : (
         <form onSubmit={onSubmit} className="mt-7 space-y-3" noValidate>
           {mode === 'signup' && (
             <label className="block">
@@ -147,6 +211,7 @@ export function Auth() {
             {!busy && <ArrowRight className="size-4" aria-hidden />}
           </button>
         </form>
+        )}
 
         <p className="mt-5 text-center text-[13px] text-muted">
           {mode === 'login' ? (

@@ -11,6 +11,7 @@ import {
   IconPlay,
   IconWhatsApp,
 } from "./Icons";
+import { IndustryDashboard } from "./IndustryDashboard";
 import { Pricing } from "./Pricing";
 import { TourVideoModal } from "./TourVideoModal";
 import { useLocale } from "../lib/locale";
@@ -1118,6 +1119,7 @@ export function SmbPage() {
         </section>
 
         {/* 6. Bottom modules */}
+        <IndustryDashboard kind="smb" />
         <div id="smb-pricing">
           <Pricing />
         </div>

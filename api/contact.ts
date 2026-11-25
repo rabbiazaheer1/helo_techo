@@ -32,5 +32,21 @@ export default async function handler(req: Request) {
     return json({ error: 'Please check the highlighted fields.', fieldErrors }, 422)
   }
 
-  return json({ ok: true, reference: reference() }, 201)
+  const ref = reference()
+  const payload = body as Record<string, unknown>
+  const webhookUrl = process.env.CONTACT_WEBHOOK_URL
+
+  if (webhookUrl) {
+    try {
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ reference: ref, ...payload, receivedAt: new Date().toISOString() }),
+      })
+    } catch (err) {
+      console.error('[api/contact] webhook failed:', err)
+    }
+  }
+
+  return json({ ok: true, reference: ref }, 201)
 }

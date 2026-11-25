@@ -7,10 +7,11 @@ import { IconChat, IconPhone, IconWhatsApp } from "./Icons";
 import { useLocale } from "../lib/locale";
 import { brand, images, routes } from "../lib/site";
 
-function buildNovemberDays() {
-  // November 2026 starts on Sunday; calendar headers are Mon–Sun.
-  const firstDow = 6;
-  const daysInMonth = 30;
+function buildMonthDays(year: number, monthZeroBased: number) {
+  // Calendar headers are Mon–Sun (0 = Mon ... 6 = Sun).
+  const jsDay = new Date(year, monthZeroBased, 1).getDay();
+  const firstDow = (jsDay + 6) % 7;
+  const daysInMonth = new Date(year, monthZeroBased + 1, 0).getDate();
   const cells: Array<number | null> = [];
   for (let i = 0; i < firstDow; i += 1) cells.push(null);
   for (let d = 1; d <= daysInMonth; d += 1) cells.push(d);
@@ -18,17 +19,19 @@ function buildNovemberDays() {
   return cells;
 }
 
-const availableDays = new Set([12, 13, 16, 17, 18, 19, 20, 23, 24, 25, 26, 27, 30]);
+const availableDays = new Set([2, 3, 5, 9, 10, 12, 13, 16, 17, 18, 19, 20, 23, 24, 25, 26, 27, 30]);
+const timeSlots = ["10:00 AM", "12:30 PM", "3:00 PM", "5:30 PM"] as const;
 
 export function Cta() {
   const { t, locale } = useLocale();
   const en = locale === "en";
-  const cells = useMemo(() => buildNovemberDays(), []);
   const [selected, setSelected] = useState<number | null>(30);
   const [monthIdx, setMonthIdx] = useState(1);
+  const [timeSlot, setTimeSlot] = useState<(typeof timeSlots)[number]>("10:00 AM");
   const months = en
     ? ["October 2026", "November 2026", "December 2026"]
     : ["أكتوبر 2026", "نوفمبر 2026", "ديسمبر 2026"];
+  const cells = useMemo(() => buildMonthDays(2026, 9 + monthIdx), [monthIdx]);
 
   const weekdays = en
     ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -164,7 +167,24 @@ export function Cta() {
                 })}
               </div>
 
-              <div className="mt-6 flex items-center justify-between gap-3 border-t border-[var(--border)] pt-4 text-sm text-[var(--muted)]">
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {timeSlots.map((slot) => (
+                  <button
+                    key={slot}
+                    type="button"
+                    onClick={() => setTimeSlot(slot)}
+                    className={`rounded-full border px-2.5 py-1 text-[11.5px] font-medium transition-colors ${
+                      timeSlot === slot
+                        ? "border-[var(--primary)] bg-[var(--primary-soft)] text-[var(--primary)]"
+                        : "border-[var(--border)] bg-white text-[var(--muted)] hover:border-[var(--primary)]"
+                    }`}
+                  >
+                    {slot}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-5 flex items-center justify-between gap-3 border-t border-[var(--border)] pt-4 text-sm text-[var(--muted)]">
                 <span>{t.cta.timeZone}</span>
                 <span className="truncate font-medium text-[var(--ink)]">
                   {en ? "Asia/Qatar (AST)" : "آسيا/قطر (AST)"}
@@ -179,7 +199,10 @@ export function Cta() {
                 {t.cta.fallbackEnd}
               </p>
 
-              <Link href={routes.demo} className="btn-primary mt-5 w-full">
+              <Link
+                href={`${routes.demo}?date=${encodeURIComponent(`${months[monthIdx]} ${selected ?? 30}`)}&time=${encodeURIComponent(timeSlot)}`}
+                className="btn-primary mt-5 w-full"
+              >
                 {t.cta.demo}
               </Link>
             </div>

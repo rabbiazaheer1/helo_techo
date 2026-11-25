@@ -23,8 +23,8 @@ function NavItem({
   onNavigate?: () => void
 }) {
   const location = useLocation()
-  const isRoute = href.startsWith('/') && !href.includes('#')
-  const active = isRoute && location.pathname === href
+  const isRoute = href.startsWith('/')
+  const active = isRoute && !href.includes('#') && location.pathname === href
 
   if (isRoute) {
     return (
@@ -379,7 +379,7 @@ export function Nav() {
                     )
                   }
 
-                  const isRoute = item.href.startsWith('/') && !item.href.includes('#')
+                  const isRoute = item.href.startsWith('/')
                   const className =
                     'flex items-center justify-between border-b border-line py-3.5 text-[17px] font-medium tracking-[-0.02em] text-ink'
                   const inner = (

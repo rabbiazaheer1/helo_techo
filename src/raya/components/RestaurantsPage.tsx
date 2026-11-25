@@ -19,6 +19,7 @@ import {
   IconUtensils,
   IconWhatsApp,
 } from "./Icons";
+import { IndustryDashboard } from "./IndustryDashboard";
 import { Pricing } from "./Pricing";
 import { TourVideoModal } from "./TourVideoModal";
 import { useLocale } from "../lib/locale";
@@ -1347,6 +1348,7 @@ export function RestaurantsPage() {
         </section>
 
         {/* J. Bottom modules */}
+        <IndustryDashboard kind="restaurants" />
         <div id="rcb-pricing">
           <Pricing />
         </div>
