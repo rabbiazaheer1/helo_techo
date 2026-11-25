@@ -1,6 +1,6 @@
-import { ArrowUpRight, LogOut, Menu, X } from 'lucide-react'
-import { AnimatePresence, motion, useScroll } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { ArrowUpRight, Building2, ChevronDown, LogOut, Menu, Sparkles, Store, Utensils, X } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router'
 
 import { SITE } from '../data'
@@ -46,12 +46,78 @@ function NavItem({
   )
 }
 
+const INDUSTRY_ITEMS = [
+  {
+    to: '/industries/hospitality',
+    icon: Building2,
+    en: { title: 'Hospitality', sub: 'Hotels, resorts and hospitality groups' },
+    ar: { title: 'الضيافة', sub: 'الفنادق والمنتجعات ومجموعات الضيافة' },
+  },
+  {
+    to: '/industries/aesthetics-dental',
+    icon: Sparkles,
+    en: { title: 'Aesthetics & Dental', sub: 'Aesthetics clinics, medspas and dental groups' },
+    ar: { title: 'التجميل والأسنان', sub: 'عيادات التجميل والمراكز الطبية والأسنان' },
+  },
+  {
+    to: '/industries/restaurants',
+    icon: Utensils,
+    en: { title: 'Restaurants, Cafes & Bakeries', sub: 'Restaurants, cafes, bakeries and groups' },
+    ar: { title: 'المطاعم والمقاهي والمخابز', sub: 'المطاعم والمقاهي والمخابز والمجموعات' },
+  },
+  {
+    to: '/industries/small-business',
+    icon: Store,
+    en: { title: 'Small Medium Businesses', sub: 'Salons, spas, gyms and online stores' },
+    ar: { title: 'الأعمال الصغيرة والمتوسطة', sub: 'الصالونات والمنتجعات والنوادي والمتاجر' },
+  },
+] as const
+
 export function Nav() {
-  const { copy } = useLocale()
+  const { copy, locale } = useLocale()
+  const location = useLocation()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const [industriesOpen, setIndustriesOpen] = useState(false)
+  const [mobileIndustriesOpen, setMobileIndustriesOpen] = useState(false)
   const [user, setUser] = useState<AuthUser | null>(null)
-  const { scrollYProgress } = useScroll()
+  const closeTimerRef = useRef<number | null>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setIndustriesOpen(false)
+    setMobileIndustriesOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    const onPointerDown = (e: PointerEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIndustriesOpen(false)
+      }
+    }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIndustriesOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [])
+
+  const openDropdown = () => {
+    if (closeTimerRef.current) {
+      window.clearTimeout(closeTimerRef.current)
+      closeTimerRef.current = null
+    }
+    setIndustriesOpen(true)
+  }
+
+  const scheduleCloseDropdown = () => {
+    if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
+    closeTimerRef.current = window.setTimeout(() => setIndustriesOpen(false), 120)
+  }
 
   useEffect(() => {
     setUser(getSession())
@@ -79,15 +145,12 @@ export function Nav() {
 
   return (
     <>
-      <motion.div
-        style={{ scaleX: scrollYProgress }}
-        className="fixed inset-x-0 top-0 z-[70] h-[3px] origin-left bg-[linear-gradient(90deg,#25D366,#1A63D8,#6F4BF2,#E1306C,#F59E0B,#0E9A9E)]"
-        aria-hidden
-      />
       <header
         className={cx(
-          'fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-[var(--duration-base)]',
-          scrolled ? 'bg-white/80 shadow-[0_12px_30px_-24px_rgb(9_30_74/0.5)] backdrop-blur-xl' : 'bg-transparent',
+          'fixed inset-x-0 top-0 z-50 border-b transition-[background-color,box-shadow,border-color,backdrop-filter] duration-[var(--duration-base)]',
+          scrolled
+            ? 'border-line/80 bg-white/95 shadow-[0_10px_30px_-22px_rgb(9_30_74/0.45)] backdrop-blur-xl'
+            : 'border-line/40 bg-white/85 backdrop-blur-md',
         )}
       >
         <div className="mx-auto flex h-18 w-full max-w-[1320px] items-center justify-between gap-4 px-4 sm:px-6">
@@ -96,14 +159,98 @@ export function Nav() {
           </Link>
 
           <nav className="hidden items-center gap-0.5 xl:flex" aria-label="Sections">
-            {copy.nav.map((item) => (
-              <NavItem
-                key={item.href}
-                href={item.href}
-                label={item.label}
-                className="rounded-full px-2.5 py-2 text-[13.5px] font-medium text-muted transition-colors duration-[var(--duration-fast)] hover:bg-soft hover:text-ink 2xl:px-3.5 2xl:text-[14px]"
-              />
-            ))}
+            {copy.nav.map((item) => {
+              if (item.href === '/#industries') {
+                const isIndustryRoute = location.pathname.startsWith('/industries/')
+                return (
+                  <div
+                    key={item.href}
+                    ref={dropdownRef}
+                    className="relative"
+                    onMouseEnter={openDropdown}
+                    onMouseLeave={scheduleCloseDropdown}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setIndustriesOpen((v) => !v)}
+                      aria-expanded={industriesOpen}
+                      aria-haspopup="menu"
+                      className={cx(
+                        'inline-flex items-center gap-1 rounded-full border px-2.5 py-2 text-[13.5px] font-medium transition-all duration-[var(--duration-fast)] 2xl:px-3.5 2xl:text-[14px]',
+                        industriesOpen
+                          ? 'border-[#5457e6] bg-white text-ink shadow-[0_6px_18px_-10px_rgb(84_87_230/0.45)]'
+                          : isIndustryRoute
+                            ? 'border-transparent bg-soft text-ink'
+                            : 'border-transparent text-muted hover:bg-soft hover:text-ink',
+                      )}
+                    >
+                      {item.label}
+                      <ChevronDown
+                        className={cx(
+                          'size-3.5 transition-transform duration-200',
+                          industriesOpen && 'rotate-180 text-[#5457e6]',
+                        )}
+                        aria-hidden
+                      />
+                    </button>
+
+                    <AnimatePresence>
+                      {industriesOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                          transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
+                          role="menu"
+                          className="absolute start-0 top-full z-50 mt-2.5 w-[23rem] rounded-[22px] border border-line bg-white p-2.5 shadow-[0_24px_60px_-18px_rgb(15_23_42/0.22)]"
+                        >
+                          <div className="flex flex-col gap-1">
+                            {INDUSTRY_ITEMS.map((ind) => {
+                              const Icon = ind.icon
+                              const text = locale === 'ar' ? ind.ar : ind.en
+                              const active = location.pathname === ind.to
+                              return (
+                                <Link
+                                  key={ind.to}
+                                  to={ind.to}
+                                  role="menuitem"
+                                  onClick={() => setIndustriesOpen(false)}
+                                  className={cx(
+                                    'group flex items-center gap-3.5 rounded-[14px] p-2.5 transition-colors',
+                                    active ? 'bg-[#f1f2ff]' : 'hover:bg-[#f5f6ff]',
+                                  )}
+                                >
+                                  <span className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-[#f1f2ff] text-[#5457e6] transition-colors group-hover:bg-[#e6e8ff]">
+                                    <Icon className="size-[18px]" aria-hidden />
+                                  </span>
+                                  <span className="min-w-0">
+                                    <span className="block text-[14px] font-semibold tracking-[-0.015em] text-ink">
+                                      {text.title}
+                                    </span>
+                                    <span className="block text-[12px] leading-snug text-muted">
+                                      {text.sub}
+                                    </span>
+                                  </span>
+                                </Link>
+                              )
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )
+              }
+
+              return (
+                <NavItem
+                  key={item.href}
+                  href={item.href}
+                  label={item.label}
+                  className="rounded-full px-2.5 py-2 text-[13.5px] font-medium text-muted transition-colors duration-[var(--duration-fast)] hover:bg-soft hover:text-ink 2xl:px-3.5 2xl:text-[14px]"
+                />
+              )
+            })}
           </nav>
 
           <div className="flex items-center gap-2">
@@ -186,6 +333,52 @@ export function Nav() {
               </div>
               <nav className="mt-5 flex flex-col" aria-label="Sections">
                 {copy.nav.map((item) => {
+                  if (item.href === '/#industries') {
+                    return (
+                      <div key={item.href} className="border-b border-line">
+                        <button
+                          type="button"
+                          onClick={() => setMobileIndustriesOpen((v) => !v)}
+                          aria-expanded={mobileIndustriesOpen}
+                          className="flex w-full items-center justify-between py-3.5 text-[17px] font-medium tracking-[-0.02em] text-ink"
+                        >
+                          {item.label}
+                          <ChevronDown
+                            className={cx(
+                              'size-4 text-faint transition-transform duration-200',
+                              mobileIndustriesOpen && 'rotate-180 text-[#5457e6]',
+                            )}
+                            aria-hidden
+                          />
+                        </button>
+                        {mobileIndustriesOpen && (
+                          <div className="mb-3 flex flex-col gap-1 ps-1">
+                            {INDUSTRY_ITEMS.map((ind) => {
+                              const Icon = ind.icon
+                              const text = locale === 'ar' ? ind.ar : ind.en
+                              return (
+                                <Link
+                                  key={ind.to}
+                                  to={ind.to}
+                                  onClick={() => setOpen(false)}
+                                  className="flex items-center gap-3 rounded-[14px] p-2 hover:bg-[#f5f6ff]"
+                                >
+                                  <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-[#f1f2ff] text-[#5457e6]">
+                                    <Icon className="size-4" aria-hidden />
+                                  </span>
+                                  <span className="min-w-0">
+                                    <span className="block text-[14px] font-semibold text-ink">{text.title}</span>
+                                    <span className="block text-[12px] text-muted">{text.sub}</span>
+                                  </span>
+                                </Link>
+                              )
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  }
+
                   const isRoute = item.href.startsWith('/') && !item.href.includes('#')
                   const className =
                     'flex items-center justify-between border-b border-line py-3.5 text-[17px] font-medium tracking-[-0.02em] text-ink'

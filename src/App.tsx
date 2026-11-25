@@ -11,6 +11,10 @@ import { LocaleProvider } from './lib/locale'
 import { AiEmployee } from './pages/AiEmployee'
 import { Auth } from './pages/Auth'
 import { Home } from './pages/Home'
+import { AestheticsDentalPage } from './pages/industries/AestheticsDentalPage'
+import { HospitalityPage } from './pages/industries/HospitalityPage'
+import { RestaurantsPage } from './pages/industries/RestaurantsPage'
+import { SmallBusinessPage } from './pages/industries/SmallBusinessPage'
 import { ResourceGuide } from './pages/ResourceGuide'
 
 function MarketingLayout({ children }: { children: ReactNode }) {
@@ -61,6 +65,38 @@ export function App() {
                 element={
                   <MarketingLayout>
                     <ResourceGuide />
+                  </MarketingLayout>
+                }
+              />
+              <Route
+                path="/industries/hospitality"
+                element={
+                  <MarketingLayout>
+                    <HospitalityPage />
+                  </MarketingLayout>
+                }
+              />
+              <Route
+                path="/industries/aesthetics-dental"
+                element={
+                  <MarketingLayout>
+                    <AestheticsDentalPage />
+                  </MarketingLayout>
+                }
+              />
+              <Route
+                path="/industries/restaurants"
+                element={
+                  <MarketingLayout>
+                    <RestaurantsPage />
+                  </MarketingLayout>
+                }
+              />
+              <Route
+                path="/industries/small-business"
+                element={
+                  <MarketingLayout>
+                    <SmallBusinessPage />
                   </MarketingLayout>
                 }
               />

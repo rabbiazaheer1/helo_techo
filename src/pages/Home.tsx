@@ -14,11 +14,12 @@ import {
   CHANNELS,
   INDUSTRIES,
   INTEGRATIONS,
-  PLANS,
   SITE,
 } from '../data'
 import { cx } from '../lib/cx'
 import { useLocale } from '../lib/locale'
+import '../raya/raya.css'
+import { Pricing as RayaPricing } from '../raya/components/Pricing'
 
 /* ------------------------------------------------------------------- hero */
 
@@ -547,154 +548,10 @@ function Results() {
 /* ----------------------------------------------------------------- pricing */
 
 function Pricing() {
-  const { copy } = useLocale()
-  const plans = PLANS.map((plan, i) => {
-    const t = copy.pricing.plans[i]
-    return {
-      accent: plan.accent,
-      originalPrice: 'originalPrice' in plan ? plan.originalPrice : undefined,
-      price: plan.price,
-      featured: plan.featured,
-      name: t?.name ?? plan.name,
-      blurb: t?.blurb ?? plan.blurb,
-      estimate: t?.estimate ?? plan.estimate,
-      credits: t?.credits ?? plan.credits,
-      features: t?.features ?? [...plan.features],
-      currency: t?.currency ?? plan.currency,
-      per: t?.per ?? plan.per,
-    }
-  })
-
   return (
-    <section id="pricing" className="relative bg-white/60 py-12 lg:py-16">
-      <div className="mx-auto w-full max-w-[1320px] px-4 sm:px-6">
-        <Reveal variant="up" y={28}>
-          <SectionHead
-            eyebrow={copy.pricing.eyebrow}
-            accent="#0E9A9E"
-            title={<>{copy.pricing.title}</>}
-            body={copy.pricing.body}
-          />
-          {copy.pricing.offerBadge && (
-            <div className="mt-5 flex justify-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50/90 px-4 py-1.5 text-[12.5px] font-semibold text-rose-600 shadow-[0_8px_20px_-14px_rgb(225_29_72/0.45)]">
-                <Sparkles className="size-3.5 shrink-0" aria-hidden />
-                {copy.pricing.offerBadge}
-              </span>
-            </div>
-          )}
-        </Reveal>
-
-        <div className="mt-11 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {plans.map((plan, i) => (
-            <Reveal
-              key={plan.name}
-              delay={0.07 * i}
-              variant={plan.featured ? 'scale' : i % 2 === 0 ? 'up' : 'down'}
-              y={plan.featured ? 20 : 40}
-              className="h-full"
-            >
-              <article
-                className={cx(
-                  'relative flex h-full flex-col overflow-hidden rounded-[26px] p-6 transition-[transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-soft)] hover:-translate-y-1.5',
-                  plan.featured
-                    ? 'bg-[linear-gradient(160deg,#0b2a63,#0b3a9c_45%,#0b6f88)] text-white shadow-[var(--shadow-float)] hover:shadow-[0_32px_60px_-24px_rgb(11_58_156/0.65)]'
-                    : 'border border-line bg-white text-ink shadow-[0_18px_40px_-34px_rgb(9_30_74/0.45)] hover:shadow-[0_28px_48px_-30px_rgb(9_30_74/0.5)]',
-                )}
-              >
-                {plan.featured && (
-                  <>
-                    <span className="pointer-events-none absolute -top-24 -right-16 size-56 rounded-full bg-[radial-gradient(circle,rgb(111_75_242/0.55),transparent_70%)] blur-2xl" aria-hidden />
-                    <span className="absolute top-5 right-5 rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold tracking-[0.1em] uppercase">
-                      {copy.pricing.recommended}
-                    </span>
-                  </>
-                )}
-                <span
-                  className="absolute inset-x-0 top-0 h-1"
-                  style={{
-                    background: plan.featured
-                      ? 'linear-gradient(90deg,#8B7CFF,#E1306C,#F59E0B,#0E9A9E)'
-                      : plan.accent,
-                  }}
-                  aria-hidden
-                />
-                <h3 className={cx('mt-2 text-[1.05rem] font-semibold tracking-[-0.02em]', plan.featured ? 'text-white' : 'text-ink')}>
-                  {plan.name}
-                </h3>
-                <p className={cx('mt-1.5 min-h-[2.6rem] text-[12.5px] leading-snug', plan.featured ? 'text-white/70' : 'text-muted')}>
-                  {plan.blurb}
-                </p>
-
-                <div className="mt-5 flex items-end gap-2">
-                  {plan.originalPrice && (
-                    <span
-                      className={cx(
-                        'pb-1 text-[1.25rem] font-medium line-through decoration-2',
-                        plan.featured
-                          ? 'text-white/50 decoration-red-400/90'
-                          : 'text-faint decoration-red-500/80',
-                      )}
-                    >
-                      {plan.originalPrice}
-                    </span>
-                  )}
-                  <span className="display text-[2.3rem]" style={{ color: plan.featured ? '#ffffff' : plan.accent }}>
-                    {plan.price === 'Custom' ? copy.pricing.customPrice : plan.price}
-                  </span>
-                  <span className={cx('pb-1 text-[12.5px]', plan.featured ? 'text-white/60' : 'text-faint')}>
-                    {plan.per}
-                  </span>
-                </div>
-                <p className={cx('mt-1 text-[11.5px]', plan.featured ? 'text-white/60' : 'text-faint')}>
-                  {plan.price === 'Custom'
-                    ? plan.currency
-                    : `${plan.currency} · ≈ $${Math.round(Number(plan.price) / 3.64)}`}
-                </p>
-
-                <div className={cx('mt-4 rounded-[12px] px-3 py-2', plan.featured ? 'bg-white/10' : 'bg-soft/80')}>
-                  <p className={cx('text-[11.5px] font-semibold', plan.featured ? 'text-white' : 'text-ink')}>{plan.estimate}</p>
-                  <p className={cx('mt-0.5 text-[10.5px]', plan.featured ? 'text-white/60' : 'text-faint')}>{plan.credits}</p>
-                </div>
-
-                <ul className="mt-4 flex-1 space-y-2">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex gap-2 text-[12.5px] leading-snug">
-                      <Check className="mt-0.5 size-3.5 shrink-0" style={{ color: plan.featured ? '#7DE8E2' : plan.accent }} aria-hidden />
-                      <span className={plan.featured ? 'text-white/80' : 'text-muted'}>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Link
-                  to="/demo"
-                  className={cx(
-                    'mt-6 flex h-11 items-center justify-center gap-2 rounded-full text-[13.5px] font-medium transition-[background-color,transform] duration-[var(--duration-fast)] active:scale-[0.98]',
-                    plan.featured
-                      ? 'bg-white text-brand-deep hover:bg-white/90'
-                      : 'border border-line-strong text-ink hover:border-brand hover:text-brand',
-                  )}
-                >
-                  {plan.price === 'Custom' ? copy.pricing.talkSales : copy.pricing.startTrial}
-                  <ArrowRight className="size-4" aria-hidden />
-                </Link>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.1}>
-          <div className="mt-6 grid gap-3 rounded-[22px] border border-line bg-white/70 p-5 sm:grid-cols-2 lg:grid-cols-4">
-            {copy.pricing.creditNotes.map((note) => (
-              <div key={note.value} className="flex flex-col">
-                <span className="text-[13.5px] font-semibold text-ink">{note.value}</span>
-                <span className="text-[11.5px] text-muted">{note.label}</span>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </div>
-    </section>
+    <div className="raya-page">
+      <RayaPricing />
+    </div>
   )
 }
 
